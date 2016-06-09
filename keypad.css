@@ -1,0 +1,32 @@
+table {
+	display: block;
+	width: 40%;	
+	padding: 15px;
+	padding-right: 0px;
+	border-radius: 20px;
+	background-image: url("images/icons/keypad_bgr.png");
+	background-repeat: all;
+
+}
+
+table td {	
+	align-content: center;
+	vertical-align: center;
+	border-style: none;
+	border-width: 0px;
+	padding: 5px;
+}
+
+table td:hover {
+	border-style: solid;
+	border-width: 2px;	
+	padding: 0px;
+	border-color: transparent;
+}
+
+table img {
+	display: block;
+	align-content: center;
+	vertical-align: center;
+	width: 80%;	 	
+}

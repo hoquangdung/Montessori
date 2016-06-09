@@ -26,7 +26,7 @@
 
 <table border="solid">
 	<tr>
-		<th>ID <img src="images/primary_key.jpg" width="20"></th>
+		<th>ID <img src="images/icons/primary_key.jpg" width="20"></th>
 		<th>First Name</th> 
 		<th>Last Name</th> 
 		<th>Birthdate</th> 
@@ -49,8 +49,10 @@
 	$tableNameStr = 'STUDENTS';
 	//query string
 	$queryStr = 'SELECT '. $tableColsStr . ' FROM ' . $tableNameStr . ';';
-	echo $queryStr; 	
 	
+	//testing
+	echo 'Executed query: ' . $queryStr;
+
 	//** 2. run the query
 	//[result]: the table returned by the query
 	$result = mysqli_query($conn, $queryStr);
@@ -58,6 +60,9 @@
 	//** 3. populate [result] to the table
 	//the number of rows in [result]
 	$resultRows = mysqli_num_rows($result);
+
+	echo '<br/><br/><i>Total number of records: ' . $resultRows . '</i><br/><br/>';
+	
 	for ($row = 0; $row < $resultRows; $row++)
 	{
 		//the current row in [result]
@@ -78,7 +83,9 @@
 
 <br/>
 
-<a class="active" href="index.php">Home</a>
+<?php
+	include 'footer.html'
+?>
 
 </body>
 
