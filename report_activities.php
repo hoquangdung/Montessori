@@ -1,3 +1,8 @@
+<?php
+// Start the session
+session_start();
+?>
+
 <!DOCTYPE html>
 
 <html>
@@ -20,6 +25,10 @@
 </head>
 
 <body>
+
+<?php
+	include 'header_log_in_out.php'
+?>
 
 <h2>List of Activities</h2>
 <br/>

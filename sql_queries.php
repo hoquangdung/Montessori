@@ -15,13 +15,16 @@
 		}
 
 		return ($db);
-	}
+		
+	}//connectDB()
 
 
 	function closeDB($db)
 	{
+		
 		$db->close();
-	}
+
+	}//closeDB()
 
 
 	function getResult($query)
@@ -38,9 +41,11 @@
 		closeDB($db);
 
 		return ($result);
-	}
 
-	function pupulateResultToTable($result, $fieldHeaderStr)
+	}//getResult()
+
+
+	function populateResultToTable($result, $fieldHeaderStr)
 	{
 		//the number of rows in [result]
 		$resultRows = mysqli_num_rows($result);
@@ -79,6 +84,6 @@
 			echo '<br/><br/><i>Total number of records: ' . $resultRows . '</i><br/><br/>';
 		}
 
-	}
+	}//populateResultToTable()
 
 ?>

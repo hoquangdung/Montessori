@@ -9,6 +9,20 @@ table {
 
 }
 
+
+input#passCode {
+	background-image: url("images/backgrounds/lcd_green.png");
+	background-repeat: repeat;
+	margin-left: 10%;
+	width: 20%;
+	height: 40px;
+	padding: 10px;
+	font-family: "Arial Black", Times, serif;
+	color: black;
+	font-size: 200%;	
+	text-align: left;
+}
+
 table td {	
 	align-content: center;
 	vertical-align: center;

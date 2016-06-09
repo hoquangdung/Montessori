@@ -14,28 +14,11 @@ session_start();
 </head>
 <body>
 
-<h2>User Login with Passcode</h2>
-
-
 <?php
-
-if (isset($_SESSION["LoggedIn_EMP_ID"]))
-{
-	echo 'LoggedIn_EMP_ID = ' .
-			$_SESSION["LoggedIn_EMP_ID"] . '<br/>';
-}
-if (isset($_SESSION["LoggedIn_EMP_NAME"]))
-{
-	echo 'LoggedIn_EMP_NAME" = ' .
-			$_SESSION["LoggedIn_EMP_NAME"] . '<br/>';			
-}
-else
-{
-	echo '<br/>&#9888; &#9888; No Logged-in User &#9888; &#9888;<br/>';
-}
-
+	include 'header_log_in_out.php'
 ?>
 
+<h2>User Login with Passcode</h2>
 
 <br/>
 <br/>
@@ -44,10 +27,9 @@ else
 
 <form name="keypadForm" action="keypad_process.php" method="post">
 
-	<input type='hidden' id='keys'		name='keys'			value=''>	
+	<input type='hidden' id='keys' name='keys' value=''>
 	
-	<label>Passcode: </label>
-	<input type="text" id="passCode" name="passCode" placeholder="passcode" value='' disabled>
+	<input type="password" id="passCode" name="passCode" value='' disabled>	
 
 	<br/>
 	<br/>

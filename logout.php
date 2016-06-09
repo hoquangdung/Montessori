@@ -32,16 +32,28 @@ else
 
 <?php
 
-if (isset($_SESSION))
+//if some user is logging in
+if (isset($_SESSION["LoggedIn_EMP_ID"]) ||
+	isset($_SESSION["LoggedIn_EMP_NAME"]))
 {
-	session_destroy();	
-	echo '<br/>&#9872; &#9872; User Logged Out &#9872; &#9872;<br/>';
+	//remove [LoggedIn_EMP_ID]
+	if (isset($_SESSION["LoggedIn_EMP_ID"]))
+	{
+		unset($_SESSION["LoggedIn_EMP_ID"]);	
+	}
+	
+	//remove [LoggedIn_EMP_NAME]
+	if (isset($_SESSION["LoggedIn_EMP_NAME"]))
+	{
+		unset($_SESSION["LoggedIn_EMP_NAME"]);	
+	}
+	
+	//then load the log-in page
+	echo '<script type="text/javascript">';
+    echo 'window.location.replace("login.php");';
+    echo '</script>';
 }
 	
-?>
-
-<?php
-	include 'footer.html'
 ?>
 
 </body>

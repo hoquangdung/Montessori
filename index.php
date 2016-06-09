@@ -1,3 +1,8 @@
+<?php
+// Start the session
+session_start();
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -6,9 +11,13 @@
 </head>
 <body>
 
+<?php
+	include 'header_log_in_out.php'
+?>
+
 <div id="header">
-	<h2> Welcome to Smart Assistance for Montessori Schools</h2>
-	<br/>
+	<h2><font color="blue">Smart Kids Montessori</font></h2>	
+	<h3>Please select one of the following option:</h3>
 	<br/>
 </div>
 
