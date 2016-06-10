@@ -36,6 +36,7 @@ session_start();
 		<li><a href="report_students.php"><img src="images/icons/report.jpg" width="40"> Students</a></li>
 		<li><a href="report_activities.php"><img src="images/icons/report.jpg" width="40"> Activities</a>
 		<li><a href="report_employee_log_ios.php"><img src="images/icons/report.jpg" width="40"> Employee Log-Ins/Outs</a>
+		<li><a href="report_employee_attendances.php"><img src="images/icons/report.jpg" width="40"> Employee Attendance-Ins/Outs</a>
 
 		</li>
 	</ul>	

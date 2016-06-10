@@ -43,7 +43,7 @@ if (isset($_SESSION["LoggedIn_EMP_ID"]) ||
 	if (isset($_SESSION["LoggedIn_EMP_ID"]))
 	{	
 		require_once("db_operations.php");		
-		insert_EMPLOYEE_LOG_IOS($_SESSION["LoggedIn_EMP_ID"], "Out");
+		insert_EMPLOYEE_LOG_IOS($_SESSION["LoggedIn_EMP_ID"], "Out", true);
 	}
 
 	//remove [LoggedIn_EMP_ID]

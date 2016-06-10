@@ -8,8 +8,8 @@ session_start();
 <html>
 
 <head>
-	<title>Report: Employees</title>
-	<link rel="stylesheet" type="text/css" href="style.css">
+	<title>Report: Employees</title>	
+	<link rel="stylesheet" type="text/css" href="db_tables.css">
 
 	<?php
 		$db_hostname = "localhost";
@@ -33,7 +33,7 @@ session_start();
 <h2>List of Employees</h2>
 <br/>
 
-<table border="solid">
+<table>
 	<tr>
 		<th>ID <img src="images/icons/primary_key.jpg" width="20"></th>
 		<th>First Name</th>

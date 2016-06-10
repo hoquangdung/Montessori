@@ -33,7 +33,7 @@
 		// 2 - Generate a random salt to encode the password
 		// 3 - Encrypt password
 		// 4 - Insert user in database
-		$db = connectDB();
+		$db = connectDB();		
 
 		// Query Database to validate user		
 		$result = mysqli_query($db, $query);
@@ -51,9 +51,9 @@
 		$resultRows = mysqli_num_rows($result);
 		$resultFields = mysqli_num_fields($result);
 
-		echo '<br/><br/><i>Total number of records: ' . $resultRows . '</i><br/><br/>';
+		echo '<br/><i>Total number of records: ' . $resultRows . '</i><br/><br/>';
 
-		echo '<table border="solid">';
+		echo '<table>';
 
 		//table row field headers
 		echo '<tr>';

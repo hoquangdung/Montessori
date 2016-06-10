@@ -1,6 +1,15 @@
+div#outer {	
+    width: 100%;
+}
+
+div#inner {
+	width: 50%;
+	margin: 0 auto;
+}
+
 table {
 	display: block;
-	width: 40%;	
+	width: 100%;	
 	padding: 15px;
 	padding-right: 0px;
 	border-radius: 20px;
@@ -13,13 +22,15 @@ table {
 input#passCode {
 	background-image: url("images/backgrounds/lcd_green.png");
 	background-repeat: repeat;
-	margin-left: 10%;
-	width: 20%;
-	height: 40px;
+	margin-left: 22%;
+	margin-top: 3%;
+	margin-bottom: 5%;
+	width: 50%;
+	height: 1.5em;
 	padding: 10px;
 	font-family: "Arial Black", Times, serif;
 	color: black;
-	font-size: 200%;	
+	font-size: 1.75em;	
 	text-align: left;
 }
 

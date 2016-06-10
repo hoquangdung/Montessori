@@ -12,29 +12,31 @@ session_start();
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
 
 </head>
+
 <body>
 
 <?php
 	include 'header_log_in_out.php'
 ?>
 
-<h2>User Login with Passcode</h2>
-
-<br/>
 <br/>
 
+<div id="outer">
 
+	<div id="inner">
+
+<br/>
 
 <form name="keypadForm" action="keypad_process.php" method="post">
 
 	<input type='hidden' id='keys' name='keys' value=''>
-	
-	<input type="password" id="passCode" name="passCode" value='' disabled>	
-
-	<br/>
-	<br/>
 
 	<table>
+		<tr>
+			<td colspan="4">
+			<input type="password" id="passCode" name="passCode" value='' disabled>		
+			</td>
+		</td>
 		<tr>
 			<td><a href="javascript: readKey('1')">
 				<img src="images/icons/key_one.png"></a></td>
@@ -75,6 +77,10 @@ session_start();
 	</table>
 
 </form>
+
+</div>
+
+</div>
 
 <script language="javascript" type="text/javascript">
 function readKey(key)
@@ -119,4 +125,5 @@ function submit_keypadForm(key)
 ?>
 
 </body>
+
 </html>

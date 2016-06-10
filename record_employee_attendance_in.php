@@ -18,13 +18,20 @@ session_start();
 
 <?php
 
-if (isset($_SESSION["LoggedIn_EMP_ID"]))
+if (isset($_SESSION["LoggedIn_EMP_ID"]) &&
+	isset($_SESSION["LoggedIn_EMP_NAME"]))
 {				
 	require_once("db_operations.php");
 
 	$notes = "";
 	//record new attendance-in
-	insert_EMPLOYEE_ATTENDANCES($_SESSION["LoggedIn_EMP_ID"], "In", $notes);
+	insert_EMPLOYEE_ATTENDANCES($_SESSION["LoggedIn_EMP_ID"], "In", $notes, true);
+
+	//display a confirmation message to the user
+	echo '<script type="text/javascript">';
+    echo 'window.confirm("Welcome ' . $_SESSION["LoggedIn_EMP_NAME"] . '!' .
+    		' Your attendance-in was recored. Enjoy your day!");';
+    echo '</script>';
 
 	//then automatically redirect to his/her main index page
 	/**/

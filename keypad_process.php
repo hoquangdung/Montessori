@@ -31,10 +31,12 @@ else
 	$keys = $_POST['keys'];
 
 	//testing
+	/**
 	if (isset($keys))
 	{
 		echo 'keys = ' . $keys . '<br/>';
 	}
+	/**/
 
 	require_once("sql_queries.php");
 	require_once("db_operations.php");
@@ -52,13 +54,14 @@ else
 		$queryStr = $queryStr . 'EMP_PASSCODE=' . '"' . $keys . '"';
 	$queryStr = $queryStr . ';';
 	
-	//testing
-	echo 'Executed query: ' . $queryStr;
+	//if debug on, display [queryStr]
+	displayQueryStr($queryStr, true);
 
 	//*** 2. execute quyery and get the results
 	$result = getResult($queryStr);
 
 	//testing
+	/**
 	//populate [result] to table
 	$fieldHeaderStr = array (
 		0 => 'Identification',
@@ -68,6 +71,7 @@ else
 		4 => 'Phone Number',
 		);
 	populateResultToTable($result, $fieldHeaderStr);
+	/**/
 
 	$resultRows = mysqli_num_rows($result);
 
@@ -78,7 +82,7 @@ else
 		//record this log-in failure for security reasons
 		if (isset($keys))
 		{			
-			insert_EMPLOYEE_LOG_FAILURES($keys);
+			insert_EMPLOYEE_LOG_FAILURES($keys, true);
 		}
 
 		//remove variables
@@ -96,7 +100,7 @@ else
 			//record this forced log-out
 			if (isset($_SESSION["LoggedIn_EMP_ID"]))
 			{				
-				insert_EMPLOYEE_LOG_IOS($_SESSION["LoggedIn_EMP_ID"], "Out");
+				insert_EMPLOYEE_LOG_IOS($_SESSION["LoggedIn_EMP_ID"], "Out", true);
 			}
 
 			//remove [LoggedIn_EMP_ID]
@@ -156,7 +160,7 @@ else
 		//c. record this successfull log-in
 		if (isset($_SESSION["LoggedIn_EMP_ID"]))
 		{				
-			insert_EMPLOYEE_LOG_IOS($_SESSION["LoggedIn_EMP_ID"], "In");
+			insert_EMPLOYEE_LOG_IOS($_SESSION["LoggedIn_EMP_ID"], "In", true);
 		}
 
 		//d. redirect the logged-in user to his/her main index page
