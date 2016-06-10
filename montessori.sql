@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.3.11
+-- version 4.5.1
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 10, 2016 at 03:37 AM
--- Server version: 5.6.24
--- PHP Version: 5.5.24
+-- Generation Time: Jun 10, 2016 at 07:38 PM
+-- Server version: 10.1.13-MariaDB
+-- PHP Version: 5.6.21
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -14,7 +14,7 @@ SET time_zone = "+00:00";
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
+/*!40101 SET NAMES utf8mb4 */;
 
 --
 -- Database: `montessori`
@@ -26,7 +26,7 @@ SET time_zone = "+00:00";
 -- Table structure for table `activities`
 --
 
-CREATE TABLE IF NOT EXISTS `activities` (
+CREATE TABLE `activities` (
   `ACT_ID` int(11) NOT NULL,
   `ACT_TYPE_ID` int(11) NOT NULL,
   `ACT_SUBTYPE_ID` int(11) NOT NULL,
@@ -35,7 +35,7 @@ CREATE TABLE IF NOT EXISTS `activities` (
   `ACT_MAX_AGE` int(11) DEFAULT NULL,
   `ACT_DESCR` text,
   `ACT_NOTES` text
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `activities`
@@ -61,7 +61,7 @@ INSERT INTO `activities` (`ACT_ID`, `ACT_TYPE_ID`, `ACT_SUBTYPE_ID`, `ACT_NAME`,
 -- Table structure for table `activity_subtypes`
 --
 
-CREATE TABLE IF NOT EXISTS `activity_subtypes` (
+CREATE TABLE `activity_subtypes` (
   `ACT_SUBTYPE_ID` int(11) NOT NULL,
   `ACT_SUBTYPE_NAME` varchar(100) NOT NULL,
   `ACT_SUBTYPE_DESCR` text NOT NULL,
@@ -93,12 +93,12 @@ INSERT INTO `activity_subtypes` (`ACT_SUBTYPE_ID`, `ACT_SUBTYPE_NAME`, `ACT_SUBT
 -- Table structure for table `activity_types`
 --
 
-CREATE TABLE IF NOT EXISTS `activity_types` (
+CREATE TABLE `activity_types` (
   `ACT_TYPE_ID` int(11) NOT NULL,
   `ACT_TYPE_NAME` varchar(100) NOT NULL,
   `ACT_TYPE_DESCR` text NOT NULL,
   `ACT_TYPE_NOTES` text NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `activity_types`
@@ -112,13 +112,79 @@ INSERT INTO `activity_types` (`ACT_TYPE_ID`, `ACT_TYPE_NAME`, `ACT_TYPE_DESCR`, 
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `db_query_logs`
+--
+
+CREATE TABLE `db_query_logs` (
+  `DB_QL_ID` int(11) NOT NULL,
+  `QUERY_STR` varchar(200) NOT NULL,
+  `DATE_TIME` datetime NOT NULL,
+  `IP_ADDR` varchar(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `db_query_logs`
+--
+
+INSERT INTO `db_query_logs` (`DB_QL_ID`, `QUERY_STR`, `DATE_TIME`, `IP_ADDR`) VALUES
+(6, 'INSERT INTO EMPLOYEE_LOG_IOS(EMP_ID, EVENT_TYPE, DATE_TIME, IP_ADDR) VALUES(2, "Out", NOW(), "::1");', '2016-06-10 13:18:08', '::1'),
+(7, 'SELECT  EMP_ID, EMP_FIRST_NAME, EMP_LAST_NAME, EMP_BIRTHDATE, EMP_PHONE1 FROM EMPLOYEES  WHERE EMP_PASSCODE="45";', '2016-06-10 13:18:29', '::1'),
+(8, 'INSERT INTO EMPLOYEE_LOG_FAILURES(IP_ADDR, PASSCODE, DATE_TIME) VALUES("::1", "45", NOW());', '2016-06-10 13:18:29', '::1'),
+(9, 'SELECT  EMP_ID, EMP_FIRST_NAME, EMP_LAST_NAME, EMP_BIRTHDATE, EMP_PHONE1 FROM EMPLOYEES  WHERE EMP_PASSCODE="632";', '2016-06-10 13:19:12', '::1'),
+(10, 'INSERT INTO EMPLOYEE_LOG_FAILURES(IP_ADDR, PASSCODE, DATE_TIME) VALUES("::1", "632", NOW());', '2016-06-10 13:19:12', '::1'),
+(11, 'SELECT  EMP_ID, EMP_FIRST_NAME, EMP_LAST_NAME, EMP_BIRTHDATE, EMP_PHONE1 FROM EMPLOYEES  WHERE EMP_PASSCODE="8772";', '2016-06-10 13:19:18', '::1'),
+(12, 'INSERT INTO EMPLOYEE_LOG_IOS(EMP_ID, EVENT_TYPE, DATE_TIME, IP_ADDR) VALUES(2, "In", NOW(), "::1");', '2016-06-10 13:19:19', '::1'),
+(13, 'INSERT INTO EMPLOYEE_ATTENDANCES(EMP_ID, EVENT_TYPE, DATE_TIME, IP_ADDR, NOTES) VALUES(2, "Out", NOW(), "::1", "");', '2016-06-10 13:19:35', '::1'),
+(14, 'INSERT INTO EMPLOYEE_LOG_IOS(EMP_ID, EVENT_TYPE, DATE_TIME, IP_ADDR) VALUES(2, "Out", NOW(), "::1");', '2016-06-10 13:21:19', '::1'),
+(15, 'SELECT  EMP_ID, EMP_FIRST_NAME, EMP_LAST_NAME, EMP_BIRTHDATE, EMP_PHONE1 FROM EMPLOYEES  WHERE EMP_PASSCODE="8772";', '2016-06-10 13:21:29', '::1'),
+(16, 'INSERT INTO EMPLOYEE_LOG_IOS(EMP_ID, EVENT_TYPE, DATE_TIME, IP_ADDR) VALUES(2, "In", NOW(), "::1");', '2016-06-10 13:21:29', '::1'),
+(17, 'INSERT INTO EMPLOYEE_LOG_IOS(EMP_ID, EVENT_TYPE, DATE_TIME, IP_ADDR) VALUES(2, "Out", NOW(), "::1");', '2016-06-10 13:21:33', '::1'),
+(18, 'SELECT  EMP_ID, EMP_FIRST_NAME, EMP_LAST_NAME, EMP_BIRTHDATE, EMP_PHONE1 FROM EMPLOYEES  WHERE EMP_PASSCODE="8772";', '2016-06-10 13:21:52', '::1'),
+(19, 'INSERT INTO EMPLOYEE_LOG_IOS(EMP_ID, EVENT_TYPE, DATE_TIME, IP_ADDR) VALUES(2, "In", NOW(), "::1");', '2016-06-10 13:21:52', '::1'),
+(20, 'SELECT  EMPLOYEE_LOG_IOS.EMP_LOGS_ID, EMPLOYEES.EMP_FIRST_NAME, EMPLOYEES.EMP_LAST_NAME, EMPLOYEE_LOG_IOS.EVENT_TYPE, EMPLOYEE_LOG_IOS.DATE_TIME, EMPLOYEE_LOG_IOS.IP_ADDR FROM EMPLOYEE_LOG_IOS, EMPLOY', '2016-06-10 13:21:57', '::1'),
+(21, 'SELECT  EMPLOYEE_ATTENDANCES.EMP_ATT_ID, EMPLOYEES.EMP_FIRST_NAME, EMPLOYEES.EMP_LAST_NAME, EMPLOYEE_ATTENDANCES.EVENT_TYPE, EMPLOYEE_ATTENDANCES.DATE_TIME, EMPLOYEE_ATTENDANCES.IP_ADDR FROM EMPLOYEE_', '2016-06-10 13:22:08', '::1'),
+(22, 'INSERT INTO EMPLOYEE_LOG_IOS(EMP_ID, EVENT_TYPE, DATE_TIME, IP_ADDR) VALUES(2, "Out", NOW(), "::1");', '2016-06-10 13:22:24', '::1'),
+(23, 'SELECT  EMP_ID, EMP_FIRST_NAME, EMP_LAST_NAME, EMP_BIRTHDATE, EMP_PHONE1 FROM EMPLOYEES  WHERE EMP_PASSCODE="1887";', '2016-06-10 13:22:43', '::1'),
+(24, 'INSERT INTO EMPLOYEE_LOG_IOS(EMP_ID, EVENT_TYPE, DATE_TIME, IP_ADDR) VALUES(1, "In", NOW(), "::1");', '2016-06-10 13:22:43', '::1'),
+(25, 'INSERT INTO EMPLOYEE_LOG_IOS(EMP_ID, EVENT_TYPE, DATE_TIME, IP_ADDR) VALUES(1, "Out", NOW(), "::1");', '2016-06-10 13:22:47', '::1'),
+(26, 'SELECT  EMP_ID, EMP_FIRST_NAME, EMP_LAST_NAME, EMP_BIRTHDATE, EMP_PHONE1 FROM EMPLOYEES  WHERE EMP_PASSCODE="8772";', '2016-06-10 13:22:56', '::1'),
+(27, 'INSERT INTO EMPLOYEE_LOG_IOS(EMP_ID, EVENT_TYPE, DATE_TIME, IP_ADDR) VALUES(2, "In", NOW(), "::1");', '2016-06-10 13:22:56', '::1'),
+(28, 'SELECT  EMPLOYEE_LOG_IOS.EMP_LOGS_ID, EMPLOYEES.EMP_FIRST_NAME, EMPLOYEES.EMP_LAST_NAME, EMPLOYEE_LOG_IOS.EVENT_TYPE, EMPLOYEE_LOG_IOS.DATE_TIME, EMPLOYEE_LOG_IOS.IP_ADDR FROM EMPLOYEE_LOG_IOS, EMPLOY', '2016-06-10 13:23:00', '::1'),
+(29, 'SELECT  EMPLOYEE_ATTENDANCES.EMP_ATT_ID, EMPLOYEES.EMP_FIRST_NAME, EMPLOYEES.EMP_LAST_NAME, EMPLOYEE_ATTENDANCES.EVENT_TYPE, EMPLOYEE_ATTENDANCES.DATE_TIME, EMPLOYEE_ATTENDANCES.IP_ADDR FROM EMPLOYEE_', '2016-06-10 13:23:13', '::1'),
+(30, 'INSERT INTO EMPLOYEE_LOG_IOS(EMP_ID, EVENT_TYPE, DATE_TIME, IP_ADDR) VALUES(2, "Out", NOW(), "::1");', '2016-06-10 13:24:51', '::1'),
+(31, 'SELECT  EMP_ID, EMP_FIRST_NAME, EMP_LAST_NAME, EMP_BIRTHDATE, EMP_PHONE1 FROM EMPLOYEES  WHERE EMP_PASSCODE="65";', '2016-06-10 13:24:54', '::1'),
+(32, 'INSERT INTO EMPLOYEE_LOG_FAILURES(IP_ADDR, PASSCODE, DATE_TIME) VALUES("::1", "65", NOW());', '2016-06-10 13:24:54', '::1'),
+(33, 'SELECT  EMP_ID, EMP_FIRST_NAME, EMP_LAST_NAME, EMP_BIRTHDATE, EMP_PHONE1 FROM EMPLOYEES  WHERE EMP_PASSCODE="8772";', '2016-06-10 13:25:05', '::1'),
+(34, 'INSERT INTO EMPLOYEE_LOG_IOS(EMP_ID, EVENT_TYPE, DATE_TIME, IP_ADDR) VALUES(2, "In", NOW(), "::1");', '2016-06-10 13:25:05', '::1'),
+(35, 'INSERT INTO EMPLOYEE_LOG_IOS(EMP_ID, EVENT_TYPE, DATE_TIME, IP_ADDR) VALUES(2, "Out", NOW(), "::1");', '2016-06-10 13:26:14', '::1'),
+(36, 'SELECT  EMP_ID, EMP_FIRST_NAME, EMP_LAST_NAME, EMP_BIRTHDATE, EMP_PHONE1 FROM EMPLOYEES  WHERE EMP_PASSCODE="1887";', '2016-06-10 13:33:48', '::1'),
+(37, 'INSERT INTO EMPLOYEE_LOG_IOS(EMP_ID, EVENT_TYPE, DATE_TIME, IP_ADDR) VALUES(1, "In", NOW(), "::1");', '2016-06-10 13:33:48', '::1'),
+(38, 'SELECT  EMP_ID, EMP_FIRST_NAME, EMP_LAST_NAME, EMP_BIRTHDATE, EMP_PHONE1 FROM EMPLOYEES  WHERE EMP_PASSCODE="21";', '2016-06-10 13:35:05', '::1'),
+(39, 'INSERT INTO EMPLOYEE_LOG_FAILURES(IP_ADDR, PASSCODE, DATE_TIME) VALUES("::1", "21", NOW());', '2016-06-10 13:35:05', '::1'),
+(40, 'INSERT INTO EMPLOYEE_LOG_IOS(EMP_ID, EVENT_TYPE, DATE_TIME, IP_ADDR) VALUES(1, "Out", NOW(), "::1");', '2016-06-10 13:35:05', '::1'),
+(41, 'SELECT  EMP_ID, EMP_FIRST_NAME, EMP_LAST_NAME, EMP_BIRTHDATE, EMP_PHONE1 FROM EMPLOYEES  WHERE EMP_PASSCODE="985";', '2016-06-10 13:35:08', '::1'),
+(42, 'INSERT INTO EMPLOYEE_LOG_FAILURES(IP_ADDR, PASSCODE, DATE_TIME) VALUES("::1", "985", NOW());', '2016-06-10 13:35:08', '::1'),
+(43, 'SELECT  EMP_ID, EMP_FIRST_NAME, EMP_LAST_NAME, EMP_BIRTHDATE, EMP_PHONE1 FROM EMPLOYEES  WHERE EMP_PASSCODE="8772";', '2016-06-10 13:35:16', '::1'),
+(44, 'INSERT INTO EMPLOYEE_LOG_IOS(EMP_ID, EVENT_TYPE, DATE_TIME, IP_ADDR) VALUES(2, "In", NOW(), "::1");', '2016-06-10 13:35:16', '::1'),
+(45, 'INSERT INTO EMPLOYEE_ATTENDANCES(EMP_ID, EVENT_TYPE, DATE_TIME, IP_ADDR, NOTES) VALUES(2, "In", NOW(), "::1", "");', '2016-06-10 13:35:26', '::1'),
+(46, 'INSERT INTO EMPLOYEE_ATTENDANCES(EMP_ID, EVENT_TYPE, DATE_TIME, IP_ADDR, NOTES) VALUES(2, "Out", NOW(), "::1", "");', '2016-06-10 13:35:31', '::1'),
+(47, 'SELECT  EMPLOYEE_ATTENDANCES.EMP_ATT_ID, EMPLOYEES.EMP_FIRST_NAME, EMPLOYEES.EMP_LAST_NAME, EMPLOYEE_ATTENDANCES.EVENT_TYPE, EMPLOYEE_ATTENDANCES.DATE_TIME, EMPLOYEE_ATTENDANCES.IP_ADDR FROM EMPLOYEE_', '2016-06-10 13:35:35', '::1'),
+(48, 'SELECT  EMPLOYEE_LOG_IOS.EMP_LOGS_ID, EMPLOYEES.EMP_FIRST_NAME, EMPLOYEES.EMP_LAST_NAME, EMPLOYEE_LOG_IOS.EVENT_TYPE, EMPLOYEE_LOG_IOS.DATE_TIME, EMPLOYEE_LOG_IOS.IP_ADDR FROM EMPLOYEE_LOG_IOS, EMPLOY', '2016-06-10 13:35:41', '::1'),
+(49, 'INSERT INTO EMPLOYEE_LOG_IOS(EMP_ID, EVENT_TYPE, DATE_TIME, IP_ADDR) VALUES(2, "Out", NOW(), "::1");', '2016-06-10 13:36:39', '::1'),
+(50, 'SELECT  EMP_ID, EMP_FIRST_NAME, EMP_LAST_NAME, EMP_BIRTHDATE, EMP_PHONE1 FROM EMPLOYEES  WHERE EMP_PASSCODE="8772";', '2016-06-10 13:37:11', '::1'),
+(51, 'INSERT INTO EMPLOYEE_LOG_IOS(EMP_ID, EVENT_TYPE, DATE_TIME, IP_ADDR) VALUES(2, "In", NOW(), "::1");', '2016-06-10 13:37:11', '::1'),
+(52, 'INSERT INTO EMPLOYEE_ATTENDANCES(EMP_ID, EVENT_TYPE, DATE_TIME, IP_ADDR, NOTES) VALUES(2, "Out", NOW(), "::1", "");', '2016-06-10 13:37:13', '::1');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `educations`
 --
 
-CREATE TABLE IF NOT EXISTS `educations` (
+CREATE TABLE `educations` (
   `EDU_ID` int(11) NOT NULL,
   `EDU_DEGREE` varchar(50) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `educations`
@@ -140,7 +206,7 @@ INSERT INTO `educations` (`EDU_ID`, `EDU_DEGREE`) VALUES
 -- Table structure for table `employees`
 --
 
-CREATE TABLE IF NOT EXISTS `employees` (
+CREATE TABLE `employees` (
   `EMP_ID` int(11) NOT NULL,
   `EMP_FIRST_NAME` varchar(50) NOT NULL,
   `EMP_LAST_NAME` varchar(25) NOT NULL,
@@ -165,7 +231,7 @@ CREATE TABLE IF NOT EXISTS `employees` (
   `EMP_HOURLY_RATE` float NOT NULL,
   `EMP_PASSCODE` varchar(10) NOT NULL,
   `EMP_NOTES` text
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `employees`
@@ -181,14 +247,14 @@ INSERT INTO `employees` (`EMP_ID`, `EMP_FIRST_NAME`, `EMP_LAST_NAME`, `EMP_BIRTH
 -- Table structure for table `employee_attendances`
 --
 
-CREATE TABLE IF NOT EXISTS `employee_attendances` (
+CREATE TABLE `employee_attendances` (
   `EMP_ATT_ID` int(11) NOT NULL,
   `EMP_ID` int(11) NOT NULL,
   `EVENT_TYPE` varchar(5) NOT NULL,
   `DATE_TIME` datetime NOT NULL,
   `IP_ADDR` varchar(50) NOT NULL,
   `NOTES` text NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `employee_attendances`
@@ -205,7 +271,38 @@ INSERT INTO `employee_attendances` (`EMP_ATT_ID`, `EMP_ID`, `EVENT_TYPE`, `DATE_
 (8, 1, 'In', '2016-06-09 21:33:38', '10.1.31.65', ''),
 (9, 1, 'Out', '2016-06-09 21:33:38', '10.1.31.65', ''),
 (10, 1, 'In', '2016-06-09 21:33:39', '10.1.31.65', ''),
-(11, 1, 'Out', '2016-06-09 21:33:39', '10.1.31.65', '');
+(11, 1, 'Out', '2016-06-09 21:33:39', '10.1.31.65', ''),
+(12, 2, 'In', '2016-06-10 10:03:54', '::1', ''),
+(13, 1, 'In', '2016-06-10 11:06:05', '::1', ''),
+(14, 1, 'Out', '2016-06-10 11:09:55', '::1', ''),
+(15, 2, 'In', '2016-06-10 11:56:29', '::1', ''),
+(16, 2, 'In', '2016-06-10 11:56:58', '::1', ''),
+(17, 2, 'In', '2016-06-10 11:58:39', '::1', ''),
+(18, 2, 'In', '2016-06-10 12:00:09', '::1', ''),
+(19, 2, 'In', '2016-06-10 12:02:51', '::1', ''),
+(20, 2, 'In', '2016-06-10 12:03:20', '::1', ''),
+(21, 2, 'Out', '2016-06-10 12:14:25', '::1', ''),
+(22, 2, 'In', '2016-06-10 12:18:54', '::1', ''),
+(23, 2, 'Out', '2016-06-10 12:18:57', '::1', ''),
+(24, 2, 'In', '2016-06-10 12:26:39', '::1', ''),
+(25, 2, 'In', '2016-06-10 12:27:11', '::1', ''),
+(26, 2, 'In', '2016-06-10 12:27:56', '::1', ''),
+(27, 2, 'Out', '2016-06-10 12:28:01', '::1', ''),
+(28, 2, 'Out', '2016-06-10 12:28:27', '::1', ''),
+(29, 2, 'In', '2016-06-10 12:41:46', '::1', ''),
+(30, 2, 'In', '2016-06-10 12:42:20', '::1', ''),
+(31, 2, 'Out', '2016-06-10 12:42:26', '::1', ''),
+(32, 2, 'In', '2016-06-10 12:50:27', '::1', ''),
+(33, 2, 'Out', '2016-06-10 12:50:38', '::1', ''),
+(34, 2, 'In', '2016-06-10 13:04:58', '::1', ''),
+(35, 2, 'In', '2016-06-10 13:06:57', '::1', ''),
+(36, 2, 'In', '2016-06-10 13:12:38', '::1', ''),
+(37, 2, 'In', '2016-06-10 13:16:12', '::1', ''),
+(38, 2, 'In', '2016-06-10 13:16:59', '::1', ''),
+(39, 2, 'Out', '2016-06-10 13:19:35', '::1', ''),
+(40, 2, 'In', '2016-06-10 13:35:26', '::1', ''),
+(41, 2, 'Out', '2016-06-10 13:35:31', '::1', ''),
+(42, 2, 'Out', '2016-06-10 13:37:13', '::1', '');
 
 -- --------------------------------------------------------
 
@@ -213,39 +310,56 @@ INSERT INTO `employee_attendances` (`EMP_ATT_ID`, `EMP_ID`, `EVENT_TYPE`, `DATE_
 -- Table structure for table `employee_log_failures`
 --
 
-CREATE TABLE IF NOT EXISTS `employee_log_failures` (
+CREATE TABLE `employee_log_failures` (
   `EM_LOG_F_ID` int(11) NOT NULL,
   `IP_ADDR` varchar(50) NOT NULL,
   `PASSCODE` varchar(50) NOT NULL,
   `DATE_TIME` datetime NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `employee_log_failures`
 --
 
 INSERT INTO `employee_log_failures` (`EM_LOG_F_ID`, `IP_ADDR`, `PASSCODE`, `DATE_TIME`) VALUES
-(1, '::1', '65232', '2016-06-09 20:04:47'),
-(2, '::1', '187', '2016-06-09 20:06:44'),
-(3, '::1', '2546', '2016-06-09 20:07:59'),
-(4, '::1', '852', '2016-06-09 20:08:04'),
-(5, '::1', '187', '2016-06-09 20:08:08'),
-(6, '::1', '5269', '2016-06-09 20:10:15'),
-(7, '::1', '213', '2016-06-09 20:10:28'),
-(8, '', '965', '2016-06-09 20:12:32'),
-(9, '', '147258', '2016-06-09 20:13:42'),
-(10, '::1', '258', '2016-06-09 20:15:17'),
-(11, '10.1.31.65', '5869', '2016-06-09 20:19:39'),
-(12, '10.1.31.65', '4589', '2016-06-09 20:20:16'),
-(13, '::1', '6589', '2016-06-09 20:27:54'),
-(14, '::1', '87729', '2016-06-09 20:43:04'),
-(15, '::1', '6254', '2016-06-09 20:43:06'),
-(16, '::1', '3652', '2016-06-09 20:43:08'),
-(17, '::1', '4589', '2016-06-09 20:43:11'),
-(18, '::1', '321', '2016-06-09 20:43:13'),
-(19, '10.1.31.65', '526', '2016-06-09 21:35:55'),
-(20, '10.1.31.65', '9985598', '2016-06-09 21:36:00'),
-(21, '10.1.31.65', '8563', '2016-06-09 21:36:22');
+(41, '::1', '11', '2016-06-10 12:37:36'),
+(42, '::1', '12', '2016-06-10 12:37:46'),
+(43, '::1', '13', '2016-06-10 12:37:54'),
+(44, '::1', '14', '2016-06-10 12:38:05'),
+(45, '::1', '15', '2016-06-10 12:38:13'),
+(46, '::1', '16', '2016-06-10 12:39:08'),
+(47, '::1', '17', '2016-06-10 12:39:11'),
+(48, '::1', '18', '2016-06-10 12:39:13'),
+(49, '::1', '19', '2016-06-10 12:39:15'),
+(50, '::1', '20', '2016-06-10 12:39:17'),
+(51, '::1', '21', '2016-06-10 12:39:20'),
+(52, '::1', '22', '2016-06-10 12:39:22'),
+(53, '::1', '23', '2016-06-10 12:39:25'),
+(54, '::1', '78', '2016-06-10 12:40:42'),
+(55, '::1', '12', '2016-06-10 12:43:26'),
+(56, '::1', '25', '2016-06-10 12:44:54'),
+(57, '::1', '12', '2016-06-10 12:45:09'),
+(58, '::1', '', '2016-06-10 12:45:12'),
+(59, '::1', '62', '2016-06-10 12:45:16'),
+(60, '::1', '32', '2016-06-10 12:45:18'),
+(61, '::1', '21', '2016-06-10 12:45:34'),
+(62, '::1', '65', '2016-06-10 12:45:37'),
+(63, '::1', '98', '2016-06-10 12:45:38'),
+(64, '::1', '80', '2016-06-10 12:45:41'),
+(65, '::1', '45', '2016-06-10 12:45:43'),
+(66, '::1', '39', '2016-06-10 12:45:47'),
+(67, '::1', '78', '2016-06-10 12:45:50'),
+(68, '::1', '08', '2016-06-10 12:45:52'),
+(69, '::1', '5880', '2016-06-10 12:45:54'),
+(70, '::1', '21', '2016-06-10 12:46:14'),
+(71, '::1', '25', '2016-06-10 12:47:42'),
+(72, '::1', '12', '2016-06-10 12:49:26'),
+(73, '::1', '12', '2016-06-10 12:50:04'),
+(74, '::1', '45', '2016-06-10 13:18:29'),
+(75, '::1', '632', '2016-06-10 13:19:12'),
+(76, '::1', '65', '2016-06-10 13:24:54'),
+(77, '::1', '21', '2016-06-10 13:35:05'),
+(78, '::1', '985', '2016-06-10 13:35:08');
 
 -- --------------------------------------------------------
 
@@ -253,13 +367,13 @@ INSERT INTO `employee_log_failures` (`EM_LOG_F_ID`, `IP_ADDR`, `PASSCODE`, `DATE
 -- Table structure for table `employee_log_ios`
 --
 
-CREATE TABLE IF NOT EXISTS `employee_log_ios` (
+CREATE TABLE `employee_log_ios` (
   `EMP_LOGS_ID` int(11) NOT NULL,
   `EMP_ID` int(11) NOT NULL,
   `EVENT_TYPE` varchar(3) NOT NULL,
   `DATE_TIME` datetime NOT NULL,
   `IP_ADDR` varchar(50) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=61 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `employee_log_ios`
@@ -325,7 +439,37 @@ INSERT INTO `employee_log_ios` (`EMP_LOGS_ID`, `EMP_ID`, `EVENT_TYPE`, `DATE_TIM
 (57, 1, 'In', '2016-06-09 21:21:24', '10.1.31.65'),
 (58, 2, 'Out', '2016-06-09 21:23:53', '::1'),
 (59, 2, 'In', '2016-06-09 21:23:57', '::1'),
-(60, 1, 'Out', '2016-06-09 21:35:52', '10.1.31.65');
+(60, 1, 'Out', '2016-06-09 21:35:52', '10.1.31.65'),
+(61, 2, 'In', '2016-06-10 10:03:20', '::1'),
+(62, 2, 'In', '2016-06-10 10:34:25', '::1'),
+(63, 2, 'Out', '2016-06-10 10:34:34', '::1'),
+(64, 1, 'In', '2016-06-10 10:37:07', '::1'),
+(65, 2, 'In', '2016-06-10 11:33:40', '::1'),
+(66, 2, 'Out', '2016-06-10 11:44:03', '::1'),
+(67, 2, 'In', '2016-06-10 11:44:07', '::1'),
+(68, 2, 'In', '2016-06-10 12:00:07', '::1'),
+(69, 2, 'Out', '2016-06-10 12:29:45', '::1'),
+(70, 2, 'In', '2016-06-10 12:40:45', '::1'),
+(71, 2, 'Out', '2016-06-10 12:43:26', '::1'),
+(72, 2, 'In', '2016-06-10 12:50:20', '::1'),
+(73, 2, 'Out', '2016-06-10 13:18:08', '::1'),
+(74, 2, 'In', '2016-06-10 13:19:19', '::1'),
+(75, 2, 'Out', '2016-06-10 13:21:19', '::1'),
+(76, 2, 'In', '2016-06-10 13:21:29', '::1'),
+(77, 2, 'Out', '2016-06-10 13:21:33', '::1'),
+(78, 2, 'In', '2016-06-10 13:21:52', '::1'),
+(79, 2, 'Out', '2016-06-10 13:22:24', '::1'),
+(80, 1, 'In', '2016-06-10 13:22:44', '::1'),
+(81, 1, 'Out', '2016-06-10 13:22:47', '::1'),
+(82, 2, 'In', '2016-06-10 13:22:56', '::1'),
+(83, 2, 'Out', '2016-06-10 13:24:51', '::1'),
+(84, 2, 'In', '2016-06-10 13:25:05', '::1'),
+(85, 2, 'Out', '2016-06-10 13:26:14', '::1'),
+(86, 1, 'In', '2016-06-10 13:33:48', '::1'),
+(87, 1, 'Out', '2016-06-10 13:35:05', '::1'),
+(88, 2, 'In', '2016-06-10 13:35:16', '::1'),
+(89, 2, 'Out', '2016-06-10 13:36:39', '::1'),
+(90, 2, 'In', '2016-06-10 13:37:11', '::1');
 
 -- --------------------------------------------------------
 
@@ -333,12 +477,12 @@ INSERT INTO `employee_log_ios` (`EMP_LOGS_ID`, `EMP_ID`, `EVENT_TYPE`, `DATE_TIM
 -- Table structure for table `positions`
 --
 
-CREATE TABLE IF NOT EXISTS `positions` (
+CREATE TABLE `positions` (
   `POS_ID` int(11) NOT NULL,
   `POS_NAME` varchar(50) NOT NULL,
   `POS_DESCR` text NOT NULL,
   `POS_NOTES` text NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `positions`
@@ -358,7 +502,7 @@ INSERT INTO `positions` (`POS_ID`, `POS_NAME`, `POS_DESCR`, `POS_NOTES`) VALUES
 -- Table structure for table `students`
 --
 
-CREATE TABLE IF NOT EXISTS `students` (
+CREATE TABLE `students` (
   `STU_ID` int(11) NOT NULL,
   `STU_FIRST_NAME` varchar(50) NOT NULL,
   `STU_LAST_NAME` varchar(25) NOT NULL,
@@ -369,7 +513,7 @@ CREATE TABLE IF NOT EXISTS `students` (
   `STU_DAILY_FEE` float NOT NULL,
   `STU_CREDENTIAL` varchar(10) NOT NULL,
   `STU_NOTES` text NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `students`
@@ -393,7 +537,7 @@ INSERT INTO `students` (`STU_ID`, `STU_FIRST_NAME`, `STU_LAST_NAME`, `STU_BIRTHD
 -- Table structure for table `student_activity_educator`
 --
 
-CREATE TABLE IF NOT EXISTS `student_activity_educator` (
+CREATE TABLE `student_activity_educator` (
   `STU_ACT_EDR_ID` int(11) NOT NULL,
   `STU_ID` int(11) NOT NULL,
   `ACT_ID` int(11) NOT NULL,
@@ -412,31 +556,53 @@ CREATE TABLE IF NOT EXISTS `student_activity_educator` (
 -- Indexes for table `activities`
 --
 ALTER TABLE `activities`
-  ADD PRIMARY KEY (`ACT_ID`), ADD KEY `ACT_TYPE_ID` (`ACT_TYPE_ID`), ADD KEY `ACT_SUBTYPE_ID` (`ACT_SUBTYPE_ID`), ADD KEY `ACT_ID` (`ACT_ID`);
+  ADD PRIMARY KEY (`ACT_ID`),
+  ADD KEY `ACT_TYPE_ID` (`ACT_TYPE_ID`),
+  ADD KEY `ACT_SUBTYPE_ID` (`ACT_SUBTYPE_ID`),
+  ADD KEY `ACT_ID` (`ACT_ID`);
 
 --
 -- Indexes for table `activity_subtypes`
 --
 ALTER TABLE `activity_subtypes`
-  ADD PRIMARY KEY (`ACT_SUBTYPE_ID`), ADD KEY `ACT_SUBTYPE_ID` (`ACT_SUBTYPE_ID`);
+  ADD PRIMARY KEY (`ACT_SUBTYPE_ID`),
+  ADD KEY `ACT_SUBTYPE_ID` (`ACT_SUBTYPE_ID`);
 
 --
 -- Indexes for table `activity_types`
 --
 ALTER TABLE `activity_types`
-  ADD PRIMARY KEY (`ACT_TYPE_ID`), ADD KEY `ACT_TYPE_ID` (`ACT_TYPE_ID`);
+  ADD PRIMARY KEY (`ACT_TYPE_ID`),
+  ADD KEY `ACT_TYPE_ID` (`ACT_TYPE_ID`);
+
+--
+-- Indexes for table `db_query_logs`
+--
+ALTER TABLE `db_query_logs`
+  ADD PRIMARY KEY (`DB_QL_ID`);
 
 --
 -- Indexes for table `educations`
 --
 ALTER TABLE `educations`
-  ADD PRIMARY KEY (`EDU_ID`), ADD KEY `EDU_ID` (`EDU_ID`);
+  ADD PRIMARY KEY (`EDU_ID`),
+  ADD KEY `EDU_ID` (`EDU_ID`);
 
 --
 -- Indexes for table `employees`
 --
 ALTER TABLE `employees`
-  ADD PRIMARY KEY (`EMP_ID`), ADD KEY `EMP_EDU_ID` (`EMP_EDU_ID`), ADD KEY `EMP_POST_ID1` (`EMP_POST_ID1`), ADD KEY `EMP_POST_ID2` (`EMP_POST_ID2`), ADD KEY `EMP_ID` (`EMP_ID`), ADD KEY `EMP_ID_2` (`EMP_ID`), ADD KEY `EMP_BOSS_ID` (`EMP_BOSS_ID`), ADD KEY `EMP_ID_3` (`EMP_ID`), ADD KEY `EMP_ID_4` (`EMP_ID`), ADD KEY `EMP_ID_5` (`EMP_ID`), ADD KEY `EMP_ID_6` (`EMP_ID`);
+  ADD PRIMARY KEY (`EMP_ID`),
+  ADD KEY `EMP_EDU_ID` (`EMP_EDU_ID`),
+  ADD KEY `EMP_POST_ID1` (`EMP_POST_ID1`),
+  ADD KEY `EMP_POST_ID2` (`EMP_POST_ID2`),
+  ADD KEY `EMP_ID` (`EMP_ID`),
+  ADD KEY `EMP_ID_2` (`EMP_ID`),
+  ADD KEY `EMP_BOSS_ID` (`EMP_BOSS_ID`),
+  ADD KEY `EMP_ID_3` (`EMP_ID`),
+  ADD KEY `EMP_ID_4` (`EMP_ID`),
+  ADD KEY `EMP_ID_5` (`EMP_ID`),
+  ADD KEY `EMP_ID_6` (`EMP_ID`);
 
 --
 -- Indexes for table `employee_attendances`
@@ -454,25 +620,33 @@ ALTER TABLE `employee_log_failures`
 -- Indexes for table `employee_log_ios`
 --
 ALTER TABLE `employee_log_ios`
-  ADD PRIMARY KEY (`EMP_LOGS_ID`), ADD KEY `EMP_ID` (`EMP_ID`);
+  ADD PRIMARY KEY (`EMP_LOGS_ID`),
+  ADD KEY `EMP_ID` (`EMP_ID`);
 
 --
 -- Indexes for table `positions`
 --
 ALTER TABLE `positions`
-  ADD PRIMARY KEY (`POS_ID`), ADD KEY `POS_ID` (`POS_ID`), ADD KEY `POS_ID_2` (`POS_ID`);
+  ADD PRIMARY KEY (`POS_ID`),
+  ADD KEY `POS_ID` (`POS_ID`),
+  ADD KEY `POS_ID_2` (`POS_ID`);
 
 --
 -- Indexes for table `students`
 --
 ALTER TABLE `students`
-  ADD PRIMARY KEY (`STU_ID`), ADD KEY `STU_ID` (`STU_ID`), ADD KEY `STU_ID_2` (`STU_ID`);
+  ADD PRIMARY KEY (`STU_ID`),
+  ADD KEY `STU_ID` (`STU_ID`),
+  ADD KEY `STU_ID_2` (`STU_ID`);
 
 --
 -- Indexes for table `student_activity_educator`
 --
 ALTER TABLE `student_activity_educator`
-  ADD PRIMARY KEY (`STU_ACT_EDR_ID`), ADD KEY `STU_ID` (`STU_ID`), ADD KEY `EDR_ID` (`EDR_ID`), ADD KEY `ACT_ID` (`ACT_ID`);
+  ADD PRIMARY KEY (`STU_ACT_EDR_ID`),
+  ADD KEY `STU_ID` (`STU_ID`),
+  ADD KEY `EDR_ID` (`EDR_ID`),
+  ADD KEY `ACT_ID` (`ACT_ID`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -482,47 +656,52 @@ ALTER TABLE `student_activity_educator`
 -- AUTO_INCREMENT for table `activities`
 --
 ALTER TABLE `activities`
-  MODIFY `ACT_ID` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=13;
+  MODIFY `ACT_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 --
 -- AUTO_INCREMENT for table `activity_types`
 --
 ALTER TABLE `activity_types`
-  MODIFY `ACT_TYPE_ID` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=4;
+  MODIFY `ACT_TYPE_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+--
+-- AUTO_INCREMENT for table `db_query_logs`
+--
+ALTER TABLE `db_query_logs`
+  MODIFY `DB_QL_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=53;
 --
 -- AUTO_INCREMENT for table `educations`
 --
 ALTER TABLE `educations`
-  MODIFY `EDU_ID` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=9;
+  MODIFY `EDU_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 --
 -- AUTO_INCREMENT for table `employees`
 --
 ALTER TABLE `employees`
-  MODIFY `EMP_ID` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
+  MODIFY `EMP_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT for table `employee_attendances`
 --
 ALTER TABLE `employee_attendances`
-  MODIFY `EMP_ATT_ID` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=12;
+  MODIFY `EMP_ATT_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
 --
 -- AUTO_INCREMENT for table `employee_log_failures`
 --
 ALTER TABLE `employee_log_failures`
-  MODIFY `EM_LOG_F_ID` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=22;
+  MODIFY `EM_LOG_F_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=79;
 --
 -- AUTO_INCREMENT for table `employee_log_ios`
 --
 ALTER TABLE `employee_log_ios`
-  MODIFY `EMP_LOGS_ID` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=61;
+  MODIFY `EMP_LOGS_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=91;
 --
 -- AUTO_INCREMENT for table `positions`
 --
 ALTER TABLE `positions`
-  MODIFY `POS_ID` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=7;
+  MODIFY `POS_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 --
 -- AUTO_INCREMENT for table `students`
 --
 ALTER TABLE `students`
-  MODIFY `STU_ID` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=11;
+  MODIFY `STU_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 --
 -- AUTO_INCREMENT for table `student_activity_educator`
 --
@@ -536,31 +715,31 @@ ALTER TABLE `student_activity_educator`
 -- Constraints for table `activities`
 --
 ALTER TABLE `activities`
-ADD CONSTRAINT `activities_ibfk_1` FOREIGN KEY (`ACT_TYPE_ID`) REFERENCES `activity_types` (`ACT_TYPE_ID`),
-ADD CONSTRAINT `activities_ibfk_2` FOREIGN KEY (`ACT_SUBTYPE_ID`) REFERENCES `activity_subtypes` (`ACT_SUBTYPE_ID`);
+  ADD CONSTRAINT `activities_ibfk_1` FOREIGN KEY (`ACT_TYPE_ID`) REFERENCES `activity_types` (`ACT_TYPE_ID`),
+  ADD CONSTRAINT `activities_ibfk_2` FOREIGN KEY (`ACT_SUBTYPE_ID`) REFERENCES `activity_subtypes` (`ACT_SUBTYPE_ID`);
 
 --
 -- Constraints for table `employees`
 --
 ALTER TABLE `employees`
-ADD CONSTRAINT `employees_ibfk_1` FOREIGN KEY (`EMP_EDU_ID`) REFERENCES `educations` (`EDU_ID`),
-ADD CONSTRAINT `employees_ibfk_2` FOREIGN KEY (`EMP_POST_ID1`) REFERENCES `positions` (`POS_ID`),
-ADD CONSTRAINT `employees_ibfk_3` FOREIGN KEY (`EMP_POST_ID2`) REFERENCES `positions` (`POS_ID`),
-ADD CONSTRAINT `employees_ibfk_4` FOREIGN KEY (`EMP_BOSS_ID`) REFERENCES `employees` (`EMP_ID`);
+  ADD CONSTRAINT `employees_ibfk_1` FOREIGN KEY (`EMP_EDU_ID`) REFERENCES `educations` (`EDU_ID`),
+  ADD CONSTRAINT `employees_ibfk_2` FOREIGN KEY (`EMP_POST_ID1`) REFERENCES `positions` (`POS_ID`),
+  ADD CONSTRAINT `employees_ibfk_3` FOREIGN KEY (`EMP_POST_ID2`) REFERENCES `positions` (`POS_ID`),
+  ADD CONSTRAINT `employees_ibfk_4` FOREIGN KEY (`EMP_BOSS_ID`) REFERENCES `employees` (`EMP_ID`);
 
 --
 -- Constraints for table `employee_log_ios`
 --
 ALTER TABLE `employee_log_ios`
-ADD CONSTRAINT `employee_log_ios_ibfk_1` FOREIGN KEY (`EMP_ID`) REFERENCES `employees` (`EMP_ID`);
+  ADD CONSTRAINT `employee_log_ios_ibfk_1` FOREIGN KEY (`EMP_ID`) REFERENCES `employees` (`EMP_ID`);
 
 --
 -- Constraints for table `student_activity_educator`
 --
 ALTER TABLE `student_activity_educator`
-ADD CONSTRAINT `student_activity_educator_ibfk_1` FOREIGN KEY (`STU_ID`) REFERENCES `students` (`STU_ID`),
-ADD CONSTRAINT `student_activity_educator_ibfk_2` FOREIGN KEY (`EDR_ID`) REFERENCES `employees` (`EMP_ID`),
-ADD CONSTRAINT `student_activity_educator_ibfk_3` FOREIGN KEY (`ACT_ID`) REFERENCES `activities` (`ACT_ID`);
+  ADD CONSTRAINT `student_activity_educator_ibfk_1` FOREIGN KEY (`STU_ID`) REFERENCES `students` (`STU_ID`),
+  ADD CONSTRAINT `student_activity_educator_ibfk_2` FOREIGN KEY (`EDR_ID`) REFERENCES `employees` (`EMP_ID`),
+  ADD CONSTRAINT `student_activity_educator_ibfk_3` FOREIGN KEY (`ACT_ID`) REFERENCES `activities` (`ACT_ID`);
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

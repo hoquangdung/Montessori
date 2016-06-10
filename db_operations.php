@@ -209,6 +209,8 @@ function displayQueryStr($queryStr, $debug_on)
 	//always siliently record SQL query into the database for system operation tracking
 	insert_DB_QUERY_LOGS($queryStr, true);
 
+	//testing
+	/**
 	if ($debug_on) {
 			//display a confirmation message to the user
 			echo '<script type="text/javascript">';
@@ -217,6 +219,7 @@ function displayQueryStr($queryStr, $debug_on)
     		echo "window.confirm('" . $queryStr . "');";
     		echo '</script>';
 	}
+	/**/
 
 }//displayQueryStr()
 
