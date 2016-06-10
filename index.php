@@ -34,11 +34,13 @@ session_start();
 		<li><a href="report_positions.php"><img src="images/icons/report.jpg" width="40"> Positions</a></li>
 		<li><a href="report_employees.php"><img src="images/icons/report.jpg" width="40"> Employees</a></li>
 		<li><a href="report_students.php"><img src="images/icons/report.jpg" width="40"> Students</a></li>
-		<li><a href="report_activities.php"><img src="images/icons/report.jpg" width="40"> Activities</a>
-		<li><a href="report_employee_log_ios.php"><img src="images/icons/report.jpg" width="40"> Employee Log-Ins/Outs</a>
-		<li><a href="report_employee_attendances.php"><img src="images/icons/report.jpg" width="40"> Employee Attendance-Ins/Outs</a>
+		<li><a href="report_activities.php"><img src="images/icons/report.jpg" width="40"> Activities</a></li>
+		<li><a href="report_employee_log_ios.php"><img src="images/icons/report.jpg" width="40"> Employee Log-Ins/Outs</a></li>
+		<li><a href="report_employee_attendances.php"><img src="images/icons/report.jpg" width="40"> Employee Attendance-Ins/Outs</a></li>
+		<li><a href="report_employee_log_failures.php"><img src="images/icons/report.jpg" width="40"> Employee Log Failures</a></li>
+		<li><a href="report_dp_query_logs.php"><img src="images/icons/report.jpg" width="40"> Database Queries</a></li>
 
-		</li>
+		
 	</ul>	
 </div>
 

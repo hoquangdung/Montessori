@@ -161,6 +161,70 @@ function report_EMPLOYEE_LOG_IOS($emp_id, $debug_on)
 }//report_EMPLOYEE_LOG_IOS()
 
 
+function report_EMPLOYEE_LOG_FAILURES($debug_on)
+{
+	
+	//** 1. build the query
+	$queryStr = 'SELECT  ';
+		$queryStr = $queryStr . 'EM_LOG_F_ID';
+		$queryStr = $queryStr . ', ' . 'IP_ADDR'; 
+		$queryStr = $queryStr . ', ' . 'PASSCODE';
+		$queryStr = $queryStr . ', ' . 'DATE_TIME';
+	$queryStr = $queryStr . ' FROM ';
+		$queryStr = $queryStr . 'EMPLOYEE_LOG_FAILURES';
+		$queryStr = $queryStr . ' ORDER BY ' . 'DATE_TIME DESC';	
+	$queryStr = $queryStr . ';';	
+
+	//if debug on, display [queryStr]
+	displayQueryStr($queryStr, $debug_on);
+	
+	//*** 2. execute quyery and get the results
+	$result = getResult($queryStr);
+	
+	//populate [result] to table
+	$fieldHeaderStr = array (
+		0 => 'Identification',
+		1 => 'IP Address',
+		2 => 'Passcode',		
+		3 => 'Date & Time'
+		);
+	populateResultToTable($result, $fieldHeaderStr);
+
+}//report_EMPLOYEE_LOG_FAILURES()
+
+
+function report_DB_QUERY_LOGS($debug_on)
+{
+	
+	//** 1. build the query
+	$queryStr = 'SELECT  ';
+		$queryStr = $queryStr . 'DB_QL_ID';
+		$queryStr = $queryStr . ', ' . 'QUERY_STR'; 
+		$queryStr = $queryStr . ', ' . 'DATE_TIME';
+		$queryStr = $queryStr . ', ' . 'IP_ADDR';
+	$queryStr = $queryStr . ' FROM ';
+		$queryStr = $queryStr . 'DB_QUERY_LOGS';
+		$queryStr = $queryStr . ' ORDER BY ' . 'DATE_TIME DESC';	
+	$queryStr = $queryStr . ';';	
+
+	//if debug on, display [queryStr]
+	displayQueryStr($queryStr, $debug_on);
+	
+	//*** 2. execute quyery and get the results
+	$result = getResult($queryStr);
+	
+	//populate [result] to table
+	$fieldHeaderStr = array (
+		0 => 'Identification',
+		1 => 'Query String',
+		2 => 'Date & Time',		
+		3 => 'IP Address',
+		);
+	populateResultToTable($result, $fieldHeaderStr);
+
+}//report_DB_QUERY_LOGS()
+
+
 function report_EMPLOYEE_ATTENDANCES($emp_id, $debug_on)
 {
 //** 1. build the query
