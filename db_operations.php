@@ -1,5 +1,11 @@
 <?php
 
+// Start the session
+if (!isset($_SESSION))
+{
+	session_start();
+}
+
 require_once("sql_queries.php");
 
 
@@ -94,7 +100,7 @@ function insert_EMPLOYEE_LOG_FAILURES($keys, $debug_on)
 
 
 //siliently record SQL query into the database
-function insert_DB_QUERY_LOGS($queryStrToDisplay)
+function insert_DB_QUERY_LOGS($user_name, $queryStrToDisplay)
 {
 	
 	//** 1. build the query
@@ -103,11 +109,13 @@ function insert_DB_QUERY_LOGS($queryStrToDisplay)
 	$queryStr = "INSERT INTO ";
 		$queryStr = $queryStr . "DB_QUERY_LOGS(";
 		$queryStr = $queryStr . "QUERY_STR";
+		$queryStr = $queryStr . ", " . "USER_NAME";
 		$queryStr = $queryStr . ", " . "DATE_TIME";
 		$queryStr = $queryStr . ", " . "IP_ADDR";
 		$queryStr = $queryStr . ")";
 	$queryStr = $queryStr . " VALUES(";
 		$queryStr = $queryStr . "'" . $queryStrToDisplay .  "'";
+		$queryStr = $queryStr . ", " . "'" . $user_name . "'";
 		$queryStr = $queryStr . ", " . "NOW()";
 		$queryStr = $queryStr . ", " . "'" . get_client_ip() .  "'";		
 		$queryStr = $queryStr . ")";
@@ -119,6 +127,247 @@ function insert_DB_QUERY_LOGS($queryStrToDisplay)
 	return ($result);
 
 }//insert_DB_QUERY_LOGS()
+
+
+//******************************************************
+//SELECT
+
+function report_ACTIVITY_TYPES($debug_on)
+{
+	
+	//** 1. build the query
+	$queryStr = 'SELECT  ';
+		$queryStr = $queryStr . '*';
+	$queryStr = $queryStr . ' FROM ';
+		$queryStr = $queryStr . 'ACTIVITY_TYPES';
+	$queryStr = $queryStr . ' ORDER BY ';
+		$queryStr = $queryStr . 'ACT_TYPE_ID' . ' ASC';	
+	$queryStr = $queryStr . ';';	
+
+	//if debug on, display [queryStr]
+	displayQueryStr($queryStr, $debug_on);
+	
+	//*** 2. execute quyery and get the results
+	$result = getResult($queryStr);
+	
+	//populate [result] to table
+	$fieldHeaderStr = array (
+		0 => 'ID',
+		1 => 'Name',
+		2 => 'Descriptions',
+		3 => 'Notes',
+		);
+	populateResultToTable($result, $fieldHeaderStr);
+
+}//report_ACTIVITY_TYPES()
+
+
+function report_ACTIVITY_SUBTYPES($debug_on)
+{
+	
+	//** 1. build the query
+	$queryStr = 'SELECT  ';
+		$queryStr = $queryStr . '*';
+	$queryStr = $queryStr . ' FROM ';
+		$queryStr = $queryStr . 'ACTIVITY_SUBTYPES';
+	$queryStr = $queryStr . ' ORDER BY ';
+		 $queryStr = $queryStr . 'ACT_SUBTYPE_ID' . ' ASC';	
+	$queryStr = $queryStr . ';';	
+
+	//if debug on, display [queryStr]
+	displayQueryStr($queryStr, $debug_on);
+	
+	//*** 2. execute quyery and get the results
+	$result = getResult($queryStr);
+	
+	//populate [result] to table
+	$fieldHeaderStr = array (
+		0 => 'ID',
+		1 => 'Name',
+		2 => 'Descriptions',
+		3 => 'Notes',
+		);
+	populateResultToTable($result, $fieldHeaderStr);
+
+}//report_ACTIVITY_SUBTYPES()
+
+
+function report_EDUCATIONS($debug_on)
+{
+	
+	//** 1. build the query
+	$queryStr = 'SELECT  ';
+		$queryStr = $queryStr . '*';
+	$queryStr = $queryStr . ' FROM ';
+		$queryStr = $queryStr . 'EDUCATIONS';
+	$queryStr = $queryStr . ' ORDER BY ';
+		 $queryStr = $queryStr . 'EDU_ID' . ' ASC';	
+	$queryStr = $queryStr . ';';	
+
+	//if debug on, display [queryStr]
+	displayQueryStr($queryStr, $debug_on);
+	
+	//*** 2. execute quyery and get the results
+	$result = getResult($queryStr);
+	
+	//populate [result] to table
+	$fieldHeaderStr = array (
+		0 => 'ID',
+		1 => 'Degree',
+		);
+	populateResultToTable($result, $fieldHeaderStr);
+
+}//report_EDUCATIONS()
+
+
+function report_POSITIONS($debug_on)
+{
+	
+	//** 1. build the query
+	$queryStr = 'SELECT  ';
+		$queryStr = $queryStr . '*';
+	$queryStr = $queryStr . ' FROM ';
+		$queryStr = $queryStr . 'POSITIONS';
+	$queryStr = $queryStr . ' ORDER BY ';
+		 $queryStr = $queryStr . 'POS_ID' . ' ASC';	
+	$queryStr = $queryStr . ';';	
+
+	//if debug on, display [queryStr]
+	displayQueryStr($queryStr, $debug_on);
+	
+	//*** 2. execute quyery and get the results
+	$result = getResult($queryStr);
+	
+	//populate [result] to table
+	$fieldHeaderStr = array (
+		0 => 'ID',
+		1 => 'Name',
+		2 => 'Descriptions',
+		3 => 'Notes',
+		);
+	populateResultToTable($result, $fieldHeaderStr);
+
+}//report_POSITIONS()
+
+
+function report_ACTIVITIES($debug_on)
+{
+	
+	//** 1. build the query
+	$queryStr = 'SELECT  ';
+		$queryStr = $queryStr . '*';
+	$queryStr = $queryStr . ' FROM ';
+		$queryStr = $queryStr . 'ACTIVITIES';
+	$queryStr = $queryStr . ' ORDER BY ';
+		$queryStr = $queryStr . 'ACT_TYPE_ID' . ' ASC ';
+		$queryStr = $queryStr . ', ' . 'ACT_SUBTYPE_ID' . ' ASC';		
+	$queryStr = $queryStr . ';';	
+
+	//if debug on, display [queryStr]
+	displayQueryStr($queryStr, $debug_on);
+	
+	//*** 2. execute quyery and get the results
+	$result = getResult($queryStr);
+	
+	//populate [result] to table
+	$fieldHeaderStr = array (
+		0 => 'ID',
+		1 => 'Type ID',
+		2 => 'Sub-Type ID',
+		3 => 'Name',
+		4 => 'Min Age',
+		5 => 'Max Age',
+		6 => 'Descriptions',
+		7 => 'Notes',
+		);
+	populateResultToTable($result, $fieldHeaderStr);
+
+}//report_ACTIVITES()
+
+
+function report_EMPLOYEES($debug_on)
+{
+	
+	//** 1. build the query
+	$queryStr = 'SELECT  ';
+		$queryStr = $queryStr . '*';
+	$queryStr = $queryStr . ' FROM ';
+		$queryStr = $queryStr . 'EMPLOYEES';
+		$queryStr = $queryStr . ' ORDER BY ' . 'EMP_FIRST_NAME' .  ' ASC';	
+	$queryStr = $queryStr . ';';	
+
+	//if debug on, display [queryStr]
+	displayQueryStr($queryStr, $debug_on);
+	
+	//*** 2. execute quyery and get the results
+	$result = getResult($queryStr);
+	
+	//populate [result] to table
+	$fieldHeaderStr = array (
+		0 => 'ID',
+		1 => 'First Name',
+		2 => 'Last Name',
+		3 => 'Birthdate',
+		4 => 'Sex',
+		5 => 'Address',
+		6 => 'City',
+		7 => 'Province',
+		8 => 'Postal Code',
+		9 => 'Country',
+		10 => 'Phone 1',
+		11 => 'Phone 2',
+		12 => 'Email',
+		13 => 'Hire Date',
+		14 => 'End Date',
+		15 => 'Education',
+		16 => 'Daycare Years',
+		17 => 'Montessori Years',
+		18 => 'Position 1',
+		19 => 'Position 2',
+		20 => 'Boss',
+		21 => 'Hourly Rate ',
+		22 => 'Passcode',
+		23 => 'Notes',
+		);
+	populateResultToTable($result, $fieldHeaderStr);
+
+}//report_EMPLOYEES()
+
+
+function report_STUDENTS($debug_on)
+{
+	
+	//** 1. build the query
+	$queryStr = 'SELECT  ';
+		$queryStr = $queryStr . '*';
+	$queryStr = $queryStr . ' FROM ';
+		$queryStr = $queryStr . 'STUDENTS';
+	$queryStr = $queryStr . ' ORDER BY ';
+		 $queryStr = $queryStr . 'STU_FIRST_NAME' . ' ASC';	
+	$queryStr = $queryStr . ';';	
+
+	//if debug on, display [queryStr]
+	displayQueryStr($queryStr, $debug_on);
+	
+	//*** 2. execute quyery and get the results
+	$result = getResult($queryStr);
+	
+	//populate [result] to table
+	$fieldHeaderStr = array (
+		0 => 'ID',
+		1 => 'First Name', 
+		2 => 'Last Name', 
+		3 => 'Birth Date', 
+		4 => 'Sex', 
+		5 => 'Start Date', 
+		6 => 'Grad date',
+		7 => 'Daily Fee',
+		8 => 'Credential',
+		9 => 'Notes',
+		);
+	populateResultToTable($result, $fieldHeaderStr);
+
+}//report_STUDENTS()
 
 
 function report_EMPLOYEE_LOG_IOS($emp_id, $debug_on)
@@ -198,10 +447,7 @@ function report_DB_QUERY_LOGS($debug_on)
 	
 	//** 1. build the query
 	$queryStr = 'SELECT  ';
-		$queryStr = $queryStr . 'DB_QL_ID';
-		$queryStr = $queryStr . ', ' . 'QUERY_STR'; 
-		$queryStr = $queryStr . ', ' . 'DATE_TIME';
-		$queryStr = $queryStr . ', ' . 'IP_ADDR';
+		$queryStr = $queryStr . '*';
 	$queryStr = $queryStr . ' FROM ';
 		$queryStr = $queryStr . 'DB_QUERY_LOGS';
 		$queryStr = $queryStr . ' ORDER BY ' . 'DATE_TIME DESC';	
@@ -217,8 +463,9 @@ function report_DB_QUERY_LOGS($debug_on)
 	$fieldHeaderStr = array (
 		0 => 'Identification',
 		1 => 'Query String',
-		2 => 'Date & Time',		
-		3 => 'IP Address',
+		2 => 'User Name',
+		3 => 'Date & Time',		
+		4 => 'IP Address',
 		);
 	populateResultToTable($result, $fieldHeaderStr);
 
@@ -271,10 +518,18 @@ function displayQueryStr($queryStr, $debug_on)
 {	
 	
 	//always siliently record SQL query into the database for system operation tracking
-	insert_DB_QUERY_LOGS($queryStr, true);
+	if (isset($_SESSION["LoggedIn_EMP_NAME"]))
+	{
+		insert_DB_QUERY_LOGS($_SESSION["LoggedIn_EMP_NAME"], $queryStr, true);
+	}
+	else
+	{
+		insert_DB_QUERY_LOGS("system", $queryStr, true);	
+	}
+	
 
 	//testing
-	/**
+	/**/
 	if ($debug_on) {
 			//display a confirmation message to the user
 			echo '<script type="text/javascript">';

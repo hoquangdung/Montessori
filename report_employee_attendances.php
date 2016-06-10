@@ -6,7 +6,7 @@ session_start();
 <!DOCTYPE html>
 <html>
 <head>
-	<title>List of Attendance-In's and Attendance's of Employee</title>
+	<title>Report: Attendance In's and Out's of Employee</title>
 	<link rel="stylesheet" type="text/css" href="db_tables.css">	
 </head>
 
@@ -16,7 +16,7 @@ session_start();
 	include 'header_log_in_out.php'
 ?>
 
-<h2>List of Attendance-In's and Attendance's of Employee</h2>
+<h2>List of Attendance In's and Out's of Employee</h2>
 
 <?php
 

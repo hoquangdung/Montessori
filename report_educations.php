@@ -8,20 +8,8 @@ session_start();
 <html>
 
 <head>
-	<title>Report: Educations</title>
-	<link rel="stylesheet" type="text/css" href="style.css">
-
-	<?php
-		$db_hostname = "localhost";
-		$db_name = "montessori";
-		$db_user = "root";
-		$db_password = "";
-
-		// Create connection
-		$conn = new mysqli($db_hostname, $db_user, $db_password);
-		$conn->select_db($db_name);
-	?>
-
+	<title>Report: Educations</title>	
+	<link rel="stylesheet" type="text/css" href="db_tables.css">
 </head>
 
 <body>
@@ -31,58 +19,27 @@ session_start();
 ?>
 
 <h2>List of Educations</h2>
-<br/>
 
-<table border="solid">
-	<tr>
-		<th>ID <img src="images/icons/primary_key.jpg" width="20"></th>
-		<th>Degree</th>
- 	</tr>    
+<?php
+
+//if a valid user is logging-in
+if (isset($_SESSION['LoggedIn_EMP_ID']))
+{
+
+	//display 
+	require_once("db_operations.php");
+	report_EDUCATIONS(true);
 	
-<?PHP
-	
-	//** 1. prepere the query
-	//colums to be selected
-	$tableColsStr = '*';
-	//total number of colums to be selected
-	$tableCols = 2;
-	//table name
-	$tableNameStr = 'EDUCATIONS';
-	//query string
-	$queryStr = 'SELECT '. $tableColsStr . ' FROM ' . $tableNameStr . ';';
+}//if
 
-	//testing
-	echo 'Executed query: ' . $queryStr; 	
-		
-	//** 2. run the query
-	//[result]: the table returned by the query
-	$result = mysqli_query($conn, $queryStr);
-	
-	//** 3. populate [result] to the table
-	//the number of rows in [result]
-	$resultRows = mysqli_num_rows($result);
+//else: something is wrong with $_SESSION['LoggedIn_EMP_ID'])
+else
+{
+	echo 'Something is wrong with $_SESSION["LoggedIn_EMP_ID"])';
+}
 
-	echo '<br/><br/><i>Total number of records: ' . $resultRows . '</i><br/><br/>';
-
-	for ($row = 0; $row < $resultRows; $row++)
-	{
-		//the current row in [result]
-		$currentRow = mysqli_fetch_row($result);
-		//populate [currentRow] in the table row
-		echo '<tr>';
-		for ($col=0; $col < $tableCols; $col++)
-		{
-			echo '<td>' . $currentRow[$col] . '</td>';	
-		}
-		echo '</tr>';
-	}
-
-	$conn->close();
 ?>
 
-</table>
-
-<br/>
 
 <?php
 	include 'footer.html'

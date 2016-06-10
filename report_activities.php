@@ -8,20 +8,8 @@ session_start();
 <html>
 
 <head>
-	<title>Report: Activities</title>
-	<link rel="stylesheet" type="text/css" href="style.css">
-
-	<?php
-		$db_hostname = "localhost";
-		$db_name = "montessori";
-		$db_user = "root";
-		$db_password = "";
-
-		// Create connection
-		$conn = new mysqli($db_hostname, $db_user, $db_password);
-		$conn->select_db($db_name);
-	?>
-
+	<title>Report: Activities</title>	
+	<link rel="stylesheet" type="text/css" href="db_tables.css">
 </head>
 
 <body>
@@ -31,62 +19,27 @@ session_start();
 ?>
 
 <h2>List of Activities</h2>
-<br/>
 
-<table border="solid">
-	<tr>
-		<th>ID <img src="images/icons/primary_key.jpg" width="20"></th>
-		<th>Type ID</th> 
-		<th>Sub-Type ID</th> 
-		<th>Name</th> 
-		<th>Min Age</th> 
-		<th>Max Age</th> 
-		<th>Description</th>
-		<th>Notes</th>
- 	</tr>    
-	
-<?PHP
-	
-	//** 1. prepere the query
-	//colums to be selected
-	$tableColsStr = '*';
-	//total number of colums to be selected
-	$tableCols = 8;
-	//table name
-	$tableNameStr = 'ACTIVITIES';
-	//query string
-	$queryStr = 'SELECT '. $tableColsStr . ' FROM ' . $tableNameStr . ';';
-	
-	//testing
-	echo 'Executed query: ' . $queryStr; 	
-	
-	//** 2. run the query
-	//[result]: the table returned by the query
-	$result = mysqli_query($conn, $queryStr);
-	
-	//** 3. populate [result] to the table
-	//the number of rows in [result]
-	$resultRows = mysqli_num_rows($result);
+<?php
 
-	echo '<br/><br/><i>Total number of records: ' . $resultRows . '</i><br/><br/>';
-	
-	for ($row = 0; $row < $resultRows; $row++)
-	{
-		//the current row in [result]
-		$currentRow = mysqli_fetch_row($result);
-		//populate [currentRow] in the table row
-		echo '<tr>';
-		for ($col=0; $col < $tableCols; $col++)
-		{
-			echo '<td>' . $currentRow[$col] . '</td>';	
-		}
-		echo '</tr>';
-	}
+//if a valid user is logging-in
+if (isset($_SESSION['LoggedIn_EMP_ID']))
+{
 
-	$conn->close();
+	//display 
+	require_once("db_operations.php");
+	report_ACTIVITIES(true);
+	
+}//if
+
+//else: something is wrong with $_SESSION['LoggedIn_EMP_ID'])
+else
+{
+	echo 'Something is wrong with $_SESSION["LoggedIn_EMP_ID"])';
+}
+
 ?>
 
-</table>
 
 <?php
 	include 'footer.html'
