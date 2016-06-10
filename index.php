@@ -26,6 +26,8 @@ session_start();
 		<li><a class="active" href="index.php"><img src="images/icons/home_button.jpg" width="40"> Home</a></li>
 		<li><a href="login.php"><img src="images/icons/keypad_small.jpg" width="40"> User Login</a></li>
 		<li><a href="logout.php"><img src="images/icons/logout.jpg" width="40"> User Logout</a></li>
+		<li><a href="record_employee_attendance_in.php"><img src="images/icons/attendance_in.jpg" width="40"> Check In Employee Attendance</a></li>
+		<li><a href="record_employee_attendance_out.php"><img src="images/icons/attendance_out.png" width="40"> Check Out Employee Attendance</a></li>		
 		<li><a href="report_activity_types.php"><img src="images/icons/report.jpg" width="40"> Activity Types</a></li>
 		<li><a href="report_activity_subtypes.php"><img src="images/icons/report.jpg" width="40"> Activity Sub-Types</a>
 		<li><a href="report_educations.php"><img src="images/icons/report.jpg" width="40"> Educations</a></li>
@@ -33,6 +35,8 @@ session_start();
 		<li><a href="report_employees.php"><img src="images/icons/report.jpg" width="40"> Employees</a></li>
 		<li><a href="report_students.php"><img src="images/icons/report.jpg" width="40"> Students</a></li>
 		<li><a href="report_activities.php"><img src="images/icons/report.jpg" width="40"> Activities</a>
+		<li><a href="report_employee_log_ios.php"><img src="images/icons/report.jpg" width="40"> Employee Log-Ins/Outs</a>
+
 		</li>
 	</ul>	
 </div>

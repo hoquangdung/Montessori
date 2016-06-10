@@ -37,6 +37,7 @@ else
 	}
 
 	require_once("sql_queries.php");
+	require_once("db_operations.php");
 
 	//** 1. build the query
 	$queryStr = 'SELECT  ';
@@ -74,6 +75,12 @@ else
 	//i.e.: the log-in failed
 	if ($resultRows != 1)
 	{	
+		//record this log-in failure for security reasons
+		if (isset($keys))
+		{			
+			insert_EMPLOYEE_LOG_FAILURES($keys);
+		}
+
 		//remove variables
 		unset($keys);
 		unset($queryStr);
@@ -86,22 +93,31 @@ else
 		if (isset($_SESSION["LoggedIn_EMP_ID"]) ||
 			isset($_SESSION["LoggedIn_EMP_NAME"]))
 		{						
+			//record this forced log-out
+			if (isset($_SESSION["LoggedIn_EMP_ID"]))
+			{				
+				insert_EMPLOYEE_LOG_IOS($_SESSION["LoggedIn_EMP_ID"], "Out");
+			}
+
 			//remove [LoggedIn_EMP_ID]
 			if (isset($_SESSION["LoggedIn_EMP_ID"]))
 			{
-				unset($_SESSION["LoggedIn_EMP_ID"]);	
+				unset($_SESSION["LoggedIn_EMP_ID"]);
 			}	
 			//remove [LoggedIn_EMP_NAME]
 			if (isset($_SESSION["LoggedIn_EMP_NAME"]))
 			{
 				unset($_SESSION["LoggedIn_EMP_NAME"]);	
-			}			
+			}
+
 		}
 
 		//go back to login page to let the user try again
+		/**/
 		echo '<script type="text/javascript">';
     	echo 'window.location.replace("login.php");';
     	echo '</script>';
+    	/**/
 	}
 
 	//if ONE SINGLE matched user is found
@@ -137,10 +153,18 @@ else
 		echo '<br/>&#9835; &#9835; You Are Authorized &#9835; &#9835; <br/>';
 		/**/
 
-		//c. redirect the logged-in user to his/her main index page
+		//c. record this successfull log-in
+		if (isset($_SESSION["LoggedIn_EMP_ID"]))
+		{				
+			insert_EMPLOYEE_LOG_IOS($_SESSION["LoggedIn_EMP_ID"], "In");
+		}
+
+		//d. redirect the logged-in user to his/her main index page
+		/**/
 		echo '<script type="text/javascript">';
     	echo 'window.location.replace("index.php");';
     	echo '</script>';	
+    	/**/
 	}
 
 }

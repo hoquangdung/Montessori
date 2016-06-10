@@ -15,7 +15,7 @@
 		}
 
 		return ($db);
-		
+
 	}//connectDB()
 
 
@@ -81,7 +81,7 @@
 
 		if ($resultRows > 20)
 		{
-			echo '<br/><br/><i>Total number of records: ' . $resultRows . '</i><br/><br/>';
+			echo '<br/><i>Total number of records: ' . $resultRows . '</i><br/><br/>';
 		}
 
 	}//populateResultToTable()

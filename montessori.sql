@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 09, 2016 at 02:52 AM
+-- Generation Time: Jun 10, 2016 at 03:37 AM
 -- Server version: 5.6.24
 -- PHP Version: 5.5.24
 
@@ -178,6 +178,158 @@ INSERT INTO `employees` (`EMP_ID`, `EMP_FIRST_NAME`, `EMP_LAST_NAME`, `EMP_BIRTH
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `employee_attendances`
+--
+
+CREATE TABLE IF NOT EXISTS `employee_attendances` (
+  `EMP_ATT_ID` int(11) NOT NULL,
+  `EMP_ID` int(11) NOT NULL,
+  `EVENT_TYPE` varchar(5) NOT NULL,
+  `DATE_TIME` datetime NOT NULL,
+  `IP_ADDR` varchar(50) NOT NULL,
+  `NOTES` text NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `employee_attendances`
+--
+
+INSERT INTO `employee_attendances` (`EMP_ATT_ID`, `EMP_ID`, `EVENT_TYPE`, `DATE_TIME`, `IP_ADDR`, `NOTES`) VALUES
+(1, 2, 'In', '2016-06-09 21:19:27', '::1', ''),
+(2, 2, 'In', '2016-06-09 21:21:06', '::1', ''),
+(3, 1, 'In', '2016-06-09 21:21:27', '10.1.31.65', ''),
+(4, 2, 'In', '2016-06-09 21:23:08', '::1', ''),
+(5, 2, 'Out', '2016-06-09 21:33:13', '::1', ''),
+(6, 1, 'In', '2016-06-09 21:33:35', '10.1.31.65', ''),
+(7, 1, 'Out', '2016-06-09 21:33:36', '10.1.31.65', ''),
+(8, 1, 'In', '2016-06-09 21:33:38', '10.1.31.65', ''),
+(9, 1, 'Out', '2016-06-09 21:33:38', '10.1.31.65', ''),
+(10, 1, 'In', '2016-06-09 21:33:39', '10.1.31.65', ''),
+(11, 1, 'Out', '2016-06-09 21:33:39', '10.1.31.65', '');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `employee_log_failures`
+--
+
+CREATE TABLE IF NOT EXISTS `employee_log_failures` (
+  `EM_LOG_F_ID` int(11) NOT NULL,
+  `IP_ADDR` varchar(50) NOT NULL,
+  `PASSCODE` varchar(50) NOT NULL,
+  `DATE_TIME` datetime NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `employee_log_failures`
+--
+
+INSERT INTO `employee_log_failures` (`EM_LOG_F_ID`, `IP_ADDR`, `PASSCODE`, `DATE_TIME`) VALUES
+(1, '::1', '65232', '2016-06-09 20:04:47'),
+(2, '::1', '187', '2016-06-09 20:06:44'),
+(3, '::1', '2546', '2016-06-09 20:07:59'),
+(4, '::1', '852', '2016-06-09 20:08:04'),
+(5, '::1', '187', '2016-06-09 20:08:08'),
+(6, '::1', '5269', '2016-06-09 20:10:15'),
+(7, '::1', '213', '2016-06-09 20:10:28'),
+(8, '', '965', '2016-06-09 20:12:32'),
+(9, '', '147258', '2016-06-09 20:13:42'),
+(10, '::1', '258', '2016-06-09 20:15:17'),
+(11, '10.1.31.65', '5869', '2016-06-09 20:19:39'),
+(12, '10.1.31.65', '4589', '2016-06-09 20:20:16'),
+(13, '::1', '6589', '2016-06-09 20:27:54'),
+(14, '::1', '87729', '2016-06-09 20:43:04'),
+(15, '::1', '6254', '2016-06-09 20:43:06'),
+(16, '::1', '3652', '2016-06-09 20:43:08'),
+(17, '::1', '4589', '2016-06-09 20:43:11'),
+(18, '::1', '321', '2016-06-09 20:43:13'),
+(19, '10.1.31.65', '526', '2016-06-09 21:35:55'),
+(20, '10.1.31.65', '9985598', '2016-06-09 21:36:00'),
+(21, '10.1.31.65', '8563', '2016-06-09 21:36:22');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `employee_log_ios`
+--
+
+CREATE TABLE IF NOT EXISTS `employee_log_ios` (
+  `EMP_LOGS_ID` int(11) NOT NULL,
+  `EMP_ID` int(11) NOT NULL,
+  `EVENT_TYPE` varchar(3) NOT NULL,
+  `DATE_TIME` datetime NOT NULL,
+  `IP_ADDR` varchar(50) NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=61 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `employee_log_ios`
+--
+
+INSERT INTO `employee_log_ios` (`EMP_LOGS_ID`, `EMP_ID`, `EVENT_TYPE`, `DATE_TIME`, `IP_ADDR`) VALUES
+(1, 1, 'In', '2016-06-01 07:00:00', ''),
+(2, 1, 'Out', '2016-06-01 07:15:00', ''),
+(3, 1, 'In', '2016-06-01 09:17:00', ''),
+(4, 1, 'Out', '2016-06-01 09:49:00', ''),
+(5, 2, 'In', '2016-06-01 08:30:00', ''),
+(6, 2, 'Out', '2016-06-01 08:31:00', ''),
+(7, 2, 'In', '2016-06-01 14:23:15', ''),
+(8, 2, 'Out', '2016-06-01 14:31:45', ''),
+(9, 2, 'In', '2016-06-09 19:32:55', ''),
+(10, 1, 'In', '2016-06-09 19:33:54', ''),
+(11, 2, 'In', '2016-06-09 19:42:32', ''),
+(12, 2, 'Out', '2016-06-09 19:42:39', ''),
+(13, 2, 'In', '2016-06-09 19:42:52', ''),
+(14, 2, 'Out', '2016-06-09 19:45:54', ''),
+(15, 1, 'In', '2016-06-09 19:45:59', ''),
+(16, 1, 'Out', '2016-06-09 19:46:10', ''),
+(17, 1, 'In', '2016-06-09 19:46:14', ''),
+(18, 1, 'Out', '2016-06-09 19:46:21', ''),
+(19, 2, 'In', '2016-06-09 19:46:25', ''),
+(20, 2, 'Out', '2016-06-09 19:46:31', ''),
+(21, 2, 'In', '2016-06-09 20:06:34', ''),
+(22, 2, 'Out', '2016-06-09 20:07:40', ''),
+(23, 2, 'In', '2016-06-09 20:07:44', ''),
+(24, 1, 'In', '2016-06-09 20:08:19', ''),
+(25, 1, 'Out', '2016-06-09 20:10:15', ''),
+(26, 2, 'Out', '2016-06-09 20:12:29', ''),
+(27, 2, 'In', '2016-06-09 20:20:47', ''),
+(28, 2, 'Out', '2016-06-09 20:25:47', '::1'),
+(29, 2, 'In', '2016-06-09 20:25:51', '::1'),
+(30, 2, 'Out', '2016-06-09 20:27:45', '::1'),
+(31, 2, 'In', '2016-06-09 20:27:59', '::1'),
+(32, 2, 'Out', '2016-06-09 20:33:46', '::1'),
+(33, 1, 'In', '2016-06-09 20:33:56', '::1'),
+(34, 1, 'In', '2016-06-09 20:34:56', '::1'),
+(35, 1, 'Out', '2016-06-09 20:35:46', '::1'),
+(36, 1, 'In', '2016-06-09 20:35:50', '::1'),
+(37, 2, 'Out', '2016-06-09 20:37:07', '10.1.31.65'),
+(38, 1, 'In', '2016-06-09 20:37:23', '10.1.31.65'),
+(39, 1, 'Out', '2016-06-09 20:38:19', '::1'),
+(40, 1, 'In', '2016-06-09 20:38:25', '::1'),
+(41, 1, 'Out', '2016-06-09 20:38:40', '10.1.31.65'),
+(42, 1, 'Out', '2016-06-09 20:42:07', '::1'),
+(43, 1, 'In', '2016-06-09 20:42:10', '::1'),
+(44, 1, 'Out', '2016-06-09 20:42:12', '::1'),
+(45, 1, 'In', '2016-06-09 20:42:15', '::1'),
+(46, 1, 'Out', '2016-06-09 20:42:56', '::1'),
+(47, 2, 'In', '2016-06-09 20:43:16', '::1'),
+(48, 2, 'Out', '2016-06-09 21:15:35', '::1'),
+(49, 2, 'In', '2016-06-09 21:15:39', '::1'),
+(50, 2, 'In', '2016-06-09 21:16:12', '::1'),
+(51, 2, 'Out', '2016-06-09 21:16:50', '::1'),
+(52, 2, 'In', '2016-06-09 21:17:21', '::1'),
+(53, 2, 'Out', '2016-06-09 21:18:13', '::1'),
+(54, 2, 'In', '2016-06-09 21:18:15', '::1'),
+(55, 2, 'Out', '2016-06-09 21:18:54', '::1'),
+(56, 2, 'In', '2016-06-09 21:18:57', '::1'),
+(57, 1, 'In', '2016-06-09 21:21:24', '10.1.31.65'),
+(58, 2, 'Out', '2016-06-09 21:23:53', '::1'),
+(59, 2, 'In', '2016-06-09 21:23:57', '::1'),
+(60, 1, 'Out', '2016-06-09 21:35:52', '10.1.31.65');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `positions`
 --
 
@@ -284,7 +436,25 @@ ALTER TABLE `educations`
 -- Indexes for table `employees`
 --
 ALTER TABLE `employees`
-  ADD PRIMARY KEY (`EMP_ID`), ADD KEY `EMP_EDU_ID` (`EMP_EDU_ID`), ADD KEY `EMP_POST_ID1` (`EMP_POST_ID1`), ADD KEY `EMP_POST_ID2` (`EMP_POST_ID2`), ADD KEY `EMP_ID` (`EMP_ID`), ADD KEY `EMP_ID_2` (`EMP_ID`), ADD KEY `EMP_BOSS_ID` (`EMP_BOSS_ID`), ADD KEY `EMP_ID_3` (`EMP_ID`);
+  ADD PRIMARY KEY (`EMP_ID`), ADD KEY `EMP_EDU_ID` (`EMP_EDU_ID`), ADD KEY `EMP_POST_ID1` (`EMP_POST_ID1`), ADD KEY `EMP_POST_ID2` (`EMP_POST_ID2`), ADD KEY `EMP_ID` (`EMP_ID`), ADD KEY `EMP_ID_2` (`EMP_ID`), ADD KEY `EMP_BOSS_ID` (`EMP_BOSS_ID`), ADD KEY `EMP_ID_3` (`EMP_ID`), ADD KEY `EMP_ID_4` (`EMP_ID`), ADD KEY `EMP_ID_5` (`EMP_ID`), ADD KEY `EMP_ID_6` (`EMP_ID`);
+
+--
+-- Indexes for table `employee_attendances`
+--
+ALTER TABLE `employee_attendances`
+  ADD PRIMARY KEY (`EMP_ATT_ID`);
+
+--
+-- Indexes for table `employee_log_failures`
+--
+ALTER TABLE `employee_log_failures`
+  ADD PRIMARY KEY (`EM_LOG_F_ID`);
+
+--
+-- Indexes for table `employee_log_ios`
+--
+ALTER TABLE `employee_log_ios`
+  ADD PRIMARY KEY (`EMP_LOGS_ID`), ADD KEY `EMP_ID` (`EMP_ID`);
 
 --
 -- Indexes for table `positions`
@@ -329,6 +499,21 @@ ALTER TABLE `educations`
 ALTER TABLE `employees`
   MODIFY `EMP_ID` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
 --
+-- AUTO_INCREMENT for table `employee_attendances`
+--
+ALTER TABLE `employee_attendances`
+  MODIFY `EMP_ATT_ID` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=12;
+--
+-- AUTO_INCREMENT for table `employee_log_failures`
+--
+ALTER TABLE `employee_log_failures`
+  MODIFY `EM_LOG_F_ID` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=22;
+--
+-- AUTO_INCREMENT for table `employee_log_ios`
+--
+ALTER TABLE `employee_log_ios`
+  MODIFY `EMP_LOGS_ID` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=61;
+--
 -- AUTO_INCREMENT for table `positions`
 --
 ALTER TABLE `positions`
@@ -362,6 +547,12 @@ ADD CONSTRAINT `employees_ibfk_1` FOREIGN KEY (`EMP_EDU_ID`) REFERENCES `educati
 ADD CONSTRAINT `employees_ibfk_2` FOREIGN KEY (`EMP_POST_ID1`) REFERENCES `positions` (`POS_ID`),
 ADD CONSTRAINT `employees_ibfk_3` FOREIGN KEY (`EMP_POST_ID2`) REFERENCES `positions` (`POS_ID`),
 ADD CONSTRAINT `employees_ibfk_4` FOREIGN KEY (`EMP_BOSS_ID`) REFERENCES `employees` (`EMP_ID`);
+
+--
+-- Constraints for table `employee_log_ios`
+--
+ALTER TABLE `employee_log_ios`
+ADD CONSTRAINT `employee_log_ios_ibfk_1` FOREIGN KEY (`EMP_ID`) REFERENCES `employees` (`EMP_ID`);
 
 --
 -- Constraints for table `student_activity_educator`

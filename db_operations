@@ -1,0 +1,30 @@
+<?php
+
+require_once("sql_queries.php");
+
+function insert_EMPLOYEE_LOG_IOS($emp_id, $event_type)
+{
+	
+	//** 1. build the query
+	$queryStr = 'INSERT INTO ';
+		$queryStr = $queryStr . 'EMPLOYEE_LOG_IOS(';
+		$queryStr = $queryStr . 'EMP_ID';
+		$queryStr = $queryStr . ', ' . 'EVENT_TYPE';
+		$queryStr = $queryStr . ', ' . 'DATE_TIME';
+		$queryStr = $queryStr . ')';
+	$queryStr = $queryStr . ' VALUES(';
+		$queryStr = $queryStr . $emp_id;
+		$queryStr = $queryStr . ', ' . $event_type;
+		$queryStr = $queryStr . ', ' . 'NOW()';
+		$queryStr = $queryStr . ')';
+	$queryStr = $queryStr . ';';
+	
+	//testing
+	echo 'Executed query: ' . $queryStr;
+
+	//*** 2. execute quyery and get the results
+	$result = getResult($queryStr);
+
+	return ($result);
+
+}//write_EMPLOYEE_LOG_IOS
