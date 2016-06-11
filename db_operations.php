@@ -529,7 +529,7 @@ function displayQueryStr($queryStr, $debug_on)
 	
 
 	//testing
-	/**/
+	/**
 	if ($debug_on) {
 			//display a confirmation message to the user
 			echo '<script type="text/javascript">';
