@@ -31,7 +31,7 @@
 		echo '<font color="blue">';
 		echo 'Logged-in User: ' .
 				$_SESSION['LoggedIn_EMP_NAME'] . 
-				'(ID = ' . $_SESSION['LoggedIn_EMP_ID'] . ')' . ' &#9658; ';
+				' (ID = ' . $_SESSION['LoggedIn_EMP_ID'] . ')' . ' &#9658; ';
 		echo ' <a href="logout.php" style="background-color: rgb(255, 153, 0); color: white; text-decoration: none; padding: 5px; border-radius: 5px"> &#10047; Log Out &#10047; </a>';
 		echo '</font>';
 	}

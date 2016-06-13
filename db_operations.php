@@ -371,6 +371,48 @@ function report_STUDENTS($debug_on)
 }//report_STUDENTS()
 
 
+function report_EDUCATOR_STUDENT($emp_id, $debug_on)
+{
+	
+	//** 1. build the query
+	$queryStr = 'SELECT  ';
+		$queryStr = $queryStr . 'EDUCATOR_STUDENT.EDU_STU_ID';
+		$queryStr = $queryStr . ', ' . 'CONCAT(EMPLOYEES.EMP_FIRST_NAME, " ", EMPLOYEES.EMP_LAST_NAME) AS EMPLOYEE_NAME'; 
+		$queryStr = $queryStr . ', ' . 'CONCAT(STUDENTS.STU_FIRST_NAME, " ", STUDENTS.STU_LAST_NAME) AS STU_NAME';
+		$queryStr = $queryStr . ', ' . 'EDUCATOR_STUDENT.RESPONSITIVTY';
+		$queryStr = $queryStr . ', ' . 'EDUCATOR_STUDENT.START_DATE';
+		$queryStr = $queryStr . ', ' . 'EDUCATOR_STUDENT.END_DATE';
+		$queryStr = $queryStr . ', ' . 'EDUCATOR_STUDENT.NOTES';
+	$queryStr = $queryStr . ' FROM ';
+		$queryStr = $queryStr . 'EDUCATOR_STUDENT';
+		$queryStr = $queryStr . ' JOIN EMPLOYEES ON EMPLOYEES.EMP_ID=EDUCATOR_STUDENT.EMP_ID';
+		$queryStr = $queryStr . ' JOIN STUDENTS ON STUDENTS.STU_ID=EDUCATOR_STUDENT.STU_ID';
+	$queryStr = $queryStr . ' WHERE ';
+		$queryStr = $queryStr . 'EDUCATOR_STUDENT.EMP_ID=' .  $emp_id;
+	$queryStr = $queryStr . ';';	
+
+
+	//if debug on, display [queryStr]
+	displayQueryStr($queryStr, $debug_on);
+	
+	//*** 2. execute quyery and get the results
+	$result = getResult($queryStr);
+	
+	//populate [result] to table
+	$fieldHeaderStr = array (
+		0 => 'ID',
+		1 => 'Educator Name',
+		2 => 'Student Name',
+		3 => 'Responsibility',
+		4 => 'Start Date',
+		5 => 'End Date',
+		6 => 'Notes',
+		);
+	populateResultToTable($result, $fieldHeaderStr);
+
+}//report_EDUCATOR_STUDENT()
+
+
 function report_EMPLOYEE_LOG_IOS($emp_id, $debug_on)
 {
 	

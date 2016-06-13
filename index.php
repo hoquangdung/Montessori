@@ -28,7 +28,11 @@ session_start();
 		<li><a href="login.php"><img src="images/icons/keypad_small.jpg" width="40"> User Login</a></li>
 		<li><a href="logout.php"><img src="images/icons/logout.jpg" width="40"> User Logout</a></li>
 		<li><a href="record_employee_attendance_in.php"><img src="images/icons/attendance_in.jpg" width="40"> Check In Employee Attendance</a></li>
-		<li><a href="record_employee_attendance_out.php"><img src="images/icons/attendance_out.png" width="40"> Check Out Employee Attendance</a></li>		
+		<li><a href="record_employee_attendance_out.php"><img src="images/icons/attendance_out.png" width="40"> Check Out Employee Attendance</a></li>
+
+		<li><a href="record_student_attendance.php"><img src="images/icons/check-in.png" width="40"> Check In/Out Student Attendance</a></li>
+		
+
 		<li><a href="report_activity_types.php"><img src="images/icons/report.jpg" width="40"> Activity Types</a></li>
 		<li><a href="report_activity_subtypes.php"><img src="images/icons/report.jpg" width="40"> Activity Sub-Types</a></li>
 		<li><a href="report_educations.php"><img src="images/icons/report.jpg" width="40"> Educations</a></li>
@@ -36,12 +40,11 @@ session_start();
 		<li><a href="report_employees.php"><img src="images/icons/report.jpg" width="40"> Employees</a></li>
 		<li><a href="report_students.php"><img src="images/icons/report.jpg" width="40"> Students</a></li>
 		<li><a href="report_activities.php"><img src="images/icons/report.jpg" width="40"> Activities</a></li>
+		<li><a href="report_educator_student.php"><img src="images/icons/report.jpg" width="40"> Educator-Student</a></li>		
 		<li><a href="report_employee_log_ios.php"><img src="images/icons/report.jpg" width="40"> Employee Log-Ins/Outs</a></li>
 		<li><a href="report_employee_attendances.php"><img src="images/icons/report.jpg" width="40"> Employee Attendance-Ins/Outs</a></li>
 		<li><a href="report_employee_log_failures.php"><img src="images/icons/report.jpg" width="40"> Employee Log Failures</a></li>
-		<li><a href="report_dp_query_logs.php"><img src="images/icons/report.jpg" width="40"> Database Queries</a></li>
-
-		
+		<li><a href="report_dp_query_logs.php"><img src="images/icons/report.jpg" width="40"> Database Queries</a></li>		
 	</ul>	
 </div>
 
@@ -51,4 +54,5 @@ session_start();
 	include 'footer.php'
 ?>
 </body>
+
 </html>

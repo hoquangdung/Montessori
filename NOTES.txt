@@ -11,5 +11,7 @@ localhost is used to specify the database connect, must be changed if database i
 if (strpos($_SERVER["PHP_SELF"], "/montessori/login.php") === false)
 
 
+PHP code is always executed by server
+http://www.randomsnippets.com/2008/02/21/how-to-dynamically-add-form-elements-via-javascript/
 
 
