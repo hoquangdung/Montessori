@@ -1,0 +1,15 @@
+NOTES
+
+June 14, 2016
+
+When the homepage (login) is opened in a new machine (not local machine), the page is reloaded multiple time continuously for a few minutes until it works fine
+http://10.1.21.59/montessori
+
+localhost is used to specify the database connect, must be changed if database is not local host
+
+//if this is not login page, then load it
+if (strpos($_SERVER["PHP_SELF"], "/montessori/login.php") === false)
+
+
+
+

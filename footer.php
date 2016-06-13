@@ -21,20 +21,22 @@
     	width: 100%;    	
     	padding: 10px;
     	vertical-align: middle;">
-				
-		&copy; <i> Copyright Smart Kid Montessori</i> &#9883; <i>All Rights Reserved </i> &#9883;
-
+		
+		&copy; Copyright Smart Kid Montessori &#9728; All Rights Reserved &#9728; Web-Admin: <a href="mailto:hoquangdung@yahoo.com"> &#9993; Quang-Dung Ho</a> 
+		
 		<?php
 
-		if ($_SERVER["PHP_SELF"] != "/montessori/index.php")
+		//if this is NOT {index, login} page, then display the [Home] button
+		if ((strpos($_SERVER["PHP_SELF"], "/montessori/index.php") === false) &&
+			(strpos($_SERVER["PHP_SELF"], "/montessori/login.php") === false))
 		{
-			echo '  <a href="index.php" style="';
-			echo 'background-color: rgb(0, 0, 255);';
+			echo '  &#9658; <a href="index.php" style="';
+			echo 'background-color: rgb(0, 153, 0);';
 			echo 'color: white;';
 			echo 'text-decoration: none;';
 			echo 'padding: 5px;';
 			echo 'border-radius: 5px"';
-			echo '> Home </a>';
+			echo '> &#10084; Home &#10084; </a>';
 		}
 
 		?>

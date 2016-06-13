@@ -358,12 +358,13 @@ function report_STUDENTS($debug_on)
 		1 => 'First Name', 
 		2 => 'Last Name', 
 		3 => 'Birth Date', 
-		4 => 'Sex', 
-		5 => 'Start Date', 
-		6 => 'Grad date',
-		7 => 'Daily Fee',
-		8 => 'Credential',
-		9 => 'Notes',
+		4 => 'Sex',
+		5 => 'Photo', 
+		6 => 'Start Date', 
+		7 => 'Grad date',
+		8 => 'Daily Fee',
+		9 => 'Credential',
+		10 => 'Notes',
 		);
 	populateResultToTable($result, $fieldHeaderStr);
 

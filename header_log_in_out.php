@@ -30,9 +30,9 @@
 	{
 		echo '<font color="blue">';
 		echo 'Logged-in User: ' .
-				$_SESSION['LoggedIn_EMP_NAME'] . ' ' .
-				'(ID = ' . $_SESSION['LoggedIn_EMP_ID'] . ')';
-		echo ' <a href="logout.php" style="background-color: rgb(255, 153, 0); color: white; text-decoration: none; padding: 5px; border-radius: 5px"> Log Out </a>';
+				$_SESSION['LoggedIn_EMP_NAME'] . 
+				'(ID = ' . $_SESSION['LoggedIn_EMP_ID'] . ')' . ' &#9658; ';
+		echo ' <a href="logout.php" style="background-color: rgb(255, 153, 0); color: white; text-decoration: none; padding: 5px; border-radius: 5px"> &#10047; Log Out &#10047; </a>';
 		echo '</font>';
 	}
 
@@ -40,12 +40,12 @@
 	else
 	{
 			echo '<font color="red">';
-			echo 'Please';
-			echo ' <a href="login.php" style="background-color: blue; color: white; text-decoration: none; padding: 5px; border-radius: 5px">Log In</a>';
+			echo 'Please &#9658; ';
+			echo ' <a href="login.php" style="background-color: blue; color: white; text-decoration: none; padding: 5px; border-radius: 5px"> &#10048; Log In &#10048; </a>';
 			echo '</font>';			
 
 			//if this is not login page, then load it
-			if ($_SERVER["PHP_SELF"] != "/montessori/login.php")
+			if (strpos($_SERVER["PHP_SELF"], "/montessori/login.php") === false)
 			{
 				echo '<script type="text/javascript">';
     			echo 'window.location.replace("login.php");';
