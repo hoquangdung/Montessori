@@ -562,6 +562,11 @@ function get_client_ip() {
         $ipaddress = $_SERVER['REMOTE_ADDR'];
     else
         $ipaddress = 'unknown';
+
+    if ($ipaddress == '::1')
+    {
+    	$ipaddress = 'localhost/unknown';
+    }
  
     return $ipaddress;
     

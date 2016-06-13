@@ -8,6 +8,7 @@ session_start();
 <head>
 	<title>Smart Assistance for Montessori Schools</title>
 	<link rel="stylesheet" type="text/css" href="vertical_navigation_bar.css">
+	<link rel="stylesheet" type="text/css" href="common.css">
 </head>
 <body>
 
@@ -15,11 +16,11 @@ session_start();
 	include 'header_log_in_out.php'
 ?>
 
-<div id="header">
-	<h2><font color="blue">Smart Kids Montessori</font></h2>	
-	<h3>Please select one of the following option:</h3>
-	<br/>
-</div>
+<div id="main">
+
+<h2><font color="blue">Smart Kids Montessori</font></h2>	
+<h3>Please select one of the following option:</h3>
+<br/>
 
 <div id="nav">	
 	<ul>
@@ -29,7 +30,7 @@ session_start();
 		<li><a href="record_employee_attendance_in.php"><img src="images/icons/attendance_in.jpg" width="40"> Check In Employee Attendance</a></li>
 		<li><a href="record_employee_attendance_out.php"><img src="images/icons/attendance_out.png" width="40"> Check Out Employee Attendance</a></li>		
 		<li><a href="report_activity_types.php"><img src="images/icons/report.jpg" width="40"> Activity Types</a></li>
-		<li><a href="report_activity_subtypes.php"><img src="images/icons/report.jpg" width="40"> Activity Sub-Types</a>
+		<li><a href="report_activity_subtypes.php"><img src="images/icons/report.jpg" width="40"> Activity Sub-Types</a></li>
 		<li><a href="report_educations.php"><img src="images/icons/report.jpg" width="40"> Educations</a></li>
 		<li><a href="report_positions.php"><img src="images/icons/report.jpg" width="40"> Positions</a></li>
 		<li><a href="report_employees.php"><img src="images/icons/report.jpg" width="40"> Employees</a></li>
@@ -44,9 +45,10 @@ session_start();
 	</ul>	
 </div>
 
+</div>
 
 <?php
-	include 'footer_no_home.html'
+	include 'footer.php'
 ?>
 </body>
 </html>

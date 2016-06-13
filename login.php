@@ -8,6 +8,7 @@ session_start();
 <head>
 	<title>User Log-In</title>
 	<link rel="stylesheet" type="text/css" href="keypad.css">
+	<link rel="stylesheet" type="text/css" href="common.css">
 
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
 
@@ -19,7 +20,7 @@ session_start();
 	include 'header_log_in_out.php'
 ?>
 
-<br/>
+<div id="main">
 
 <div id="outer">
 
@@ -36,7 +37,7 @@ session_start();
 			<td colspan="4">
 			<input type="password" id="passCode" name="passCode" value='' disabled>		
 			</td>
-		</td>
+		</tr>
 		<tr>
 			<td><a href="javascript: readKey('1')">
 				<img src="images/icons/key_one.png"></a></td>
@@ -82,6 +83,8 @@ session_start();
 
 </div>
 
+</div>
+
 <script language="javascript" type="text/javascript">
 function readKey(key)
 {		
@@ -121,7 +124,7 @@ function submit_keypadForm(key)
 
 
 <?php
-	include 'footer.html'
+	include 'footer.php'
 ?>
 
 </body>

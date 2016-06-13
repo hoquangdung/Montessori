@@ -8,6 +8,7 @@ session_start();
 <head>
 	<title>Recored Employee Attendance Out</title>
 	<link rel="stylesheet" type="text/css" href="db_tables.css">
+	<link rel="stylesheet" type="text/css" href="common.css">
 </head>
 
 <body>
@@ -43,7 +44,7 @@ if (isset($_SESSION["LoggedIn_EMP_ID"]))
 ?>
 
 <?php
-	include 'footer.html'
+	include 'footer.php'
 ?>
 
 </body>

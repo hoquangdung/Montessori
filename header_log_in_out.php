@@ -1,17 +1,23 @@
-<header>
+<header style="
+    		position: fixed; 
+    		top: 0;
+    		left: 0;
+    		right: 0;    
+    		background-color: rgb(204, 204, 255);"
+>
 
 <div style="
 	display: table;
-	height: 40px;
+	height: 30px;
     width: 100%;
     margin: 0px;
-    background: lightgray;
+    background-color: rgb(204, 204, 255);
     border-radius: 10px;    
     text-align: right;">
 
 	<div style="
 		display: table-cell;
-		height: 40px;
+		height: 30px;
     	width: 100%;    	
     	padding: 10px;
     	vertical-align: middle;">

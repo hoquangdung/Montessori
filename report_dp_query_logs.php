@@ -8,6 +8,7 @@ session_start();
 <head>
 	<title>Report: Database Queries</title>
 	<link rel="stylesheet" type="text/css" href="db_tables.css">
+	<link rel="stylesheet" type="text/css" href="common.css">
 </head>
 
 <body>
@@ -15,6 +16,8 @@ session_start();
 <?php
 	include 'header_log_in_out.php'
 ?>
+
+<div id="main">
 
 <h2>List of Database Queries</h2>
 
@@ -38,9 +41,11 @@ else
 
 ?>
 
+</div>
+
 
 <?php
-	include 'footer.html'
+	include 'footer.php'
 ?>
 
 </body>

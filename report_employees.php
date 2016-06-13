@@ -10,13 +10,16 @@ session_start();
 <head>
 	<title>Report: Employees</title>	
 	<link rel="stylesheet" type="text/css" href="db_tables.css">
-</head>
+	<link rel="stylesheet" type="text/css" href="common.css">
+</head>	
 
 <body>
 
 <?php
 	include 'header_log_in_out.php'
 ?>
+
+<div id="main">
 
 <h2>List of Employees</h2>
 
@@ -40,9 +43,11 @@ else
 
 ?>
 
+</div>
+
 
 <?php
-	include 'footer.html'
+	include 'footer.php'
 ?>
 
 </body>
