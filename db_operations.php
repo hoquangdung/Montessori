@@ -71,6 +71,40 @@ function insert_EMPLOYEE_ATTENDANCES($emp_id, $event_type, $notes, $debug_on)
 }//insert_EMPLOYEE_ATTENDANCES()
 
 
+function insert_STUDENT_ATTENDANCES($stu_id, $event_type, $emp_id, $notes, $debug_on)
+{
+	
+	//** 1. build the query
+	$queryStr = 'INSERT INTO ';
+		$queryStr = $queryStr . 'STUDENT_ATTENDANCES(';
+		$queryStr = $queryStr . 'STU_ID';
+		$queryStr = $queryStr . ', ' . 'EVENT_TYPE';		
+		$queryStr = $queryStr . ', ' . 'DATE_TIME';
+		$queryStr = $queryStr . ', ' . 'EMP_ID';
+		$queryStr = $queryStr . ', ' . 'IP_ADDR';
+		$queryStr = $queryStr . ', ' . 'NOTES';
+		$queryStr = $queryStr . ')';
+	$queryStr = $queryStr . ' VALUES(';
+		$queryStr = $queryStr . $stu_id;
+		$queryStr = $queryStr . ', ' . '"' . $event_type .  '"';
+		$queryStr = $queryStr . ', ' . 'NOW()';
+		$queryStr = $queryStr . ', ' . $emp_id;
+		$queryStr = $queryStr . ', ' . '"' . get_client_ip() .  '"';
+		$queryStr = $queryStr . ', ' . '"' . $notes .  '"';
+		$queryStr = $queryStr . ')';
+	$queryStr = $queryStr . ';';
+	
+	//if debug on, display [queryStr]
+	displayQueryStr($queryStr, $debug_on);
+
+	//*** 2. execute quyery and get the results
+	$result = getResult($queryStr);
+
+	return ($result);
+
+}//insert_STUDENT_ATTENDANCES()
+
+
 function insert_EMPLOYEE_LOG_FAILURES($keys, $debug_on)
 {
 	
@@ -461,8 +495,8 @@ function get_EDUCATOR_STUDENT($emp_id, $debug_on)
 
 
 function getStudents_AttendanceCheckIn($debug_on)
-{	
-	//** 1. build the query
+{
+	
 	$queryStr = 'SELECT  ';
 		$queryStr = $queryStr . 'STUDENTS.STU_ID';		
 		$queryStr = $queryStr . ', ' . 'CONCAT(STUDENTS.STU_FIRST_NAME, " ", STUDENTS.STU_LAST_NAME) AS STU_NAME';
@@ -471,12 +505,11 @@ function getStudents_AttendanceCheckIn($debug_on)
 		$queryStr = $queryStr . ', ' . 'STUDENTS.STU_PHOTO';
 	$queryStr = $queryStr . ' FROM ';
 		$queryStr = $queryStr . 'STUDENTS';
-		//$queryStr = $queryStr . ' JOIN EMPLOYEES ON EMPLOYEES.EMP_ID=EDUCATOR_STUDENT.EMP_ID';
-		//$queryStr = $queryStr . ' JOIN STUDENTS ON STUDENTS.STU_ID=EDUCATOR_STUDENT.STU_ID';
-	//$queryStr = $queryStr . ' WHERE ';
-		//$queryStr = $queryStr . 'EDUCATOR_STUDENT.EMP_ID=' .  $emp_id;
+	$queryStr = $queryStr . ' WHERE  STUDENTS.STU_ID NOT IN ';
+		$queryStr = $queryStr . '(SELECT STUDENT_ATTENDANCES.STU_ID FROM STUDENT_ATTENDANCES WHERE 
+										STUDENT_ATTENDANCES.DATE_TIME >= CURDATE() && 
+										STUDENT_ATTENDANCES.DATE_TIME < (CURDATE() + INTERVAL 1 DAY))';
 	$queryStr = $queryStr . ';';	
-
 
 	//if debug on, display [queryStr]
 	displayQueryStr($queryStr, $debug_on);
@@ -484,8 +517,9 @@ function getStudents_AttendanceCheckIn($debug_on)
 	//*** 2. execute quyery and get the results
 	$result = getResult($queryStr);
 
-	//populate [result] to table
+	//testting	
 	/**
+	//populate [result] to table
 	$fieldHeaderStr = array (
 		0 => 'ID',
 		1 => 'Name',
@@ -494,10 +528,11 @@ function getStudents_AttendanceCheckIn($debug_on)
 		4 => 'Photo',
 		);
 	populateResultToTable($result, $fieldHeaderStr);
-	/**/
 
 	//NOTES: after print out, the result cursor is at the end
 	//need to reset to head before return
+	/**/
+
 		
 	return ($result);
 

@@ -39,6 +39,8 @@ if (isset($_POST['checked_student_ids']) && is_array($_POST['checked_student_ids
 	echo '</script>';
 	/**/
 
+	require_once("db_operations.php");
+
 	$checked_student_ids = $_POST['checked_student_ids'];
 
 	// let's iterate thru the array<br/><br/>';
@@ -48,8 +50,25 @@ if (isset($_POST['checked_student_ids']) && is_array($_POST['checked_student_ids
    	{
       	echo $i . ': ' . $checked_ids . '<br/>';
       	$i++;
-   	}
-}
+
+      	//record student attendance-in
+      	if (isset($_SESSION['LoggedIn_EMP_ID']))
+      	{
+      		$stu_id = $checked_ids; 
+      		$event_type = "In";
+      		$emp_id = $_SESSION['LoggedIn_EMP_ID'];
+      		$notes = "";
+      		insert_STUDENT_ATTENDANCES($stu_id, $event_type, $emp_id, $notes, true);
+      	}//if
+
+    }//for
+
+    //reload the page
+	echo '<script type="text/javascript">';
+    echo 'window.location.replace("record_student_attendance.php");';
+    echo '</script>';
+
+}//if
 
 //if a valid user is logging-in
 else if (isset($_SESSION['LoggedIn_EMP_ID']))

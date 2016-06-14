@@ -22,20 +22,19 @@ session_start();
 		echo  $itemText . '</a>';
 	}
 
+	$selected_student_ids=array();
+
+	function selectStudent($id)
+	{
+		$pos = count($selected_student_ids);
+		$selected_student_ids[$pos] = $id;
+
+		echo '<br/>';
+		print_r($selected_student_ids);
+		echo '<br/>';
+	}
+
 	?>
-
-
-	<script type="text/javascript">
-
-		function addLinkItem(itemHref, itemText)
-		{
-			var a = $('<a />');
-			a.attr('href', itemHref);
-			a.text(itemText);
-			$('body').append(a);
-		}
-
-	</script>
 
 
 </head>
@@ -66,31 +65,27 @@ session_start();
 	?>
 </p>
 
+<a href="<?php selectStudent(1); ?>">Student 1</a>;
+<a href="<?php selectStudent(2); ?>">Student 2</a>;
+<a href="<?php selectStudent(3); ?>">Student 3</a>;
 
 
-<p>
-<script type="text/javascript">
+<form name="studentAttendanceForm" action="student_attendance_process.php" method="post">
 
-	var itemHref = 'report_dp_query_logs.php';
-	var itemText = 'Database Queries';
+<?php
 
-	addLinkItem(itemHref, itemText);
+	$FORM_selected_student_ids=array(1, 2, 3);
 
-</script>
+	foreach ($FORM_selected_student_ids as $student_id)
+	{
+	  	echo '<input type="hidden" name="selected_student_ids[]" value=' .  $student_id . '>';
+	}
 
-</p>
+?>	
 
-<p>
-<script type="text/javascript">
+<input type="submit" value="Record Student Attendance">
 
-	var itemHref = 'report_dp_query_logs.php';
-	var itemText = 'Database Queries';
-
-	addLinkItem(itemHref, itemText);
-
-</script>
-
-</p>
+</form>
 
 
 </div>
