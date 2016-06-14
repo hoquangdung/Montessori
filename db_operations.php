@@ -413,6 +413,124 @@ function report_EDUCATOR_STUDENT($emp_id, $debug_on)
 }//report_EDUCATOR_STUDENT()
 
 
+function get_EDUCATOR_STUDENT($emp_id, $debug_on)
+{	
+	//** 1. build the query
+	$queryStr = 'SELECT  ';
+		$queryStr = $queryStr . 'EDUCATOR_STUDENT.EDU_STU_ID';
+		$queryStr = $queryStr . ', ' . 'EDUCATOR_STUDENT.STU_ID';		
+		$queryStr = $queryStr . ', ' . 'CONCAT(EMPLOYEES.EMP_FIRST_NAME, " ", EMPLOYEES.EMP_LAST_NAME) AS EMPLOYEE_NAME'; 
+		$queryStr = $queryStr . ', ' . 'CONCAT(STUDENTS.STU_FIRST_NAME, " ", STUDENTS.STU_LAST_NAME) AS STU_NAME';
+		$queryStr = $queryStr . ', ' . 'STUDENTS.STU_PHOTO';	
+		$queryStr = $queryStr . ', ' . 'EDUCATOR_STUDENT.RESPONSITIVTY';
+		$queryStr = $queryStr . ', ' . 'EDUCATOR_STUDENT.START_DATE';
+		$queryStr = $queryStr . ', ' . 'EDUCATOR_STUDENT.END_DATE';
+		$queryStr = $queryStr . ', ' . 'EDUCATOR_STUDENT.NOTES';
+	$queryStr = $queryStr . ' FROM ';
+		$queryStr = $queryStr . 'EDUCATOR_STUDENT';
+		$queryStr = $queryStr . ' JOIN EMPLOYEES ON EMPLOYEES.EMP_ID=EDUCATOR_STUDENT.EMP_ID';
+		$queryStr = $queryStr . ' JOIN STUDENTS ON STUDENTS.STU_ID=EDUCATOR_STUDENT.STU_ID';
+	$queryStr = $queryStr . ' WHERE ';
+		$queryStr = $queryStr . 'EDUCATOR_STUDENT.EMP_ID=' .  $emp_id;
+	$queryStr = $queryStr . ';';	
+
+
+	//if debug on, display [queryStr]
+	displayQueryStr($queryStr, $debug_on);
+
+	//*** 2. execute quyery and get the results
+	$result = getResult($queryStr);
+
+	//populate [result] to table
+	$fieldHeaderStr = array (
+		0 => 'ID',
+		1 => 'Student ID',
+		2 => 'Educator Name',
+		3 => 'Student Name',
+		4 => 'Student Photo',
+		5 => 'Responsibility',
+		6 => 'Start Date',
+		7 => 'End Date',
+		8 => 'Notes',
+		);
+	populateResultToTable($result, $fieldHeaderStr);
+		
+	return ($result);
+
+}//get_EDUCATOR_STUDENT()
+
+
+function getStudents_AttendanceCheckIn($debug_on)
+{	
+	//** 1. build the query
+	$queryStr = 'SELECT  ';
+		$queryStr = $queryStr . 'STUDENTS.STU_ID';		
+		$queryStr = $queryStr . ', ' . 'CONCAT(STUDENTS.STU_FIRST_NAME, " ", STUDENTS.STU_LAST_NAME) AS STU_NAME';
+		$queryStr = $queryStr . ', ' . 'STUDENTS.STU_BIRTHDATE';
+		$queryStr = $queryStr . ', ' . 'FLOOR(DATEDIFF(NOW(), STUDENTS.STU_BIRTHDATE)/365.25) AS STU_AGE';
+		$queryStr = $queryStr . ', ' . 'STUDENTS.STU_PHOTO';
+	$queryStr = $queryStr . ' FROM ';
+		$queryStr = $queryStr . 'STUDENTS';
+		//$queryStr = $queryStr . ' JOIN EMPLOYEES ON EMPLOYEES.EMP_ID=EDUCATOR_STUDENT.EMP_ID';
+		//$queryStr = $queryStr . ' JOIN STUDENTS ON STUDENTS.STU_ID=EDUCATOR_STUDENT.STU_ID';
+	//$queryStr = $queryStr . ' WHERE ';
+		//$queryStr = $queryStr . 'EDUCATOR_STUDENT.EMP_ID=' .  $emp_id;
+	$queryStr = $queryStr . ';';	
+
+
+	//if debug on, display [queryStr]
+	displayQueryStr($queryStr, $debug_on);
+
+	//*** 2. execute quyery and get the results
+	$result = getResult($queryStr);
+
+	//populate [result] to table
+	/**
+	$fieldHeaderStr = array (
+		0 => 'ID',
+		1 => 'Name',
+		2 => 'Birth Date',
+		3 => 'Age',
+		4 => 'Photo',
+		);
+	populateResultToTable($result, $fieldHeaderStr);
+	/**/
+
+	//NOTES: after print out, the result cursor is at the end
+	//need to reset to head before return
+		
+	return ($result);
+
+}//getStudents_AttendanceCheckIn()
+
+
+function createStudentList_AttendanceCheckIn($result)
+{
+	//the number of rows in [result]
+	$resultRows = mysqli_num_rows($result);
+	$resultFields = mysqli_num_fields($result);
+
+	for ($row = 0; $row < $resultRows; $row++)
+	{
+		//the current row in [result]
+		$currentRow = mysqli_fetch_row($result);
+		//populate [currentRow] 
+		echo '<div class="imagelinkbox">';	
+		echo '<input type="checkbox" name="checked_student_ids[]"' .
+				' id="' . $currentRow[0] . '_id"' . 
+				' value="' . $currentRow[0] . '"' .  '>';
+		echo '<br/>';
+		echo '<label for="' . $currentRow[0] . '_id">' . 
+		     	'<img src="' . $currentRow[4] . '" alt="student photo" height="110" width="110">' . 
+				'<br/>' . $currentRow[1] . '<br/>' . ' (Age: ' . $currentRow[3] . ')' . '</label>';
+		//echo '<br/>';
+		echo '</div>'; 
+	}
+
+
+}//createStudentList_AttendanceCheckIn()
+
+
 function report_EMPLOYEE_LOG_IOS($emp_id, $debug_on)
 {
 	

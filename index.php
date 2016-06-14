@@ -30,6 +30,8 @@ session_start();
 		<li><a href="record_employee_attendance_in.php"><img src="images/icons/attendance_in.jpg" width="40"> Check In Employee Attendance</a></li>
 		<li><a href="record_employee_attendance_out.php"><img src="images/icons/attendance_out.png" width="40"> Check Out Employee Attendance</a></li>
 
+		<li><a href="TEST_record_student_attendance.php"><img src="images/icons/check-in.png" width="40"> TEST Check In/Out Student Attendance</a></li>
+
 		<li><a href="record_student_attendance.php"><img src="images/icons/check-in.png" width="40"> Check In/Out Student Attendance</a></li>
 		
 
