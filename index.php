@@ -6,10 +6,14 @@ session_start();
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Smart Assistance for Montessori Schools</title>
-	<link rel="stylesheet" type="text/css" href="vertical_navigation_bar.css">
+	<title>Application Panel</title>
+	<link rel="stylesheet" type="text/css" href="imglinkboxes_panel.css">
 	<link rel="stylesheet" type="text/css" href="common.css">
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+
 </head>
+
 <body>
 
 <?php
@@ -18,42 +22,91 @@ session_start();
 
 <div id="main">
 
-<h2><font color="blue">Smart Kids Montessori</font></h2>	
-<h3>Please select one of the following option:</h3>
-<br/>
 
-<div id="nav">	
-	<ul>
-		<li><a class="active" href="index.php"><img src="images/icons/home_button.jpg" width="40"> Home</a></li>
-		<li><a href="login.php"><img src="images/icons/keypad_small.jpg" width="40"> User Login</a></li>
-		<li><a href="logout.php"><img src="images/icons/logout.jpg" width="40"> User Logout</a></li>
-		<li><a href="record_employee_attendance_in.php"><img src="images/icons/attendance_in.jpg" width="40"> Check In Employee Attendance</a></li>
-		<li><a href="record_employee_attendance_out.php"><img src="images/icons/attendance_out.png" width="40"> Check Out Employee Attendance</a></li>
+<?php
 
-		<li><a href="record_student_attendance_in.php"><img src="images/icons/student_attendance_in.png" width="40"> Check In Student Attendance</a></li>
+//if a valid user is logging-in
+if (isset($_SESSION['LoggedIn_EMP_ID']))
+{	
+	//testing
+	/**
+	echo '<script type="text/javascript">';
+	echo 'window.confirm("NO Data received");';
+	echo '</script>';
+	/**/
 
-		<li><a href="record_student_attendance_out.php"><img src="images/icons/student_attendance_out.png" width="40"> Check Out Student Attendance</a></li>
+	//search for students that were not checkec in today
+	require_once("db_operations.php");
+	$emp_id = $_SESSION['LoggedIn_EMP_ID'];
+	$result = getWebPageLinks($emp_id, true);
+	$resultRows = mysqli_num_rows($result);
 
-		<li><a href="report_activity_types.php"><img src="images/icons/report.jpg" width="40"> Activity Types</a></li>
-		<li><a href="report_activity_subtypes.php"><img src="images/icons/report.jpg" width="40"> Activity Sub-Types</a></li>
-		<li><a href="report_educations.php"><img src="images/icons/report.jpg" width="40"> Educations</a></li>
-		<li><a href="report_positions.php"><img src="images/icons/report.jpg" width="40"> Positions</a></li>
-		<li><a href="report_employees.php"><img src="images/icons/report.jpg" width="40"> Employees</a></li>
-		<li><a href="report_students.php"><img src="images/icons/report.jpg" width="40"> Students</a></li>
-		<li><a href="report_activities.php"><img src="images/icons/report.jpg" width="40"> Activities</a></li>
-		<li><a href="report_educator_student.php"><img src="images/icons/report.jpg" width="40"> Educator-Student</a></li>		
-		<li><a href="report_employee_log_ios.php"><img src="images/icons/report.jpg" width="40"> Employee Log-Ins/Outs</a></li>
-		<li><a href="report_employee_attendances.php"><img src="images/icons/report.jpg" width="40"> Employee Attendance-Ins/Outs</a></li>
-		<li><a href="report_employee_log_failures.php"><img src="images/icons/report.jpg" width="40"> Employee Log Failures</a></li>
-		<li><a href="report_dp_query_logs.php"><img src="images/icons/report.jpg" width="40"> Database Queries</a></li>		
-	</ul>	
+	if ($resultRows == 0) {
+		
+		echo '<script type="text/javascript">';
+		echo 'window.confirm("You are not authorized to access any page!");';
+		echo '</script>';
+
+		//redirect this page to the [log-in] page
+		echo '<script type="text/javascript">';
+    	echo 'window.location.replace("login.php");';
+    	echo '</script>';
+	}
+	
+	echo '<div class="outer">';
+
+	$this_page = $_SERVER["PHP_SELF"];
+	
+	echo '<table class="imagelinkbox">';
+
+	echo '<tr>';
+	echo '<td>';
+	echo '<h2>Application Panel</h2>';
+	echo '</td>';
+	echo '</tr>';
+
+	echo '<tr>';
+	echo '<td>';
+	createWebPageLinkItems($result);
+	echo '</td>';
+	echo '</tr>';
+
+	echo '<tr>';
+	echo '<td>';
+	echo '<a href="help_main.html" target="_new"> Help: How to Use the Application?</a>';
+	echo '</td>';
+	echo '</tr>';
+
+
+	echo '</table>';
+		
+	echo '</div>';
+
+	
+}//if
+
+//else: something is wrong with $_SESSION['LoggedIn_EMP_ID'])
+else
+{
+	echo '<script type="text/javascript">';
+	echo 'window.confirm("No user is logging in!");';
+	echo '</script>';
+
+	//redirect this page to the [log-in] page
+	echo '<script type="text/javascript">';
+    echo 'window.location.replace("login.php");';
+    echo '</script>';
+}
+
+?>
+
 </div>
 
-</div>
 
 <?php
 	include 'footer.php'
 ?>
+
 </body>
 
 </html>

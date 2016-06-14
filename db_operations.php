@@ -538,32 +538,10 @@ function getStudents_NotAttendanceCheckedToday($event_type, $debug_on)
 
 }//getStudents_NotAttendanceCheckedToday()
 
+
 //list of students that were checked in but not yet checked out now
 function getStudents_InSchoolNow($debug_on)
-{
-	/*
-	$queryStr = 'SELECT  ';
-		$queryStr = $queryStr . 'STUDENTS.STU_ID';		
-		$queryStr = $queryStr . ', ' . 'CONCAT(STUDENTS.STU_FIRST_NAME, " ", STUDENTS.STU_LAST_NAME) AS STU_NAME';
-		$queryStr = $queryStr . ', ' . 'STUDENTS.STU_BIRTHDATE';
-		$queryStr = $queryStr . ', ' . 'FLOOR(DATEDIFF(NOW(), STUDENTS.STU_BIRTHDATE)/365.25) AS STU_AGE';
-		$queryStr = $queryStr . ', ' . 'STUDENTS.STU_PHOTO';
-	$queryStr = $queryStr . ' FROM ';
-		$queryStr = $queryStr . 'STUDENTS';
-	$queryStr = $queryStr . ' WHERE  ' .
-		$queryStr = $queryStr . '(STUDENTS.STU_ID IN ';
-		$queryStr = $queryStr . '(SELECT STUDENT_ATTENDANCES.STU_ID FROM STUDENT_ATTENDANCES WHERE 
-										STUDENT_ATTENDANCES.DATE_TIME >= CURDATE() AND 
-										STUDENT_ATTENDANCES.DATE_TIME < (CURDATE() + INTERVAL 1 DAY) AND
-										STUDENT_ATTENDANCES.EVENT_TYPE = "In")) AND ';
-		$queryStr = $queryStr . '(STUDENTS.STU_ID NOT IN ';
-		$queryStr = $queryStr . '(SELECT STUDENT_ATTENDANCES.STU_ID FROM STUDENT_ATTENDANCES WHERE 
-										STUDENT_ATTENDANCES.DATE_TIME >= CURDATE() AND 
-										STUDENT_ATTENDANCES.DATE_TIME < (CURDATE() + INTERVAL 1 DAY) AND
-										STUDENT_ATTENDANCES.EVENT_TYPE = "Out"))';
-	$queryStr = $queryStr . ';';
-	*/	
-
+{	
 	$queryStr = 'SELECT ';
 		$queryStr = $queryStr . 'STUDENTS.STU_ID';
 		$queryStr = $queryStr . ', ' . 'CONCAT(STUDENTS.STU_FIRST_NAME, " ", STUDENTS.STU_LAST_NAME) AS STU_NAME';
@@ -577,30 +555,11 @@ function getStudents_InSchoolNow($debug_on)
 		$queryStr = $queryStr . '(STUDENTS.STU_ID NOT IN (SELECT STUDENT_ATTENDANCES.STU_ID FROM STUDENT_ATTENDANCES WHERE STUDENT_ATTENDANCES.DATE_TIME >= CURDATE() AND STUDENT_ATTENDANCES.DATE_TIME < (CURDATE() + INTERVAL 1 DAY) AND STUDENT_ATTENDANCES.EVENT_TYPE = "Out"))';
 		$queryStr = $queryStr . ';';
 
-	/*
-	$queryStr = 'SELECT STUDENTS.STU_ID, CONCAT(STUDENTS.STU_FIRST_NAME, " ", STUDENTS.STU_LAST_NAME) AS STU_NAME, STUDENTS.STU_BIRTHDATE, FLOOR(DATEDIFF(NOW(), STUDENTS.STU_BIRTHDATE)/365.25) AS STU_AGE, STUDENTS.STU_PHOTO FROM STUDENTS WHERE (STUDENTS.STU_ID IN (SELECT STUDENT_ATTENDANCES.STU_ID FROM STUDENT_ATTENDANCES WHERE STUDENT_ATTENDANCES.DATE_TIME >= CURDATE() AND STUDENT_ATTENDANCES.DATE_TIME < (CURDATE() + INTERVAL 1 DAY) AND STUDENT_ATTENDANCES.EVENT_TYPE = "In")) AND (STUDENTS.STU_ID NOT IN (SELECT STUDENT_ATTENDANCES.STU_ID FROM STUDENT_ATTENDANCES WHERE STUDENT_ATTENDANCES.DATE_TIME >= CURDATE() AND STUDENT_ATTENDANCES.DATE_TIME < (CURDATE() + INTERVAL 1 DAY) AND STUDENT_ATTENDANCES.EVENT_TYPE = "Out"));';*/
-
 	//if debug on, display [queryStr]
 	displayQueryStr($queryStr, $debug_on);
 
 	//*** 2. execute quyery and get the results
 	$result = getResult($queryStr);
-
-	//testting	
-	/**
-	//populate [result] to table
-	$fieldHeaderStr = array (
-		0 => 'ID',
-		1 => 'Name',
-		2 => 'Birth Date',
-		3 => 'Age',
-		4 => 'Photo',
-		);
-	populateResultToTable($result, $fieldHeaderStr);
-
-	//NOTES: after print out, the result cursor is at the end
-	//need to reset to head before return
-	/**/
 		
 	return ($result);
 
@@ -630,8 +589,59 @@ function createStudentList_AttendanceCheck($result)
 		echo '</div>'; 
 	}
 
-
 }//createStudentList_AttendanceCheckIn()
+
+
+//list of web page links that the user have the authorization on
+function getWebPageLinks($emp_id, $debug_on)
+{	
+	$queryStr = 'SELECT ';
+		$queryStr = $queryStr . 'WEB_PAGES.PAGE_ID';
+		$queryStr = $queryStr . ', ' . 'WEB_PAGES.TAG_CLASS';
+		$queryStr = $queryStr . ', ' . 'WEB_PAGES.TYPE';
+		$queryStr = $queryStr . ', ' . 'WEB_PAGES.HREF';
+		$queryStr = $queryStr . ', ' . 'WEB_PAGES.ICON_URL';
+		$queryStr = $queryStr . ', ' . 'WEB_PAGES.TITLE';
+		$queryStr = $queryStr . ', ' . 'WEB_PAGES.STATUS';
+	$queryStr = $queryStr . ' FROM ';
+		$queryStr = $queryStr . 'WEB_PAGES';
+	$queryStr = $queryStr . ' WHERE ';
+		$queryStr = $queryStr . '(WEB_PAGES.STATUS="active")';
+		$queryStr = $queryStr . ';';
+
+	//if debug on, display [queryStr]
+	displayQueryStr($queryStr, $debug_on);
+
+	//*** 2. execute quyery and get the results
+	$result = getResult($queryStr);
+		
+	return ($result);
+
+}//getWebPageLinks()
+
+
+function createWebPageLinkItems($result)
+{
+	//the number of rows in [result]
+	$resultRows = mysqli_num_rows($result);
+	$resultFields = mysqli_num_fields($result);
+
+	for ($row = 0; $row < $resultRows; $row++)
+	{
+		//the current row in [result]
+		$currentRow = mysqli_fetch_row($result);
+		//populate [currentRow] 
+		echo '<div class="imagelinkbox">';
+		echo '<div class="innerimagelinkbox">';
+		echo '<a href="' . $currentRow[3] . '">';
+		echo '<img src="' . $currentRow[4] . '" width="40">';
+		echo '<br/>'. $currentRow[5] . '</a>';
+		echo '</div>'; 
+		echo '</div>';
+	}
+
+}//createWebPageLinkItems()
+
 
 
 function report_EMPLOYEE_LOG_IOS($emp_id, $debug_on)
@@ -773,6 +783,46 @@ function report_EMPLOYEE_ATTENDANCES($emp_id, $debug_on)
 	populateResultToTable($result, $fieldHeaderStr);
 
 }//report_EMPLOYEE_ATTENDANCES()
+
+
+function report_STUDENT_ATTENDANCES($debug_on)
+{
+//** 1. build the query
+	$queryStr = 'SELECT  ';
+		$queryStr = $queryStr . 'STUDENT_ATTENDANCES.STU_ATT_ID';
+		$queryStr = $queryStr . ', ' . 'CONCAT(STUDENTS.STU_FIRST_NAME, " ", STUDENTS.STU_LAST_NAME) AS STU_NAME';
+		$queryStr = $queryStr . ', ' . 'STUDENT_ATTENDANCES.EVENT_TYPE';
+		$queryStr = $queryStr . ', ' . 'STUDENT_ATTENDANCES.DATE_TIME';
+		$queryStr = $queryStr . ', ' . 'CONCAT(EMPLOYEES.EMP_FIRST_NAME, " ", EMPLOYEES.EMP_LAST_NAME) AS EMP_NAME';
+		$queryStr = $queryStr . ', ' . 'STUDENT_ATTENDANCES.IP_ADDR';
+	$queryStr = $queryStr . ' FROM ';
+		$queryStr = $queryStr . 'STUDENT_ATTENDANCES';
+		$queryStr = $queryStr . ', ' . 'STUDENTS';
+		$queryStr = $queryStr . ', ' . 'EMPLOYEES';
+	$queryStr = $queryStr . ' WHERE ';
+		$queryStr = $queryStr . 'STUDENTS.STU_ID = STUDENT_ATTENDANCES.STU_ID AND ';
+		$queryStr = $queryStr . 'EMPLOYEES.EMP_ID = STUDENT_ATTENDANCES.EMP_ID';
+		$queryStr = $queryStr . ' ORDER BY ' . 'STU_NAME ASC, STUDENT_ATTENDANCES.DATE_TIME DESC';
+	$queryStr = $queryStr . ';';
+	
+	//if debug on, display [queryStr]
+	displayQueryStr($queryStr, $debug_on);
+
+	//*** 2. execute quyery and get the results
+	$result = getResult($queryStr);
+	
+	//populate [result] to table
+	$fieldHeaderStr = array (
+		0 => 'ID',
+		1 => 'Student Name',
+		2 => 'Event',
+		3 => 'Date & Time',
+		4 => 'Employee Name',
+		5 => 'IP Address',
+		);
+	populateResultToTable($result, $fieldHeaderStr);
+
+}//report_STUDENT_ATTENDANCES()
 
 
 

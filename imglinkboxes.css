@@ -21,3 +21,19 @@ div.outer {
 table.imagelinkbox tr, td {
 	padding: 5px;
 }
+
+input:hover {    
+    color: red;
+}
+
+label:hover {    
+    color: red;
+}
+
+img {    
+    border: 1px solid transparent;
+}
+
+img:hover {    
+    border: 1px solid red;
+}

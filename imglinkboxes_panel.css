@@ -1,0 +1,56 @@
+div.imagelinkbox {
+    float: left;
+    width: 120px;
+    height: 150px;
+    margin: 5px;
+    padding: 5px;
+    border: 3px solid gray;
+    border-radius: 10px;
+    text-align: center;
+}
+
+div.innerimagelinkbox {
+    display: table-cell;
+    width: 120px;
+    height: 145px;
+    margin: 0px;
+    padding: 0px;
+    border-radius: 10px;
+    background-color: white;
+    vertical-align: middle;
+}
+
+div.outer {
+	display: box;
+	float: none;
+    width: 100%;
+    margin-bottom: 50px;
+    padding: 5px;
+    background-color: rgb(255, 255, 204);
+    border: none;
+    text-align: center;
+}
+
+a {
+    text-decoration: none;
+}
+
+a.self {
+    background-color: white;
+    color: blue;
+}
+
+/* Change the link color on hover */
+a:hover {
+    background-color: white;
+    color: red;    
+}
+
+a:hover:not(.self) {
+    background-color: white;
+    color: red;    
+}
+
+table.imagelinkbox tr, td {
+	padding: 5px;
+}

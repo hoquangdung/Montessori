@@ -9,7 +9,6 @@ session_start();
 	<title>Record Student Attendance-In</title>
 	<link rel="stylesheet" type="text/css" href="imglinkboxes.css">
 	<link rel="stylesheet" type="text/css" href="common.css">
-	<link rel="stylesheet" type="text/css" href="imglinkboxes.css">
 
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
 
