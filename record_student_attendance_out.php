@@ -6,7 +6,7 @@ session_start();
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Record Student Attendance</title>
+	<title>Record Student Attendance-Out</title>
 	<link rel="stylesheet" type="text/css" href="imglinkboxes.css">
 	<link rel="stylesheet" type="text/css" href="common.css">
 	<link rel="stylesheet" type="text/css" href="imglinkboxes.css">
@@ -22,9 +22,6 @@ session_start();
 ?>
 
 <div id="main">
-
-<h2>Record Student Attendance</h2>
-
 
 
 <?php
@@ -55,7 +52,7 @@ if (isset($_POST['checked_student_ids']) && is_array($_POST['checked_student_ids
       	if (isset($_SESSION['LoggedIn_EMP_ID']))
       	{
       		$stu_id = $checked_ids; 
-      		$event_type = "In";
+      		$event_type = "Out";
       		$emp_id = $_SESSION['LoggedIn_EMP_ID'];
       		$notes = "";
       		insert_STUDENT_ATTENDANCES($stu_id, $event_type, $emp_id, $notes, true);
@@ -67,20 +64,20 @@ if (isset($_POST['checked_student_ids']) && is_array($_POST['checked_student_ids
     //testing
 	/**/
 	echo '<script type="text/javascript">';
-	echo 'window.confirm("Attendance-in recorded: ' . count($checked_student_ids) . ' student(s).");';
+	echo 'window.confirm("Attendance-out recorded: ' . count($checked_student_ids) . ' student(s).");';
 	echo '</script>';
 	/**/
 
     //reload the page
 	echo '<script type="text/javascript">';
-    echo 'window.location.replace("record_student_attendance.php");';
+    echo 'window.location.replace("record_student_attendance_out.php");';
     echo '</script>';
 
 }//if
 
 //if a valid user is logging-in
 else if (isset($_SESSION['LoggedIn_EMP_ID']))
-{
+{	
 	//testing
 	/**
 	echo '<script type="text/javascript">';
@@ -88,22 +85,24 @@ else if (isset($_SESSION['LoggedIn_EMP_ID']))
 	echo '</script>';
 	/**/
 
-	//display log-ios of employee
-	require_once("db_operations.php");
-	$result = getStudents_AttendanceCheckIn(true);
+	//search for students that were checked in but not yet checked out now
+	require_once("db_operations.php");	
+	$result = getStudents_InSchoolNow(true);
 	$resultRows = mysqli_num_rows($result);
 
 	if ($resultRows == 0) {
 		
 		echo '<script type="text/javascript">';
-		echo 'window.confirm("All students were attendance-in recored!");';
+		echo 'window.confirm("All students were attendance-out recored!");';
 		echo '</script>';
 
 		//reload the page
 		echo '<script type="text/javascript">';
     	echo 'window.location.replace("index.php");';
     	echo '</script>';
-	}	 
+	}
+
+	echo '<h2>Record Student Attendance-Out</h2>';	 
 
 	echo '<br/>';
 
@@ -111,26 +110,26 @@ else if (isset($_SESSION['LoggedIn_EMP_ID']))
 
 	$this_page = $_SERVER["PHP_SELF"];
 
-	echo '<form id="Students_AttendanceCheckIn_Form"' .
+	echo '<form id="Students_AttendanceCheckOut_Form"' .
 			' action="' . $this_page . '"' . ' method="post">';
 
 	echo '<table class="imagelinkbox">';
 
 	echo '<tr>';
 	echo '<td>';
-	echo '<input type="submit" value="Check Students In">';
+	echo '<input type="submit" value="Check Students Out">';
 	echo '</td>';
 	echo '</tr>';
 
 	echo '<tr>';
 	echo '<td>';
-	createStudentList_AttendanceCheckIn($result);
+	createStudentList_AttendanceCheck($result);
 	echo '</td>';
 	echo '</tr>';
 
 	echo '<tr>';
 	echo '<td>';
-	echo '<input type="submit" value="Check Students In">';
+	echo '<input type="submit" value="Check Students Out">';
 	echo '</td>';
 	echo '</tr>';
 

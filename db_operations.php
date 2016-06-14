@@ -494,7 +494,7 @@ function get_EDUCATOR_STUDENT($emp_id, $debug_on)
 }//get_EDUCATOR_STUDENT()
 
 
-function getStudents_AttendanceCheckIn($debug_on)
+function getStudents_NotAttendanceCheckedToday($event_type, $debug_on)
 {
 	
 	$queryStr = 'SELECT  ';
@@ -507,8 +507,9 @@ function getStudents_AttendanceCheckIn($debug_on)
 		$queryStr = $queryStr . 'STUDENTS';
 	$queryStr = $queryStr . ' WHERE  STUDENTS.STU_ID NOT IN ';
 		$queryStr = $queryStr . '(SELECT STUDENT_ATTENDANCES.STU_ID FROM STUDENT_ATTENDANCES WHERE 
-										STUDENT_ATTENDANCES.DATE_TIME >= CURDATE() && 
-										STUDENT_ATTENDANCES.DATE_TIME < (CURDATE() + INTERVAL 1 DAY))';
+										STUDENT_ATTENDANCES.DATE_TIME >= CURDATE() AND 
+										STUDENT_ATTENDANCES.DATE_TIME < (CURDATE() + INTERVAL 1 DAY) AND
+										STUDENT_ATTENDANCES.EVENT_TYPE = "' . $event_type . '")';
 	$queryStr = $queryStr . ';';	
 
 	//if debug on, display [queryStr]
@@ -532,14 +533,81 @@ function getStudents_AttendanceCheckIn($debug_on)
 	//NOTES: after print out, the result cursor is at the end
 	//need to reset to head before return
 	/**/
-
 		
 	return ($result);
 
-}//getStudents_AttendanceCheckIn()
+}//getStudents_NotAttendanceCheckedToday()
+
+//list of students that were checked in but not yet checked out now
+function getStudents_InSchoolNow($debug_on)
+{
+	/*
+	$queryStr = 'SELECT  ';
+		$queryStr = $queryStr . 'STUDENTS.STU_ID';		
+		$queryStr = $queryStr . ', ' . 'CONCAT(STUDENTS.STU_FIRST_NAME, " ", STUDENTS.STU_LAST_NAME) AS STU_NAME';
+		$queryStr = $queryStr . ', ' . 'STUDENTS.STU_BIRTHDATE';
+		$queryStr = $queryStr . ', ' . 'FLOOR(DATEDIFF(NOW(), STUDENTS.STU_BIRTHDATE)/365.25) AS STU_AGE';
+		$queryStr = $queryStr . ', ' . 'STUDENTS.STU_PHOTO';
+	$queryStr = $queryStr . ' FROM ';
+		$queryStr = $queryStr . 'STUDENTS';
+	$queryStr = $queryStr . ' WHERE  ' .
+		$queryStr = $queryStr . '(STUDENTS.STU_ID IN ';
+		$queryStr = $queryStr . '(SELECT STUDENT_ATTENDANCES.STU_ID FROM STUDENT_ATTENDANCES WHERE 
+										STUDENT_ATTENDANCES.DATE_TIME >= CURDATE() AND 
+										STUDENT_ATTENDANCES.DATE_TIME < (CURDATE() + INTERVAL 1 DAY) AND
+										STUDENT_ATTENDANCES.EVENT_TYPE = "In")) AND ';
+		$queryStr = $queryStr . '(STUDENTS.STU_ID NOT IN ';
+		$queryStr = $queryStr . '(SELECT STUDENT_ATTENDANCES.STU_ID FROM STUDENT_ATTENDANCES WHERE 
+										STUDENT_ATTENDANCES.DATE_TIME >= CURDATE() AND 
+										STUDENT_ATTENDANCES.DATE_TIME < (CURDATE() + INTERVAL 1 DAY) AND
+										STUDENT_ATTENDANCES.EVENT_TYPE = "Out"))';
+	$queryStr = $queryStr . ';';
+	*/	
+
+	$queryStr = 'SELECT ';
+		$queryStr = $queryStr . 'STUDENTS.STU_ID';
+		$queryStr = $queryStr . ', ' . 'CONCAT(STUDENTS.STU_FIRST_NAME, " ", STUDENTS.STU_LAST_NAME) AS STU_NAME';
+		$queryStr = $queryStr . ', ' . 'STUDENTS.STU_BIRTHDATE';
+		$queryStr = $queryStr . ', ' . 'FLOOR(DATEDIFF(NOW(), STUDENTS.STU_BIRTHDATE)/365.25) AS STU_AGE';
+		$queryStr = $queryStr . ', ' . 'STUDENTS.STU_PHOTO';
+	$queryStr = $queryStr . ' FROM ';
+		$queryStr = $queryStr . 'STUDENTS';
+	$queryStr = $queryStr . ' WHERE ';
+		$queryStr = $queryStr . '(STUDENTS.STU_ID IN (SELECT STUDENT_ATTENDANCES.STU_ID FROM STUDENT_ATTENDANCES WHERE STUDENT_ATTENDANCES.DATE_TIME >= CURDATE() AND STUDENT_ATTENDANCES.DATE_TIME < (CURDATE() + INTERVAL 1 DAY) AND STUDENT_ATTENDANCES.EVENT_TYPE = "In")) AND ';
+		$queryStr = $queryStr . '(STUDENTS.STU_ID NOT IN (SELECT STUDENT_ATTENDANCES.STU_ID FROM STUDENT_ATTENDANCES WHERE STUDENT_ATTENDANCES.DATE_TIME >= CURDATE() AND STUDENT_ATTENDANCES.DATE_TIME < (CURDATE() + INTERVAL 1 DAY) AND STUDENT_ATTENDANCES.EVENT_TYPE = "Out"))';
+		$queryStr = $queryStr . ';';
+
+	/*
+	$queryStr = 'SELECT STUDENTS.STU_ID, CONCAT(STUDENTS.STU_FIRST_NAME, " ", STUDENTS.STU_LAST_NAME) AS STU_NAME, STUDENTS.STU_BIRTHDATE, FLOOR(DATEDIFF(NOW(), STUDENTS.STU_BIRTHDATE)/365.25) AS STU_AGE, STUDENTS.STU_PHOTO FROM STUDENTS WHERE (STUDENTS.STU_ID IN (SELECT STUDENT_ATTENDANCES.STU_ID FROM STUDENT_ATTENDANCES WHERE STUDENT_ATTENDANCES.DATE_TIME >= CURDATE() AND STUDENT_ATTENDANCES.DATE_TIME < (CURDATE() + INTERVAL 1 DAY) AND STUDENT_ATTENDANCES.EVENT_TYPE = "In")) AND (STUDENTS.STU_ID NOT IN (SELECT STUDENT_ATTENDANCES.STU_ID FROM STUDENT_ATTENDANCES WHERE STUDENT_ATTENDANCES.DATE_TIME >= CURDATE() AND STUDENT_ATTENDANCES.DATE_TIME < (CURDATE() + INTERVAL 1 DAY) AND STUDENT_ATTENDANCES.EVENT_TYPE = "Out"));';*/
+
+	//if debug on, display [queryStr]
+	displayQueryStr($queryStr, $debug_on);
+
+	//*** 2. execute quyery and get the results
+	$result = getResult($queryStr);
+
+	//testting	
+	/**
+	//populate [result] to table
+	$fieldHeaderStr = array (
+		0 => 'ID',
+		1 => 'Name',
+		2 => 'Birth Date',
+		3 => 'Age',
+		4 => 'Photo',
+		);
+	populateResultToTable($result, $fieldHeaderStr);
+
+	//NOTES: after print out, the result cursor is at the end
+	//need to reset to head before return
+	/**/
+		
+	return ($result);
+
+}//getStudents_InSchoolNow()
 
 
-function createStudentList_AttendanceCheckIn($result)
+function createStudentList_AttendanceCheck($result)
 {
 	//the number of rows in [result]
 	$resultRows = mysqli_num_rows($result);

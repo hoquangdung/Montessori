@@ -6,7 +6,7 @@ session_start();
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Record Student Attendance</title>
+	<title>Record Student Attendance-In</title>
 	<link rel="stylesheet" type="text/css" href="imglinkboxes.css">
 	<link rel="stylesheet" type="text/css" href="common.css">
 	<link rel="stylesheet" type="text/css" href="imglinkboxes.css">
@@ -22,9 +22,6 @@ session_start();
 ?>
 
 <div id="main">
-
-<h2>Record Student Attendance</h2>
-
 
 
 <?php
@@ -67,20 +64,20 @@ if (isset($_POST['checked_student_ids']) && is_array($_POST['checked_student_ids
     //testing
 	/**/
 	echo '<script type="text/javascript">';
-	echo 'window.confirm("Attendance-in recorded: ' . count($checked_student_ids) . ' student(s).");';
+	echo 'window.confirm("Attendance-in recorded: ' . count($checked_student_ids) . ' students.");';
 	echo '</script>';
 	/**/
 
     //reload the page
 	echo '<script type="text/javascript">';
-    echo 'window.location.replace("record_student_attendance.php");';
+    echo 'window.location.replace("record_student_attendance_in.php");';
     echo '</script>';
 
 }//if
 
 //if a valid user is logging-in
 else if (isset($_SESSION['LoggedIn_EMP_ID']))
-{
+{	
 	//testing
 	/**
 	echo '<script type="text/javascript">';
@@ -88,9 +85,10 @@ else if (isset($_SESSION['LoggedIn_EMP_ID']))
 	echo '</script>';
 	/**/
 
-	//display log-ios of employee
+	//search for students that were not checkec in today
 	require_once("db_operations.php");
-	$result = getStudents_AttendanceCheckIn(true);
+	$event_type = "In";
+	$result = getStudents_NotAttendanceCheckedToday($event_type, true);
 	$resultRows = mysqli_num_rows($result);
 
 	if ($resultRows == 0) {
@@ -103,7 +101,9 @@ else if (isset($_SESSION['LoggedIn_EMP_ID']))
 		echo '<script type="text/javascript">';
     	echo 'window.location.replace("index.php");';
     	echo '</script>';
-	}	 
+	}
+
+	echo '<h2>Record Student Attendance-In</h2>';	 
 
 	echo '<br/>';
 
@@ -124,7 +124,7 @@ else if (isset($_SESSION['LoggedIn_EMP_ID']))
 
 	echo '<tr>';
 	echo '<td>';
-	createStudentList_AttendanceCheckIn($result);
+	createStudentList_AttendanceCheck($result);
 	echo '</td>';
 	echo '</tr>';
 
