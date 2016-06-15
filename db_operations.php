@@ -574,13 +574,14 @@ function getEducators_InSchoolNow($debug_on)
 		$queryStr = $queryStr . 'EMPLOYEES.EMP_ID';
 		$queryStr = $queryStr . ', ' . 'CONCAT(EMPLOYEES.EMP_FIRST_NAME, " ", EMPLOYEES.EMP_LAST_NAME) AS EMP_NAME';
 		$queryStr = $queryStr . ', ' . 'EMPLOYEES.EMP_BIRTHDATE';
-		$queryStr = $queryStr . ', ' . 'FLOOR(DATEDIFF(NOW(), EMPLOYEES.EMP_BIRTHDATE)/365.25) AS EMP_AGE';
+		$queryStr = $queryStr . ', ' . 'EMPLOYEES.EMP_PHONE1 EMP_PHONE';
 		$queryStr = $queryStr . ', ' . 'EMPLOYEES.EMP_PHOTO';
 	$queryStr = $queryStr . ' FROM ';
 		$queryStr = $queryStr . 'EMPLOYEES';
 	$queryStr = $queryStr . ' WHERE ';
 		$queryStr = $queryStr . '(EMPLOYEES.EMP_ID IN (SELECT EMPLOYEE_ATTENDANCES.EMP_ID FROM EMPLOYEE_ATTENDANCES WHERE EMPLOYEE_ATTENDANCES.DATE_TIME >= CURDATE() AND EMPLOYEE_ATTENDANCES.DATE_TIME < (CURDATE() + INTERVAL 1 DAY) AND EMPLOYEE_ATTENDANCES.EVENT_TYPE = "In")) AND ';
-		$queryStr = $queryStr . '(EMPLOYEES.EMP_ID NOT IN (SELECT EMPLOYEE_ATTENDANCES.EMP_ID FROM EMPLOYEE_ATTENDANCES WHERE EMPLOYEE_ATTENDANCES.DATE_TIME >= CURDATE() AND EMPLOYEE_ATTENDANCES.DATE_TIME < (CURDATE() + INTERVAL 1 DAY) AND EMPLOYEE_ATTENDANCES.EVENT_TYPE = "Out"))';
+		$queryStr = $queryStr . '(EMPLOYEES.EMP_ID NOT IN (SELECT EMPLOYEE_ATTENDANCES.EMP_ID FROM EMPLOYEE_ATTENDANCES WHERE EMPLOYEE_ATTENDANCES.DATE_TIME >= CURDATE() AND EMPLOYEE_ATTENDANCES.DATE_TIME < (CURDATE() + INTERVAL 1 DAY) AND EMPLOYEE_ATTENDANCES.EVENT_TYPE = "Out")) AND ';
+		$queryStr = $queryStr . '(EMPLOYEES.EMP_POST_ID1 IN (3,4 ))';
 		$queryStr = $queryStr . ';';
 
 	//if debug on, display [queryStr]
@@ -592,6 +593,35 @@ function getEducators_InSchoolNow($debug_on)
 	return ($result);
 
 }//getEducators_InSchoolNow()
+
+
+//list of educators that have never been checked in or
+//(checked in but) already checked out
+function getEducators_NotInSchoolNow($debug_on)
+{	
+	$queryStr = 'SELECT DISTINCT ';
+		$queryStr = $queryStr . 'EMPLOYEES.EMP_ID';
+		$queryStr = $queryStr . ', ' . 'CONCAT(EMPLOYEES.EMP_FIRST_NAME, " ", EMPLOYEES.EMP_LAST_NAME) AS EMP_NAME';
+		$queryStr = $queryStr . ', ' . 'EMPLOYEES.EMP_BIRTHDATE';
+		$queryStr = $queryStr . ', ' . 'EMPLOYEES.EMP_PHONE1 EMP_PHONE';
+		$queryStr = $queryStr . ', ' . 'EMPLOYEES.EMP_PHOTO';
+	$queryStr = $queryStr . ' FROM ';
+		$queryStr = $queryStr . 'EMPLOYEES';
+	$queryStr = $queryStr . ' WHERE ';
+		$queryStr = $queryStr . '((EMPLOYEES.EMP_ID NOT IN (SELECT EMPLOYEE_ATTENDANCES.EMP_ID FROM EMPLOYEE_ATTENDANCES WHERE EMPLOYEE_ATTENDANCES.DATE_TIME >= CURDATE() AND EMPLOYEE_ATTENDANCES.DATE_TIME < (CURDATE() + INTERVAL 1 DAY) AND EMPLOYEE_ATTENDANCES.EVENT_TYPE = "In")) OR ';
+		$queryStr = $queryStr . '(EMPLOYEES.EMP_ID IN (SELECT EMPLOYEE_ATTENDANCES.EMP_ID FROM EMPLOYEE_ATTENDANCES WHERE EMPLOYEE_ATTENDANCES.DATE_TIME >= CURDATE() AND EMPLOYEE_ATTENDANCES.DATE_TIME < (CURDATE() + INTERVAL 1 DAY) AND EMPLOYEE_ATTENDANCES.EVENT_TYPE = "Out"))) AND ';
+		$queryStr = $queryStr . '(EMPLOYEES.EMP_POST_ID1 IN (3,4 ))';
+		$queryStr = $queryStr . ';';
+
+	//if debug on, display [queryStr]
+	displayQueryStr($queryStr, $debug_on);
+
+	//*** 2. execute quyery and get the results
+	$result = getResult($queryStr);
+		
+	return ($result);
+
+}//getEducators_NotInSchoolNow()
 
 
 function createStudentList_AttendanceCheck($result)
@@ -620,6 +650,58 @@ function createStudentList_AttendanceCheck($result)
 }//getEducators_InSchoolNow()
 
 
+function createStudentPhotoList($result)
+{
+	//the number of rows in [result]
+	$resultRows = mysqli_num_rows($result);
+	$resultFields = mysqli_num_fields($result);
+
+	for ($row = 0; $row < $resultRows; $row++)
+	{
+		//the current row in [result]
+		$currentRow = mysqli_fetch_row($result);
+		//populate [currentRow] 
+		echo '<div class="imagelinkbox">';	
+		echo '<input type="checkbox" name="checked_student_ids[]"' .
+				' id="' . $currentRow[0] . '_id"' . 
+				' value="' . $currentRow[0] . '"' .  ' disabled>';
+		echo '<br/>';
+		echo '<label for="' . $currentRow[0] . '_id">' . 
+		     	'<img src="' . $currentRow[4] . '" alt="student photo" height="110" width="110">' . 
+				'<br/>' . $currentRow[1] . '<br/>' . ' (Age: ' . $currentRow[3] . ')' . '</label>';
+		//echo '<br/>';
+		echo '</div>'; 
+	}
+
+}//createStudentPhotoList()
+
+
+function createEmployeePhotoList($result)
+{
+	//the number of rows in [result]
+	$resultRows = mysqli_num_rows($result);
+	$resultFields = mysqli_num_fields($result);
+
+	for ($row = 0; $row < $resultRows; $row++)
+	{
+		//the current row in [result]
+		$currentRow = mysqli_fetch_row($result);
+		//populate [currentRow] 
+		echo '<div class="imagelinkbox">';	
+		echo '<input type="checkbox" name="checked_student_ids[]"' .
+				' id="' . $currentRow[0] . '_id"' . 
+				' value="' . $currentRow[0] . '"' .  ' disabled>';
+		echo '<br/>';
+		echo '<label for="' . $currentRow[0] . '_id">' . 
+		     	'<img src="' . $currentRow[4] . '" alt="student photo" height="110" width="110">' . 
+				'<br/>' . $currentRow[1] . '<br/>' . ' (P: ' . $currentRow[3] . ')' . '</label>';
+		//echo '<br/>';
+		echo '</div>'; 
+	}
+
+}//createEmployeePhotoList()
+
+
 //list of web page links that the user have the authorization on
 function getWebPageLinks($emp_id, $debug_on)
 {	
@@ -634,7 +716,10 @@ function getWebPageLinks($emp_id, $debug_on)
 	$queryStr = $queryStr . ' FROM ';
 		$queryStr = $queryStr . 'WEB_PAGES';
 	$queryStr = $queryStr . ' WHERE ';
-		$queryStr = $queryStr . '(WEB_PAGES.STATUS="active")';
+		$queryStr = $queryStr . '(WEB_PAGES.PAGE_ID IN 
+									(SELECT PAGE_ID FROM EMPLOYEE_WEBPAGE 
+										WHERE EMP_ID = ' . $emp_id . ')) AND ';		
+		$queryStr = $queryStr . '(WEB_PAGES.STATUS = "active")';
 		$queryStr = $queryStr . ';';
 
 	//if debug on, display [queryStr]
@@ -669,6 +754,63 @@ function createWebPageLinkItems($result)
 	}
 
 }//createWebPageLinkItems()
+
+
+//list of web page links that the user have the authorization on
+function employeeIsAuthorizedThisPage($emp_id, $page_url, $debug_on)
+{
+	//if this is the index homepage
+	if (strpos($page_url, 'index.php') !== false)
+	{
+		return (true);
+	}
+
+	//*** 2. prepare the query
+	$queryStr = 'SELECT ';
+		$queryStr = $queryStr . 'HREF';
+	$queryStr = $queryStr . ' FROM ';
+		$queryStr = $queryStr . 'WEB_PAGES';
+	$queryStr = $queryStr . ' WHERE ';
+		$queryStr = $queryStr . '(PAGE_ID IN 
+									(SELECT PAGE_ID FROM EMPLOYEE_WEBPAGE 
+										WHERE EMP_ID = ' . $emp_id . ')) AND ';		
+		$queryStr = $queryStr . '(WEB_PAGES.STATUS = "active")';
+		$queryStr = $queryStr . ';';
+
+	//if debug on, display [queryStr]
+	displayQueryStr($queryStr, $debug_on);
+
+	//*** 2. execute quyery and get the results
+	$result = getResult($queryStr);
+	
+	//*** 3. search for a sub-string match
+	//the number of rows in [result]
+	$resultRows = mysqli_num_rows($result);
+	//if result is emplty
+	if ($resultRows == 0) 
+	{
+		return (false);
+	}
+	//else: result is NOT emplty
+	//now search
+	for ($row = 0; $row < $resultRows; $row++)
+	{
+		//the current row in [result]
+		$currentRow = mysqli_fetch_row($result);
+
+		//if a sub-string match found
+		//Ex: $page_url = "/montessori/report_employees.php";
+		//$currentRow[0] = report_employees.php
+		if (strpos($page_url, $currentRow[0]) !== false)
+		{
+			return (true);
+		}
+	}//for
+	
+	//NO sub-string match found
+	return (false);
+
+}//employeeIsAuthorizedThisPage()
 
 
 

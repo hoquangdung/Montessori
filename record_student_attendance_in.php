@@ -126,7 +126,7 @@ else if (isset($_SESSION['LoggedIn_EMP_ID']))
 
 	echo '<tr>';
 	echo '<td>';
-	echo '<input type="submit" value="CHECK IN &#x00A; SELECTED STUDENT(S)">';
+	echo '<input type="submit" value="CHECK IN &#x00A;SELECTED STUDENT(S)">';
 	echo '</td>';
 	echo '</tr>';	
 
@@ -138,7 +138,7 @@ else if (isset($_SESSION['LoggedIn_EMP_ID']))
 
 	echo '<tr>';
 	echo '<td>';
-	echo '<input type="submit" value="CHECK IN &#x00A; SELECTED STUDENT(S)">';
+	echo '<input type="submit" value="CHECK IN &#x00A;SELECTED STUDENT(S)">';
 	echo '</td>';
 	echo '</tr>';
 

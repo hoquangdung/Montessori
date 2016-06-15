@@ -77,19 +77,19 @@ _END;
 
 	echo '<br/><br/>';
 
-	$extraEducatorNum = $studentNum/5 - $educatorNum;
+	$minEducatorNum = ceil($studentNum/5);
 
-	if ($extraEducatorNum > 0)
+	if ($educatorNum < $minEducatorNum)
 	{		
-		echo '<font color="red"> Recommendation: ' . ceil($extraEducatorNum) . ' more educator(s) required!</font>';	 
+		echo '<font color="red"> Recommendation: ' . ($minEducatorNum - $educatorNum) . ' more educator(s) required!</font>';	 
 	}
-	else if (($extraEducatorNum < 0) && (floor(-$educatorNum) >= 1))
+	else if ($educatorNum > $minEducatorNum)
 	{			
-		echo '<font color="blue"> Recommendation: ' . ceil(-$extraEducatorNum) . ' educator(s) exceed!</font>';	 
+		echo '<font color="blue"> Recommendation: ' . ($educatorNum - $minEducatorNum) . ' educator(s) exceeded!</font>';	 
 	}
 	else
 	{			
-		echo '<font color="blue"> Recommendation: ' . 'maintain the current number of educator(s)!</font>';	 
+		echo '<font color="black"> Recommendation: ' . 'maintain the current number of educator(s)!</font>';	 
 	}
 
 	echo '<br/><br/>';
@@ -107,7 +107,7 @@ _END;
 
 	echo '<tr>';
 	echo '<td>';
-	echo 'Total number of students presented: ' . $studentNum;
+	echo '<b>Total number of students presented: ' . $studentNum . '</b>';
 	echo '</td>';
 	echo '</tr>';
 
@@ -119,7 +119,7 @@ _END;
 
 	echo '<tr>';
 	echo '<td>';
-	createStudentList_AttendanceCheck($students);
+	createStudentPhotoList($students);
 	echo '</td>';
 	echo '</tr>';
 
@@ -143,7 +143,7 @@ _END;
 
 	echo '<tr>';
 	echo '<td>';
-	echo 'Total number of educators presented: ' . $educatorNum;
+	echo '<b>Total number of educators presented: ' . $educatorNum . '</b>';;
 	echo '</td>';
 	echo '</tr>';
 
@@ -155,7 +155,7 @@ _END;
 
 	echo '<tr>';
 	echo '<td>';
-	createStudentList_AttendanceCheck($educators);
+	createEmployeePhotoList($educators);
 	echo '</td>';
 	echo '</tr>';
 
@@ -168,6 +168,64 @@ _END;
 	echo '</table>';
 	
 	echo '</div>';
+
+	
+	//////////////////////////////////////////////////////////
+
+	//if more educators required
+	//if ($educatorNum < $minEducatorNum)
+	//{
+
+		//3. search for students that are not in school now
+		$notWorkingEducators = getEducators_NotInSchoolNow(true);
+		$notWorkingEducatorNum = mysqli_num_rows($notWorkingEducators);
+
+		if ($notWorkingEducatorNum >= 1)
+		{
+
+			//if more educators required
+			if ($educatorNum < $minEducatorNum)
+			{				
+				echo '<font color="green">Suggested list of ' . $notWorkingEducatorNum . 
+							' educator(s) to call in: </font>';
+				echo '<br/><br/>';
+			}
+
+			echo '<div class="outer">';
+	
+			echo '<table class="imagelinkbox">';
+
+			echo '<tr>';
+			echo '<td>';
+			echo '<b>Total number of educators not in school now: ' . $notWorkingEducatorNum . '</b>';
+			echo '</td>';
+			echo '</tr>';
+
+			echo '<tr>';
+			echo '<td>';
+			echo 'Details are as follows:';
+			echo '</td>';
+			echo '</tr>';
+
+			echo '<tr>';
+			echo '<td>';
+			createEmployeePhotoList($notWorkingEducators);
+			echo '</td>';
+			echo '</tr>';
+
+			echo '<tr>';
+			echo '<td>';
+			echo 'Total number of educators not in school now: ' . $notWorkingEducatorNum;
+			echo '</td>';
+			echo '</tr>';
+
+			echo '</table>';
+			
+			echo '</div>';
+
+		}//if ($notWorkingEducatorNum >= 1)
+
+	//}//if more educators required
 
 	
 }//else if

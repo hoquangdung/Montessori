@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 15, 2016 at 06:45 AM
+-- Generation Time: Jun 15, 2016 at 10:20 PM
 -- Server version: 10.1.13-MariaDB
 -- PHP Version: 5.6.21
 
@@ -123,37 +123,6 @@ CREATE TABLE `db_query_logs` (
   `IP_ADDR` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Dumping data for table `db_query_logs`
---
-
-INSERT INTO `db_query_logs` (`DB_QL_ID`, `QUERY_STR`, `USER_NAME`, `DATE_TIME`, `IP_ADDR`) VALUES
-(1, 'SELECT  * FROM DB_QUERY_LOGS ORDER BY DATE_TIME DESC;', 'Cathy Kim', '2016-06-15 00:43:05', '192.168.1.68'),
-(2, 'SELECT WEB_PAGES.PAGE_ID, WEB_PAGES.TAG_CLASS, WEB_PAGES.TYPE, WEB_PAGES.HREF, WEB_PAGES.ICON_URL, WEB_PAGES.TITLE, WEB_PAGES.STATUS FROM WEB_PAGES WHERE (WEB_PAGES.STATUS="active");', 'Cathy Kim', '2016-06-15 00:43:11', '192.168.1.68'),
-(3, 'SELECT  STUDENTS.STU_ID, CONCAT(STUDENTS.STU_FIRST_NAME, " ", STUDENTS.STU_LAST_NAME) AS STU_NAME, STUDENTS.STU_BIRTHDATE, FLOOR(DATEDIFF(NOW(), STUDENTS.STU_BIRTHDATE)/365.25) AS STU_AGE, STUDENTS.STU_PHOTO FROM STUDENTS WHERE  STUDENTS.STU_ID NOT IN (SELECT STUDENT_ATTENDANCES.STU_ID FROM STUDENT_ATTENDANCES WHERE \r\n										STUDENT_ATTENDANCES.DATE_TIME >= CURDATE() AND \r\n										STUDENT_ATTENDANCES.DATE_TIME < (CURDATE() + INTERVAL 1 DAY) AND\r\n										STUDENT_ATTENDANCES.EVENT_TYPE = "In");', 'Cathy Kim', '2016-06-15 00:43:14', '192.168.1.68'),
-(4, 'SELECT STUDENTS.STU_ID, CONCAT(STUDENTS.STU_FIRST_NAME, " ", STUDENTS.STU_LAST_NAME) AS STU_NAME, STUDENTS.STU_BIRTHDATE, FLOOR(DATEDIFF(NOW(), STUDENTS.STU_BIRTHDATE)/365.25) AS STU_AGE, STUDENTS.STU_PHOTO FROM STUDENTS WHERE (STUDENTS.STU_ID IN (SELECT STUDENT_ATTENDANCES.STU_ID FROM STUDENT_ATTENDANCES WHERE STUDENT_ATTENDANCES.DATE_TIME >= CURDATE() AND STUDENT_ATTENDANCES.DATE_TIME < (CURDATE() + INTERVAL 1 DAY) AND STUDENT_ATTENDANCES.EVENT_TYPE = "In")) AND (STUDENTS.STU_ID NOT IN (SELECT STUDENT_ATTENDANCES.STU_ID FROM STUDENT_ATTENDANCES WHERE STUDENT_ATTENDANCES.DATE_TIME >= CURDATE() AND STUDENT_ATTENDANCES.DATE_TIME < (CURDATE() + INTERVAL 1 DAY) AND STUDENT_ATTENDANCES.EVENT_TYPE = "Out"));', 'Cathy Kim', '2016-06-15 00:43:14', '192.168.1.68'),
-(5, 'SELECT WEB_PAGES.PAGE_ID, WEB_PAGES.TAG_CLASS, WEB_PAGES.TYPE, WEB_PAGES.HREF, WEB_PAGES.ICON_URL, WEB_PAGES.TITLE, WEB_PAGES.STATUS FROM WEB_PAGES WHERE (WEB_PAGES.STATUS="active");', 'Cathy Kim', '2016-06-15 00:43:18', '192.168.1.68'),
-(6, 'SELECT  * FROM DB_QUERY_LOGS ORDER BY DATE_TIME DESC;', 'Cathy Kim', '2016-06-15 00:43:21', '192.168.1.68'),
-(7, 'SELECT WEB_PAGES.PAGE_ID, WEB_PAGES.TAG_CLASS, WEB_PAGES.TYPE, WEB_PAGES.HREF, WEB_PAGES.ICON_URL, WEB_PAGES.TITLE, WEB_PAGES.STATUS FROM WEB_PAGES WHERE (WEB_PAGES.STATUS="active");', 'Cathy Kim', '2016-06-15 00:43:25', '192.168.1.68'),
-(8, 'SELECT  * FROM ACTIVITY_TYPES ORDER BY ACT_TYPE_ID ASC;', 'Cathy Kim', '2016-06-15 00:43:27', '192.168.1.68'),
-(9, 'SELECT WEB_PAGES.PAGE_ID, WEB_PAGES.TAG_CLASS, WEB_PAGES.TYPE, WEB_PAGES.HREF, WEB_PAGES.ICON_URL, WEB_PAGES.TITLE, WEB_PAGES.STATUS FROM WEB_PAGES WHERE (WEB_PAGES.STATUS="active");', 'Cathy Kim', '2016-06-15 00:43:28', '192.168.1.68'),
-(10, 'SELECT  * FROM EDUCATIONS ORDER BY EDU_ID ASC;', 'Cathy Kim', '2016-06-15 00:43:34', '192.168.1.68'),
-(11, 'SELECT WEB_PAGES.PAGE_ID, WEB_PAGES.TAG_CLASS, WEB_PAGES.TYPE, WEB_PAGES.HREF, WEB_PAGES.ICON_URL, WEB_PAGES.TITLE, WEB_PAGES.STATUS FROM WEB_PAGES WHERE (WEB_PAGES.STATUS="active");', 'Cathy Kim', '2016-06-15 00:43:36', '192.168.1.68'),
-(12, 'SELECT  * FROM POSITIONS ORDER BY POS_ID ASC;', 'Cathy Kim', '2016-06-15 00:43:37', '192.168.1.68'),
-(13, 'SELECT WEB_PAGES.PAGE_ID, WEB_PAGES.TAG_CLASS, WEB_PAGES.TYPE, WEB_PAGES.HREF, WEB_PAGES.ICON_URL, WEB_PAGES.TITLE, WEB_PAGES.STATUS FROM WEB_PAGES WHERE (WEB_PAGES.STATUS="active");', 'Cathy Kim', '2016-06-15 00:43:39', '192.168.1.68'),
-(14, 'SELECT  EMP_ID, EMP_FIRST_NAME, EMP_LAST_NAME, EMP_BIRTHDATE, EMP_PHONE1 FROM EMPLOYEES  WHERE EMP_PASSCODE="652";', 'Cathy Kim', '2016-06-15 00:43:45', '192.168.1.68'),
-(15, 'INSERT INTO EMPLOYEE_LOG_FAILURES(IP_ADDR, PASSCODE, DATE_TIME) VALUES("192.168.1.68", "652", NOW());', 'Cathy Kim', '2016-06-15 00:43:45', '192.168.1.68'),
-(16, 'INSERT INTO EMPLOYEE_LOG_IOS(EMP_ID, EVENT_TYPE, DATE_TIME, IP_ADDR) VALUES(3, "Out", NOW(), "192.168.1.68");', 'Cathy Kim', '2016-06-15 00:43:45', '192.168.1.68'),
-(17, 'SELECT  EMP_ID, EMP_FIRST_NAME, EMP_LAST_NAME, EMP_BIRTHDATE, EMP_PHONE1 FROM EMPLOYEES  WHERE EMP_PASSCODE="563";', 'system', '2016-06-15 00:43:49', '192.168.1.68'),
-(18, 'INSERT INTO EMPLOYEE_LOG_FAILURES(IP_ADDR, PASSCODE, DATE_TIME) VALUES("192.168.1.68", "563", NOW());', 'system', '2016-06-15 00:43:49', '192.168.1.68'),
-(19, 'SELECT  EMP_ID, EMP_FIRST_NAME, EMP_LAST_NAME, EMP_BIRTHDATE, EMP_PHONE1 FROM EMPLOYEES  WHERE EMP_PASSCODE="5698";', 'system', '2016-06-15 00:43:52', '192.168.1.68'),
-(20, 'INSERT INTO EMPLOYEE_LOG_FAILURES(IP_ADDR, PASSCODE, DATE_TIME) VALUES("192.168.1.68", "5698", NOW());', 'system', '2016-06-15 00:43:52', '192.168.1.68'),
-(21, 'SELECT  EMP_ID, EMP_FIRST_NAME, EMP_LAST_NAME, EMP_BIRTHDATE, EMP_PHONE1 FROM EMPLOYEES  WHERE EMP_PASSCODE="5699";', 'system', '2016-06-15 00:43:55', '192.168.1.68'),
-(22, 'INSERT INTO EMPLOYEE_LOG_FAILURES(IP_ADDR, PASSCODE, DATE_TIME) VALUES("192.168.1.68", "5699", NOW());', 'system', '2016-06-15 00:43:55', '192.168.1.68'),
-(23, 'SELECT  EMP_ID, EMP_FIRST_NAME, EMP_LAST_NAME, EMP_BIRTHDATE, EMP_PHONE1 FROM EMPLOYEES  WHERE EMP_PASSCODE="1887";', 'system', '2016-06-15 00:44:02', '192.168.1.68'),
-(24, 'INSERT INTO EMPLOYEE_LOG_IOS(EMP_ID, EVENT_TYPE, DATE_TIME, IP_ADDR) VALUES(1, "In", NOW(), "192.168.1.68");', 'Raphaelle Philippe', '2016-06-15 00:44:02', '192.168.1.68'),
-(25, 'SELECT WEB_PAGES.PAGE_ID, WEB_PAGES.TAG_CLASS, WEB_PAGES.TYPE, WEB_PAGES.HREF, WEB_PAGES.ICON_URL, WEB_PAGES.TITLE, WEB_PAGES.STATUS FROM WEB_PAGES WHERE (WEB_PAGES.STATUS="active");', 'Raphaelle Philippe', '2016-06-15 00:44:02', '192.168.1.68');
-
 -- --------------------------------------------------------
 
 --
@@ -260,9 +229,12 @@ CREATE TABLE `employees` (
 --
 
 INSERT INTO `employees` (`EMP_ID`, `EMP_FIRST_NAME`, `EMP_LAST_NAME`, `EMP_BIRTHDATE`, `EMP_SEX`, `EMP_PHOTO`, `EMP_ADDRESS`, `EMP_CITY`, `EMP_PROVINCE`, `EMP_POSTAL_CODE`, `EMP_COUNTRY`, `EMP_PHONE1`, `EMP_PHONE2`, `EMP_EMAIL`, `EMP_HIRE_DATE`, `EMP_END_DATE`, `EMP_EDU_ID`, `EDU_DAYCARE_EXPERIENCE`, `EDU_MONTESSORI_EXPERIENCE`, `EMP_POST_ID1`, `EMP_POST_ID2`, `EMP_BOSS_ID`, `EMP_HOURLY_RATE`, `EMP_PASSCODE`, `EMP_NOTES`) VALUES
-(1, 'Raphaelle', 'Philippe', '1973-06-08', 'F', 'images/employee_photos/1.png', '1887 Ch. du Tremblay #100', 'Longueuil', 'QC', 'J4N 1A4', 'Canada', ' 450-332-7255', NULL, 'raphaelle.philippe@gmail.com', '2009-06-19', '0000-00-00', 6, 7, 7, 1, 3, NULL, 35.75, '1887', 'The owner of the school'),
+(1, 'Raphaelle', 'Philippe', '1973-06-08', 'F', 'images/employee_photos/1.png', '1887 Ch. du Tremblay #100', 'Longueuil', 'QC', 'J4N 1A4', 'Canada', ' 450-332-7255', NULL, 'raphaelle.philippe@gmail.com', '2009-06-19', '0000-00-00', 6, 7, 7, 3, 1, NULL, 35.75, '1887', 'The owner of the school'),
 (2, 'Linda', 'Tweed', '1982-10-10', 'F', 'images/employee_photos/2.png', '3412 Rue Simon', 'Montreal', 'QC', 'H1K 2S6 ', 'Canada', '514-649-6731', NULL, 'linda.tweed@yahoo.com', '2013-07-04', '0000-00-00', 4, 5, 5, 4, NULL, 1, 15.5, '8772', NULL),
-(3, 'Cathy', 'Kim', '1988-12-11', 'F', 'images/employee_photos/3.png', '4528 University Street', 'Montreal', 'QC', 'H3A 0E9', 'Canada', '514-464-2673', NULL, 'cathy.kim@gmail.com', '2015-09-12', '0000-00-00', 3, 2, 1, 4, NULL, 1, 14.5, '4072', NULL);
+(3, 'Cathy', 'Kim', '1988-12-11', 'F', 'images/employee_photos/3.png', '4528 University Street', 'Montreal', 'QC', 'H3A 0E9', 'Canada', '514-464-2673', NULL, 'cathy.kim@gmail.com', '2015-09-12', '0000-00-00', 3, 2, 1, 4, NULL, 1, 14.5, '4072', NULL),
+(4, 'Mary', 'Garcia', '1988-12-11', 'F', 'images/employee_photos/4.png', '2856 Ave. George', 'Montreal', 'QC', 'H1K 2S8', 'Canada', '514-644-7721', NULL, 'mary.garcia@hotmail.com', '2014-11-09', '0000-00-00', 4, 5, 2, 3, NULL, 1, 17.5, '2016', NULL),
+(5, 'Jenifer', 'Taylor', '1989-12-24', 'F', 'images/employee_photos/5.png', '39 Rue Saint Paul Est', 'Montreal', 'QC', 'S1A 1B9', 'Canada', '438-414-7281', NULL, 'Jenifer.Taylor@hotmail.com', '2012-09-16', '0000-00-00', 5, 6, 3, 4, NULL, 1, 20.75, '7381', NULL),
+(6, 'Super', 'User', '1990-01-17', 'M', 'images/employee_photos/6.png', '3927 Rue Saint-Denis', 'Montreal', 'QC', 'H4H 2A5', 'Canada', '460-135-5567', NULL, 'super.user@hotmail.com', '2010-09-16', '0000-00-00', 3, 0, 0, 8, NULL, 1, 25, '1357', NULL);
 
 -- --------------------------------------------------------
 
@@ -284,15 +256,15 @@ CREATE TABLE `employee_attendances` (
 --
 
 INSERT INTO `employee_attendances` (`EMP_ATT_ID`, `EMP_ID`, `EVENT_TYPE`, `DATE_TIME`, `IP_ADDR`, `NOTES`) VALUES
-(91, 2, 'In', '2016-06-14 23:33:15', '192.168.1.68', ''),
-(92, 2, 'In', '2016-06-15 00:05:05', '192.168.1.68', ''),
-(93, 3, 'In', '2016-06-15 00:09:38', '192.168.1.68', ''),
-(94, 3, 'Out', '2016-06-15 00:10:18', '192.168.1.68', ''),
-(95, 2, 'In', '2016-06-15 00:12:03', '192.168.1.68', ''),
-(96, 1, 'In', '2016-06-15 00:12:23', '192.168.1.68', ''),
-(97, 2, 'Out', '2016-06-15 00:21:11', '192.168.1.68', ''),
-(98, 2, 'In', '2016-06-15 00:21:54', '192.168.1.68', ''),
-(99, 2, 'In', '2016-06-15 00:38:22', '192.168.1.68', '');
+(122, 2, 'In', '2016-06-15 14:23:57', '192.168.0.42', ''),
+(123, 3, 'In', '2016-06-15 14:24:37', '192.168.0.42', ''),
+(124, 3, 'Out', '2016-06-15 14:24:42', '192.168.0.42', ''),
+(125, 4, 'In', '2016-06-15 14:25:00', '192.168.0.42', ''),
+(126, 1, 'In', '2016-06-15 14:26:30', '192.168.0.42', ''),
+(127, 1, 'In', '2016-06-15 14:26:43', '192.168.0.42', ''),
+(128, 2, 'In', '2016-06-15 14:37:49', '192.168.0.42', ''),
+(129, 2, 'Out', '2016-06-15 14:47:47', '192.168.0.42', ''),
+(130, 2, 'Out', '2016-06-15 15:59:32', '192.168.0.42', '');
 
 -- --------------------------------------------------------
 
@@ -381,7 +353,11 @@ INSERT INTO `employee_log_failures` (`EM_LOG_F_ID`, `IP_ADDR`, `PASSCODE`, `DATE
 (107, '192.168.1.68', '652', '2016-06-15 00:43:45'),
 (108, '192.168.1.68', '563', '2016-06-15 00:43:49'),
 (109, '192.168.1.68', '5698', '2016-06-15 00:43:52'),
-(110, '192.168.1.68', '5699', '2016-06-15 00:43:55');
+(110, '192.168.1.68', '5699', '2016-06-15 00:43:55'),
+(111, '192.168.0.42', '2816', '2016-06-15 12:36:51'),
+(112, '192.168.0.42', '2816', '2016-06-15 12:36:55'),
+(113, '192.168.0.42', '2816', '2016-06-15 13:59:09'),
+(114, '192.168.0.42', '4872', '2016-06-15 14:24:27');
 
 -- --------------------------------------------------------
 
@@ -682,7 +658,185 @@ INSERT INTO `employee_log_ios` (`EMP_LOGS_ID`, `EMP_ID`, `EVENT_TYPE`, `DATE_TIM
 (278, 3, 'Out', '2016-06-15 00:41:44', '192.168.1.68'),
 (279, 3, 'In', '2016-06-15 00:41:51', '192.168.1.68'),
 (280, 3, 'Out', '2016-06-15 00:43:45', '192.168.1.68'),
-(281, 1, 'In', '2016-06-15 00:44:02', '192.168.1.68');
+(281, 1, 'In', '2016-06-15 00:44:02', '192.168.1.68'),
+(282, 3, 'In', '2016-06-15 11:19:02', '192.168.0.42'),
+(283, 3, 'Out', '2016-06-15 11:20:57', '192.168.0.42'),
+(284, 1, 'In', '2016-06-15 11:21:02', '192.168.0.42'),
+(285, 1, 'Out', '2016-06-15 12:36:25', '192.168.0.42'),
+(286, 1, 'In', '2016-06-15 12:36:31', '192.168.0.42'),
+(287, 1, 'Out', '2016-06-15 12:36:34', '192.168.0.42'),
+(288, 2, 'In', '2016-06-15 12:36:36', '192.168.0.42'),
+(289, 2, 'Out', '2016-06-15 12:36:39', '192.168.0.42'),
+(290, 3, 'In', '2016-06-15 12:36:43', '192.168.0.42'),
+(291, 3, 'Out', '2016-06-15 12:36:46', '192.168.0.42'),
+(292, 4, 'In', '2016-06-15 12:36:59', '192.168.0.42'),
+(293, 4, 'Out', '2016-06-15 12:37:03', '192.168.0.42'),
+(294, 5, 'In', '2016-06-15 12:37:07', '192.168.0.42'),
+(295, 5, 'Out', '2016-06-15 12:37:10', '192.168.0.42'),
+(296, 6, 'In', '2016-06-15 12:37:19', '192.168.0.42'),
+(297, 6, 'Out', '2016-06-15 12:57:04', '192.168.0.42'),
+(298, 2, 'In', '2016-06-15 12:57:08', '192.168.0.42'),
+(299, 2, 'Out', '2016-06-15 12:57:31', '192.168.0.42'),
+(300, 5, 'In', '2016-06-15 12:57:40', '192.168.0.42'),
+(301, 5, 'Out', '2016-06-15 12:58:09', '192.168.0.42'),
+(302, 2, 'In', '2016-06-15 12:58:14', '192.168.0.42'),
+(303, 2, 'Out', '2016-06-15 12:58:30', '192.168.0.42'),
+(304, 1, 'In', '2016-06-15 12:58:36', '192.168.0.42'),
+(305, 4, 'In', '2016-06-15 12:58:55', '192.168.0.42'),
+(306, 4, 'In', '2016-06-15 12:59:25', '192.168.0.42'),
+(307, 4, 'Out', '2016-06-15 12:59:48', '192.168.0.42'),
+(308, 3, 'In', '2016-06-15 12:59:51', '192.168.0.42'),
+(309, 3, 'Out', '2016-06-15 13:01:28', '192.168.0.42'),
+(310, 2, 'In', '2016-06-15 13:01:31', '192.168.0.42'),
+(311, 2, 'Out', '2016-06-15 13:01:59', '192.168.0.42'),
+(312, 2, 'In', '2016-06-15 13:02:02', '192.168.0.42'),
+(313, 2, 'Out', '2016-06-15 13:09:47', '192.168.0.42'),
+(314, 1, 'In', '2016-06-15 13:09:52', '192.168.0.42'),
+(315, 1, 'Out', '2016-06-15 13:57:30', '192.168.0.42'),
+(316, 2, 'In', '2016-06-15 13:57:33', '192.168.0.42'),
+(317, 2, 'Out', '2016-06-15 13:58:35', '192.168.0.42'),
+(318, 3, 'In', '2016-06-15 13:58:40', '192.168.0.42'),
+(319, 3, 'Out', '2016-06-15 13:58:45', '192.168.0.42'),
+(320, 1, 'In', '2016-06-15 13:58:52', '192.168.0.42'),
+(321, 1, 'Out', '2016-06-15 13:59:05', '192.168.0.42'),
+(322, 4, 'In', '2016-06-15 13:59:13', '192.168.0.42'),
+(323, 4, 'Out', '2016-06-15 13:59:23', '192.168.0.42'),
+(324, 5, 'In', '2016-06-15 13:59:30', '192.168.0.42'),
+(325, 5, 'Out', '2016-06-15 14:04:48', '192.168.0.42'),
+(326, 3, 'In', '2016-06-15 14:04:55', '192.168.0.42'),
+(327, 3, 'Out', '2016-06-15 14:05:09', '192.168.0.42'),
+(328, 2, 'In', '2016-06-15 14:05:12', '192.168.0.42'),
+(329, 2, 'Out', '2016-06-15 14:05:22', '192.168.0.42'),
+(330, 4, 'In', '2016-06-15 14:05:25', '192.168.0.42'),
+(331, 2, 'In', '2016-06-15 14:11:54', '192.168.0.42'),
+(332, 2, 'In', '2016-06-15 14:12:18', '192.168.0.42'),
+(333, 2, 'In', '2016-06-15 14:22:51', '192.168.0.42'),
+(334, 2, 'Out', '2016-06-15 14:24:22', '192.168.0.42'),
+(335, 3, 'In', '2016-06-15 14:24:31', '192.168.0.42'),
+(336, 3, 'Out', '2016-06-15 14:24:48', '192.168.0.42'),
+(337, 4, 'In', '2016-06-15 14:24:56', '192.168.0.42'),
+(338, 4, 'Out', '2016-06-15 14:25:28', '192.168.0.42'),
+(339, 5, 'In', '2016-06-15 14:25:32', '192.168.0.42'),
+(340, 5, 'Out', '2016-06-15 14:26:17', '192.168.0.42'),
+(341, 1, 'In', '2016-06-15 14:26:23', '192.168.0.42'),
+(342, 1, 'Out', '2016-06-15 14:27:55', '192.168.0.42'),
+(343, 6, 'In', '2016-06-15 14:28:00', '192.168.0.42'),
+(344, 6, 'Out', '2016-06-15 14:28:16', '192.168.0.42'),
+(345, 2, 'In', '2016-06-15 14:28:19', '192.168.0.42'),
+(346, 2, 'Out', '2016-06-15 14:54:18', '192.168.0.42'),
+(347, 6, 'In', '2016-06-15 14:54:28', '192.168.0.42'),
+(348, 6, 'Out', '2016-06-15 14:55:06', '192.168.0.42'),
+(349, 2, 'In', '2016-06-15 14:55:11', '192.168.0.42'),
+(350, 2, 'Out', '2016-06-15 15:58:04', '192.168.0.42'),
+(351, 2, 'In', '2016-06-15 15:58:08', '192.168.0.42'),
+(352, 2, 'In', '2016-06-15 16:09:13', '192.168.0.42'),
+(353, 3, 'In', '2016-06-15 16:09:22', '192.168.0.42'),
+(354, 3, 'Out', '2016-06-15 16:09:48', '192.168.0.42'),
+(355, 1, 'In', '2016-06-15 16:09:53', '192.168.0.42'),
+(356, 1, 'Out', '2016-06-15 16:10:20', '192.168.0.42'),
+(357, 6, 'In', '2016-06-15 16:10:24', '192.168.0.42'),
+(358, 6, 'Out', '2016-06-15 16:16:43', '192.168.0.42'),
+(359, 1, 'In', '2016-06-15 16:16:50', '192.168.0.42'),
+(360, 1, 'Out', '2016-06-15 16:16:55', '192.168.0.42'),
+(361, 4, 'In', '2016-06-15 16:17:01', '192.168.0.42'),
+(362, 4, 'Out', '2016-06-15 16:17:45', '192.168.0.42');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `employee_webpage`
+--
+
+CREATE TABLE `employee_webpage` (
+  `EMP_WEB_ID` int(11) NOT NULL,
+  `EMP_ID` int(11) NOT NULL,
+  `PAGE_ID` int(11) NOT NULL,
+  `GRANTED_DATE` datetime NOT NULL,
+  `NOTES` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `employee_webpage`
+--
+
+INSERT INTO `employee_webpage` (`EMP_WEB_ID`, `EMP_ID`, `PAGE_ID`, `GRANTED_DATE`, `NOTES`) VALUES
+(1, 6, 1, '2015-06-10 12:30:00', ''),
+(2, 6, 2, '2015-06-10 12:30:00', ''),
+(3, 6, 101, '2015-06-10 12:30:00', ''),
+(4, 6, 102, '2015-06-10 12:30:00', ''),
+(5, 6, 103, '2015-06-10 12:30:00', ''),
+(6, 6, 104, '2015-06-10 12:30:00', ''),
+(7, 6, 1001, '2015-06-10 12:30:00', ''),
+(8, 6, 1002, '2015-06-10 12:30:00', ''),
+(9, 6, 1101, '2015-06-10 12:30:00', ''),
+(10, 6, 1201, '2015-06-10 12:30:00', ''),
+(11, 6, 1202, '2015-06-10 12:30:00', ''),
+(12, 6, 1203, '2015-06-10 12:30:00', ''),
+(13, 6, 1301, '2015-06-10 12:30:00', ''),
+(14, 6, 2001, '2015-06-10 12:30:00', ''),
+(15, 6, 2002, '2015-06-10 12:30:00', ''),
+(16, 6, 3001, '2015-06-10 12:30:00', ''),
+(17, 6, 4001, '2015-06-10 12:30:00', ''),
+(18, 6, 4002, '2015-06-10 12:30:00', ''),
+(19, 6, 4003, '2015-06-10 12:30:00', ''),
+(20, 6, 4004, '2015-06-10 12:30:00', ''),
+(21, 1, 1, '2015-06-10 12:30:00', ''),
+(22, 1, 2, '2015-06-10 12:30:00', ''),
+(23, 1, 101, '2015-06-10 12:30:00', ''),
+(24, 1, 102, '2015-06-10 12:30:00', ''),
+(25, 1, 103, '2015-06-10 12:30:00', ''),
+(26, 1, 104, '2015-06-10 12:30:00', ''),
+(27, 1, 1001, '2015-06-10 12:30:00', ''),
+(28, 1, 1002, '2015-06-10 12:30:00', ''),
+(29, 1, 1101, '2015-06-10 12:30:00', ''),
+(30, 1, 1201, '2015-06-10 12:30:00', ''),
+(31, 1, 1202, '2015-06-10 12:30:00', ''),
+(32, 1, 1203, '2015-06-10 12:30:00', ''),
+(33, 1, 1301, '2015-06-10 12:30:00', ''),
+(34, 1, 4001, '2015-06-10 12:30:00', ''),
+(35, 1, 4002, '2015-06-10 12:30:00', ''),
+(36, 1, 4003, '2015-06-10 12:30:00', ''),
+(37, 1, 4004, '2015-06-10 12:30:00', ''),
+(38, 2, 1, '2015-06-10 12:30:00', ''),
+(39, 2, 2, '2015-06-10 12:30:00', ''),
+(40, 2, 101, '2015-06-10 12:30:00', ''),
+(41, 2, 102, '2015-06-10 12:30:00', ''),
+(42, 2, 103, '2015-06-10 12:30:00', ''),
+(43, 2, 104, '2015-06-10 12:30:00', ''),
+(44, 2, 1001, '2015-06-10 12:30:00', ''),
+(45, 2, 1002, '2015-06-10 12:30:00', ''),
+(46, 2, 1101, '2015-06-10 12:30:00', ''),
+(47, 2, 1301, '2015-06-10 12:30:00', ''),
+(48, 3, 1, '2015-06-10 12:30:00', ''),
+(49, 3, 2, '2015-06-10 12:30:00', ''),
+(50, 3, 101, '2015-06-10 12:30:00', ''),
+(51, 3, 102, '2015-06-10 12:30:00', ''),
+(52, 3, 103, '2015-06-10 12:30:00', ''),
+(53, 3, 104, '2015-06-10 12:30:00', ''),
+(54, 3, 1001, '2015-06-10 12:30:00', ''),
+(55, 3, 1002, '2015-06-10 12:30:00', ''),
+(56, 3, 1101, '2015-06-10 12:30:00', ''),
+(57, 3, 1301, '2015-06-10 12:30:00', ''),
+(58, 4, 1, '2015-06-10 12:30:00', ''),
+(59, 4, 2, '2015-06-10 12:30:00', ''),
+(60, 4, 101, '2015-06-10 12:30:00', ''),
+(61, 4, 102, '2015-06-10 12:30:00', ''),
+(62, 4, 103, '2015-06-10 12:30:00', ''),
+(63, 4, 104, '2015-06-10 12:30:00', ''),
+(64, 4, 1001, '2015-06-10 12:30:00', ''),
+(65, 4, 1002, '2015-06-10 12:30:00', ''),
+(66, 4, 1101, '2015-06-10 12:30:00', ''),
+(67, 4, 1301, '2015-06-10 12:30:00', ''),
+(68, 5, 1, '2015-06-10 12:30:00', ''),
+(69, 5, 2, '2015-06-10 12:30:00', ''),
+(70, 5, 101, '2015-06-10 12:30:00', ''),
+(71, 5, 102, '2015-06-10 12:30:00', ''),
+(72, 5, 103, '2015-06-10 12:30:00', ''),
+(73, 5, 104, '2015-06-10 12:30:00', ''),
+(74, 5, 1001, '2015-06-10 12:30:00', ''),
+(75, 5, 1002, '2015-06-10 12:30:00', ''),
+(76, 5, 1101, '2015-06-10 12:30:00', ''),
+(77, 5, 1301, '2015-06-10 12:30:00', '');
 
 -- --------------------------------------------------------
 
@@ -795,34 +949,22 @@ CREATE TABLE `student_attendances` (
 --
 
 INSERT INTO `student_attendances` (`STU_ATT_ID`, `STU_ID`, `EVENT_TYPE`, `DATE_TIME`, `EMP_ID`, `IP_ADDR`, `NOTES`) VALUES
-(374, 2, 'In', '2016-06-14 22:58:20', 2, '192.168.1.68', ''),
-(375, 3, 'In', '2016-06-14 22:58:20', 2, '192.168.1.68', ''),
-(376, 4, 'In', '2016-06-14 22:58:20', 2, '192.168.1.68', ''),
-(377, 5, 'In', '2016-06-14 22:58:20', 2, '192.168.1.68', ''),
-(378, 6, 'In', '2016-06-14 22:58:20', 2, '192.168.1.68', ''),
-(379, 7, 'In', '2016-06-14 22:58:20', 2, '192.168.1.68', ''),
-(380, 14, 'In', '2016-06-14 22:58:20', 2, '192.168.1.68', ''),
-(381, 15, 'In', '2016-06-14 22:58:20', 2, '192.168.1.68', ''),
-(382, 1, 'In', '2016-06-15 00:04:53', 2, '192.168.1.68', ''),
-(383, 2, 'In', '2016-06-15 00:04:53', 2, '192.168.1.68', ''),
-(384, 3, 'In', '2016-06-15 00:04:53', 2, '192.168.1.68', ''),
-(385, 4, 'In', '2016-06-15 00:04:53', 2, '192.168.1.68', ''),
-(386, 5, 'In', '2016-06-15 00:04:53', 2, '192.168.1.68', ''),
-(387, 6, 'In', '2016-06-15 00:04:53', 2, '192.168.1.68', ''),
-(388, 11, 'In', '2016-06-15 00:10:40', 3, '192.168.1.68', ''),
-(389, 12, 'In', '2016-06-15 00:10:40', 3, '192.168.1.68', ''),
-(390, 13, 'In', '2016-06-15 00:10:40', 3, '192.168.1.68', ''),
-(391, 14, 'In', '2016-06-15 00:10:40', 3, '192.168.1.68', ''),
-(392, 15, 'In', '2016-06-15 00:10:40', 3, '192.168.1.68', ''),
-(393, 5, 'Out', '2016-06-15 00:17:21', 2, '192.168.1.68', ''),
-(394, 6, 'Out', '2016-06-15 00:17:21', 2, '192.168.1.68', ''),
-(395, 11, 'Out', '2016-06-15 00:17:21', 2, '192.168.1.68', ''),
-(396, 12, 'Out', '2016-06-15 00:17:21', 2, '192.168.1.68', ''),
-(397, 13, 'Out', '2016-06-15 00:22:30', 2, '192.168.1.68', ''),
-(398, 14, 'Out', '2016-06-15 00:22:30', 2, '192.168.1.68', ''),
-(399, 15, 'Out', '2016-06-15 00:22:30', 2, '192.168.1.68', ''),
-(400, 9, 'In', '2016-06-15 00:37:48', 2, '192.168.1.68', ''),
-(401, 17, 'In', '2016-06-15 00:38:00', 2, '192.168.1.68', '');
+(438, 4, 'In', '2016-06-15 14:25:14', 4, '192.168.0.42', ''),
+(439, 5, 'In', '2016-06-15 14:25:14', 4, '192.168.0.42', ''),
+(440, 6, 'In', '2016-06-15 14:25:14', 4, '192.168.0.42', ''),
+(441, 7, 'In', '2016-06-15 14:25:14', 4, '192.168.0.42', ''),
+(442, 3, 'In', '2016-06-15 14:37:35', 2, '192.168.0.42', ''),
+(443, 8, 'In', '2016-06-15 14:37:35', 2, '192.168.0.42', ''),
+(444, 9, 'In', '2016-06-15 14:37:36', 2, '192.168.0.42', ''),
+(445, 10, 'In', '2016-06-15 14:37:36', 2, '192.168.0.42', ''),
+(446, 11, 'In', '2016-06-15 14:37:36', 2, '192.168.0.42', ''),
+(447, 12, 'In', '2016-06-15 14:37:36', 2, '192.168.0.42', ''),
+(448, 13, 'In', '2016-06-15 14:37:36', 2, '192.168.0.42', ''),
+(449, 18, 'In', '2016-06-15 14:37:36', 2, '192.168.0.42', ''),
+(450, 19, 'In', '2016-06-15 14:37:36', 2, '192.168.0.42', ''),
+(451, 20, 'In', '2016-06-15 14:37:36', 2, '192.168.0.42', ''),
+(452, 15, 'In', '2016-06-15 14:37:57', 2, '192.168.0.42', ''),
+(453, 16, 'In', '2016-06-15 14:38:26', 2, '192.168.0.42', '');
 
 -- --------------------------------------------------------
 
@@ -847,6 +989,7 @@ CREATE TABLE `web_pages` (
 INSERT INTO `web_pages` (`PAGE_ID`, `TAG_CLASS`, `TYPE`, `HREF`, `ICON_URL`, `TITLE`, `STATUS`) VALUES
 (1, 'active', '', 'login.php', 'images/icons/keypad_small.jpg', 'User Login', 'active'),
 (2, '', '', 'logout.php', 'images/icons/logout.jpg', 'User Logout', 'active'),
+(3, '', '', 'index.php', 'images/icons/home_button.jpg', 'Home', 'active'),
 (101, '', '', 'record_employee_attendance_in.php', 'images/icons/attendance_in.jpg', 'Check In Employee Attendance', 'active'),
 (102, '', '', 'record_employee_attendance_out.php', 'images/icons/attendance_out.png', 'Check Out Employee Attendance', 'active'),
 (103, '', '', 'record_student_attendance_in.php', 'images/icons/student_attendance_in.png', 'Check In Student Attendance', 'active'),
@@ -932,7 +1075,8 @@ ALTER TABLE `employees`
   ADD KEY `EMP_ID_7` (`EMP_ID`),
   ADD KEY `EMP_ID_8` (`EMP_ID`),
   ADD KEY `EMP_ID_9` (`EMP_ID`),
-  ADD KEY `EMP_ID_10` (`EMP_ID`);
+  ADD KEY `EMP_ID_10` (`EMP_ID`),
+  ADD KEY `EMP_ID_11` (`EMP_ID`);
 
 --
 -- Indexes for table `employee_attendances`
@@ -953,6 +1097,14 @@ ALTER TABLE `employee_log_failures`
 ALTER TABLE `employee_log_ios`
   ADD PRIMARY KEY (`EMP_LOGS_ID`),
   ADD KEY `EMP_ID` (`EMP_ID`);
+
+--
+-- Indexes for table `employee_webpage`
+--
+ALTER TABLE `employee_webpage`
+  ADD PRIMARY KEY (`EMP_WEB_ID`),
+  ADD KEY `EMPLOYEE_WEBPAGE` (`EMP_ID`),
+  ADD KEY `PAGE_ID` (`PAGE_ID`);
 
 --
 -- Indexes for table `positions`
@@ -994,7 +1146,9 @@ ALTER TABLE `student_attendances`
 --
 ALTER TABLE `web_pages`
   ADD PRIMARY KEY (`PAGE_ID`),
-  ADD KEY `PAGE_ID` (`PAGE_ID`);
+  ADD KEY `PAGE_ID` (`PAGE_ID`),
+  ADD KEY `PAGE_ID_2` (`PAGE_ID`),
+  ADD KEY `PAGE_ID_3` (`PAGE_ID`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -1014,7 +1168,7 @@ ALTER TABLE `activity_types`
 -- AUTO_INCREMENT for table `db_query_logs`
 --
 ALTER TABLE `db_query_logs`
-  MODIFY `DB_QL_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `DB_QL_ID` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `educations`
 --
@@ -1029,22 +1183,27 @@ ALTER TABLE `educator_student`
 -- AUTO_INCREMENT for table `employees`
 --
 ALTER TABLE `employees`
-  MODIFY `EMP_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `EMP_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 --
 -- AUTO_INCREMENT for table `employee_attendances`
 --
 ALTER TABLE `employee_attendances`
-  MODIFY `EMP_ATT_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=100;
+  MODIFY `EMP_ATT_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=131;
 --
 -- AUTO_INCREMENT for table `employee_log_failures`
 --
 ALTER TABLE `employee_log_failures`
-  MODIFY `EM_LOG_F_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=111;
+  MODIFY `EM_LOG_F_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=115;
 --
 -- AUTO_INCREMENT for table `employee_log_ios`
 --
 ALTER TABLE `employee_log_ios`
-  MODIFY `EMP_LOGS_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=282;
+  MODIFY `EMP_LOGS_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=363;
+--
+-- AUTO_INCREMENT for table `employee_webpage`
+--
+ALTER TABLE `employee_webpage`
+  MODIFY `EMP_WEB_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=78;
 --
 -- AUTO_INCREMENT for table `positions`
 --
@@ -1064,7 +1223,7 @@ ALTER TABLE `student_activity_educator`
 -- AUTO_INCREMENT for table `student_attendances`
 --
 ALTER TABLE `student_attendances`
-  MODIFY `STU_ATT_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=402;
+  MODIFY `STU_ATT_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=454;
 --
 -- Constraints for dumped tables
 --
@@ -1104,6 +1263,13 @@ ALTER TABLE `employee_attendances`
 ALTER TABLE `employee_log_ios`
   ADD CONSTRAINT `employee_log_ios_ibfk_1` FOREIGN KEY (`EMP_ID`) REFERENCES `employees` (`EMP_ID`),
   ADD CONSTRAINT `employee_log_ios_ibfk_2` FOREIGN KEY (`EMP_ID`) REFERENCES `employees` (`EMP_ID`);
+
+--
+-- Constraints for table `employee_webpage`
+--
+ALTER TABLE `employee_webpage`
+  ADD CONSTRAINT `EMPLOYEE_WEBPAGE` FOREIGN KEY (`EMP_ID`) REFERENCES `employees` (`EMP_ID`),
+  ADD CONSTRAINT `employee_webpage_ibfk_1` FOREIGN KEY (`PAGE_ID`) REFERENCES `web_pages` (`PAGE_ID`);
 
 --
 -- Constraints for table `student_activity_educator`
