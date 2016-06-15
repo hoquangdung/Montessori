@@ -73,7 +73,7 @@ if (isset($_SESSION['LoggedIn_EMP_ID']))
 
 	echo '<tr>';
 	echo '<td>';
-	echo '<a href="help_main.html" target="_new"> Help: How to Use the Application?</a>';
+	echo '';
 	echo '</td>';
 	echo '</tr>';
 

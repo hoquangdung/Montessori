@@ -44,7 +44,7 @@
 			echo ' <a href="logout.php" style="background-color: rgb(255, 153, 0); color: white; text-decoration: none; padding: 5px; border-radius: 5px"> &#10047; Log Out &#10047; </a>';
 			echo '</font>';
 		}
-		
+
 		//else: the logged-in employee is NOT authorized to access this page 
 		else
 		{
@@ -63,23 +63,24 @@
 
 	//else: if currently NO employee is logging in
 	else
-	{
-			echo '<font color="red">';
-			echo 'Please &#9658; ';
-			echo ' <a href="login.php" style="background-color: blue; color: white; text-decoration: none; padding: 5px; border-radius: 5px"> &#10048; Log In &#10048; </a>';
-			echo '</font>';			
+	{		
+		echo '<font color="red">';
+		echo 'Please &#9658; ';
+		echo ' <a href="login.php" style="background-color: blue; color: white; text-decoration: none; padding: 	5px; border-radius: 5px"> &#10048; Log In &#10048; </a>';
+		echo '</font>';			
 
-			//if this is not login page, then load it
-			//*** othwerwise, the login page may keep recursively calling itself!! ***
-			if (strpos($_SERVER["PHP_SELF"], "/montessori/login.php") === false)
-			{
-				echo '<script type="text/javascript">';
-    			echo 'window.location.replace("login.php");';
-    			echo '</script>';
-    		}
-    		//else: if this is login page, do nothing
-    		//since the log in key pad is already in place    		
-	}
+		//if this is not login page, then load it
+		//*** othwerwise, the login page may keep recursively calling itself!! ***
+		if (strpos($_SERVER["PHP_SELF"], "/montessori/login.php") === false)
+		{
+			echo '<script type="text/javascript">';
+    		echo 'window.location.replace("login.php");';
+    		echo '</script>';
+    	}
+    	//else: if this is login page, do nothing
+    	//since the log in key pad is already in place    		
+
+	}//else
 
 	?>
 

@@ -2,3 +2,13 @@ div#main {
 	margin-top: 70px;
 	margin-bottom: 70px;
 }
+
+a {
+	text-decoration: none;
+}
+
+/* Change the link color on hover */
+a:hover {
+    background-color: white;
+    color: red;    
+}

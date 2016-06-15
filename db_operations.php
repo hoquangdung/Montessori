@@ -764,6 +764,11 @@ function employeeIsAuthorizedThisPage($emp_id, $page_url, $debug_on)
 	{
 		return (true);
 	}
+	//if this is the help homepage
+	if (strpos($page_url, 'help_main.php') !== false)
+	{
+		return (true);
+	}
 
 	//*** 2. prepare the query
 	$queryStr = 'SELECT ';

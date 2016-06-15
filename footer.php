@@ -22,6 +22,8 @@
     	padding: 10px;
     	vertical-align: middle;">
 		
+    	<a href="help_main.php" target="_new">[Application User Guide] </a>
+
 		&copy; Copyright Smart Kid Montessori &#9728; All Rights Reserved &#9728; Web-Admin: <a href="mailto:hoquangdung@yahoo.com"> &#9993; Quang-Dung Ho</a> 
 		
 		<?php
