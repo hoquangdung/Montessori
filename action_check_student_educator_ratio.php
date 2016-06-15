@@ -31,25 +31,9 @@ if (isset($_SESSION['LoggedIn_EMP_ID']))
 	
 	require_once("db_operations.php");	
 
-	//1. search for students that were checked in but not yet checked out now
-	$students = getStudents_InSchoolNow(true);
-	$studentNum = mysqli_num_rows($students);
-
-	//2. search for students that were checked in but not yet checked out now
+	//search for educators that were checked in but not yet checked out now
 	$educators = getEducators_InSchoolNow(true);
 	$educatorNum = mysqli_num_rows($educators);
-
-	if ($studentNum == 0) {
-		
-		echo '<script type="text/javascript">';
-		echo 'window.confirm("No student presented now!");';
-		echo '</script>';
-
-		//reload the page
-		echo '<script type="text/javascript">';
-    	echo 'window.location.replace("index.php");';
-    	echo '</script>';
-	}
 
 	if ($educatorNum == 0) {
 		
@@ -64,14 +48,22 @@ if (isset($_SESSION['LoggedIn_EMP_ID']))
 	}
 
 
-	//disable checkbox (but not works yet)
-	echo <<<_END
-	<script type="text/javascript">
-	$('input[type="checkbox"]').on('click', function(ev){
-    	ev.preventDefault();
-	})
-	</script>
-_END;
+	//search for students that were checked in but not yet checked out now
+	$students = getStudents_InSchoolNow(true);
+	$studentNum = mysqli_num_rows($students);
+
+	if ($studentNum == 0) {
+		
+		echo '<script type="text/javascript">';
+		echo 'window.confirm("No student presented now!");';
+		echo '</script>';
+
+		//reload the page
+		echo '<script type="text/javascript">';
+    	echo 'window.location.replace("index.php");';
+    	echo '</script>';
+	}
+
 
 	echo '<b>CHECK STUDENT-EDUCATOR RATIO</b>';	 
 
@@ -93,9 +85,6 @@ _END;
 	}
 
 	echo '<br/><br/>';
-
-
-	$this_page = $_SERVER["PHP_SELF"];
 
 
 	//////////////////////////////////////////////////////////
