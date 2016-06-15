@@ -90,6 +90,9 @@ else if (isset($_SESSION['LoggedIn_EMP_ID']))
 	$result = getStudents_NotAttendanceCheckedToday($event_type, true);
 	$resultRows = mysqli_num_rows($result);
 
+	$result1 = getStudents_InSchoolNow(true);
+	$resultRows1 = mysqli_num_rows($result1);
+
 	if ($resultRows == 0) {
 		
 		echo '<script type="text/javascript">';
@@ -117,9 +120,15 @@ else if (isset($_SESSION['LoggedIn_EMP_ID']))
 
 	echo '<tr>';
 	echo '<td>';
-	echo '<input type="submit" value="Check Students In">';
+	echo 'Total number of students presented (before this update): ' . $resultRows1;
 	echo '</td>';
 	echo '</tr>';
+
+	echo '<tr>';
+	echo '<td>';
+	echo '<input type="submit" value="CHECK IN &#x00A; SELECTED STUDENT(S)">';
+	echo '</td>';
+	echo '</tr>';	
 
 	echo '<tr>';
 	echo '<td>';
@@ -129,7 +138,7 @@ else if (isset($_SESSION['LoggedIn_EMP_ID']))
 
 	echo '<tr>';
 	echo '<td>';
-	echo '<input type="submit" value="Check Students In">';
+	echo '<input type="submit" value="CHECK IN &#x00A; SELECTED STUDENT(S)">';
 	echo '</td>';
 	echo '</tr>';
 

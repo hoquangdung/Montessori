@@ -1,6 +1,7 @@
 div.imagelinkbox {
     float: left;
     width: 120px;
+    height: 200px;
     margin: 0 0 5px 5px;
     padding: 5px;
     border: 1px solid black;

@@ -117,7 +117,13 @@ else if (isset($_SESSION['LoggedIn_EMP_ID']))
 
 	echo '<tr>';
 	echo '<td>';
-	echo '<input type="submit" value="Check Students Out">';
+	echo 'Total number of students presented (before this update): ' . $resultRows;
+	echo '</td>';
+	echo '</tr>';
+
+	echo '<tr>';
+	echo '<td>';
+	echo '<input type="submit" value="CHECK OUT &#x00A; SELECTED STUDENT(S)">';
 	echo '</td>';
 	echo '</tr>';
 
@@ -129,7 +135,7 @@ else if (isset($_SESSION['LoggedIn_EMP_ID']))
 
 	echo '<tr>';
 	echo '<td>';
-	echo '<input type="submit" value="Check Students Out">';
+	echo '<input type="submit" value="CHECK OUT &#x00A; SELECTED STUDENT(S)">';
 	echo '</td>';
 	echo '</tr>';
 

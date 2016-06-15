@@ -343,25 +343,26 @@ function report_EMPLOYEES($debug_on)
 		2 => 'Last Name',
 		3 => 'Birthdate',
 		4 => 'Sex',
-		5 => 'Address',
-		6 => 'City',
-		7 => 'Province',
-		8 => 'Postal Code',
-		9 => 'Country',
-		10 => 'Phone 1',
-		11 => 'Phone 2',
-		12 => 'Email',
-		13 => 'Hire Date',
-		14 => 'End Date',
-		15 => 'Education',
-		16 => 'Daycare Years',
-		17 => 'Montessori Years',
-		18 => 'Position 1',
-		19 => 'Position 2',
-		20 => 'Boss',
-		21 => 'Hourly Rate ',
-		22 => 'Passcode',
-		23 => 'Notes',
+		5 => 'Photo',
+		6 => 'Address',
+		7 => 'City',
+		8 => 'Province',
+		9 => 'Postal Code',
+		10 => 'Country',
+		11 => 'Phone 1',
+		12 => 'Phone 2',
+		13 => 'Email',
+		14 => 'Hire Date',
+		15 => 'End Date',
+		16 => 'Education',
+		17 => 'Daycare Years',
+		18 => 'Montessori Years',
+		19 => 'Position 1',
+		20 => 'Position 2',
+		21 => 'Boss',
+		22 => 'Hourly Rate ',
+		23 => 'Passcode',
+		24 => 'Notes',
 		);
 	populateResultToTable($result, $fieldHeaderStr);
 
@@ -566,6 +567,33 @@ function getStudents_InSchoolNow($debug_on)
 }//getStudents_InSchoolNow()
 
 
+//list of students that were checked in but not yet checked out now
+function getEducators_InSchoolNow($debug_on)
+{	
+	$queryStr = 'SELECT ';
+		$queryStr = $queryStr . 'EMPLOYEES.EMP_ID';
+		$queryStr = $queryStr . ', ' . 'CONCAT(EMPLOYEES.EMP_FIRST_NAME, " ", EMPLOYEES.EMP_LAST_NAME) AS EMP_NAME';
+		$queryStr = $queryStr . ', ' . 'EMPLOYEES.EMP_BIRTHDATE';
+		$queryStr = $queryStr . ', ' . 'FLOOR(DATEDIFF(NOW(), EMPLOYEES.EMP_BIRTHDATE)/365.25) AS EMP_AGE';
+		$queryStr = $queryStr . ', ' . 'EMPLOYEES.EMP_PHOTO';
+	$queryStr = $queryStr . ' FROM ';
+		$queryStr = $queryStr . 'EMPLOYEES';
+	$queryStr = $queryStr . ' WHERE ';
+		$queryStr = $queryStr . '(EMPLOYEES.EMP_ID IN (SELECT EMPLOYEE_ATTENDANCES.EMP_ID FROM EMPLOYEE_ATTENDANCES WHERE EMPLOYEE_ATTENDANCES.DATE_TIME >= CURDATE() AND EMPLOYEE_ATTENDANCES.DATE_TIME < (CURDATE() + INTERVAL 1 DAY) AND EMPLOYEE_ATTENDANCES.EVENT_TYPE = "In")) AND ';
+		$queryStr = $queryStr . '(EMPLOYEES.EMP_ID NOT IN (SELECT EMPLOYEE_ATTENDANCES.EMP_ID FROM EMPLOYEE_ATTENDANCES WHERE EMPLOYEE_ATTENDANCES.DATE_TIME >= CURDATE() AND EMPLOYEE_ATTENDANCES.DATE_TIME < (CURDATE() + INTERVAL 1 DAY) AND EMPLOYEE_ATTENDANCES.EVENT_TYPE = "Out"))';
+		$queryStr = $queryStr . ';';
+
+	//if debug on, display [queryStr]
+	displayQueryStr($queryStr, $debug_on);
+
+	//*** 2. execute quyery and get the results
+	$result = getResult($queryStr);
+		
+	return ($result);
+
+}//getEducators_InSchoolNow()
+
+
 function createStudentList_AttendanceCheck($result)
 {
 	//the number of rows in [result]
@@ -589,7 +617,7 @@ function createStudentList_AttendanceCheck($result)
 		echo '</div>'; 
 	}
 
-}//createStudentList_AttendanceCheckIn()
+}//getEducators_InSchoolNow()
 
 
 //list of web page links that the user have the authorization on
