@@ -17,11 +17,7 @@ session_start();
 <body>
 
 <?php
-	include 'header_log_in_out.php'
-?>
-
-<?php
-	include 'tab_header.php'
+	include 'header_log_in_out.php';
 ?>
 
 <div id="main">

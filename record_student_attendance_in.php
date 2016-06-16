@@ -17,7 +17,7 @@ session_start();
 <body>
 
 <?php
-	include 'header_log_in_out.php'
+	include 'header_log_in_out.php';
 ?>
 
 <div id="main">
@@ -176,7 +176,7 @@ else
 
 
 <?php
-	include 'footer.php'
+	include 'footer.php';
 ?>
 
 </body>

@@ -43,6 +43,10 @@
 					' (ID = ' . $emp_id . ')' . ' &#9658; ';
 			echo ' <a href="logout.php" style="background-color: rgb(255, 153, 0); color: white; text-decoration: none; padding: 5px; border-radius: 5px"> &#10047; Log Out &#10047; </a>';
 			echo '</font>';
+
+			//then add designed tabs for this page
+			include 'tab_header.php';
+
 		}
 
 		//else: the logged-in employee is NOT authorized to access this page 

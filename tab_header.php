@@ -10,7 +10,7 @@
 
 <div style="
 	display: table;
-	height: 20px;
+	height: 26px;
     width: 100%;
     margin: 0px;
     background-color: transparent;
@@ -19,22 +19,31 @@
 
 	<div style="
 		display: table-cell;
-		height: 20px;
+		height: 26px;
     	width: 100%;    	
     	padding: 5px;
     	vertical-align: middle;">
 
 	<?php
 
-	//if currently some employee is logging in
-	if (isset($_SESSION['LoggedIn_EMP_ID']) &&
-    	isset($_SESSION['LoggedIn_EMP_NAME']))
+	require_once("db_operations.php");
+
+	//1. get details of all tabs designed to this page
+	$tabs = getTabsOfPage($_SERVER["PHP_SELF"], true);
+	//$tabs = getTabsOfPage("/montessori/report_employee_attendances.php", true);
+
+	//2. populate all tabs designed to this page
+	//the number of tabs in [tabs]
+	$tabNum = mysqli_num_rows($tabs);	
+	//populate tabs now
+	for ($row = 0; $row < $tabNum; $row++)
 	{
-		echo ' ';
-		echo '<a href="logout.php" style="background-color: rgb(255, 153, 0); color: white; text-decoration: none; padding: 5px; border-radius: 5px"> &#10047; Log Out &#10047; </a>';
-		echo '<font color="transparent">s</font>';		
-		echo ' <a href="logout.php" style="background-color: rgb(255, 153, 0); color: white; text-decoration: none; padding: 5px; border-radius: 5px"> &#10047; Log Out &#10047; </a>';
-	}
+		//the current row in [result]
+		$currentTab = mysqli_fetch_row($tabs);
+
+		echo '<a href="' . $currentTab[0] . '" style="background-color: rgb(153, 0, 0); color: white; text-decoration: none; padding: 5px; margin-left: 5px; border-radius: 5px">' . $currentTab[1] . '</a>';
+		
+	}//for	
 
 	?>
 

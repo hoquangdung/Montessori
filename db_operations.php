@@ -818,6 +818,43 @@ function employeeIsAuthorizedThisPage($emp_id, $page_url, $debug_on)
 }//employeeIsAuthorizedThisPage()
 
 
+function getTabsOfPage($this_page_url, $debug_on)
+{
+	$queryStr = 'SELECT ';
+		$queryStr = $queryStr .'HREF';
+		$queryStr = $queryStr . ', ' . 'TITLE_SHORT';
+	$queryStr = $queryStr . ' FROM ';
+		$queryStr = $queryStr . 'WEB_PAGES';
+	$queryStr = $queryStr . ' WHERE ';
+		$queryStr = $queryStr . 'PAGE_ID IN';
+		$queryStr = $queryStr . '(';
+			$queryStr = $queryStr . 'SELECT ';
+				$queryStr = $queryStr . 'TAB_PAGE_ID';
+			$queryStr = $queryStr . ' FROM ';
+				$queryStr = $queryStr . 'PAGE_TABS';
+			$queryStr = $queryStr . ' WHERE ';
+				$queryStr = $queryStr . 'PAGE_ID IN';
+				$queryStr = $queryStr . '(';
+					$queryStr = $queryStr . 'SELECT ';
+						$queryStr = $queryStr . 'PAGE_ID';
+					$queryStr = $queryStr . ' FROM ';
+						$queryStr = $queryStr . 'WEB_PAGES';
+					$queryStr = $queryStr . ' WHERE ';
+						$queryStr = $queryStr . '(INSTR("' . $this_page_url .'", HREF) > 0)';
+					$queryStr = $queryStr . ')';
+				$queryStr = $queryStr . ')';
+	$queryStr = $queryStr . ';';
+
+	//if debug on, display [queryStr]
+	displayQueryStr($queryStr, $debug_on);
+	
+	//*** 2. execute quyery and get the results
+	$result = getResult($queryStr);
+
+	return ($result);
+
+}//getTabsOfPage()
+
 
 function report_EMPLOYEE_LOG_IOS($emp_id, $debug_on)
 {

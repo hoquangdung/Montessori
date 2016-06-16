@@ -14,7 +14,7 @@ session_start();
 <body>
 
 <?php
-	include 'header_log_in_out.php'
+	include 'header_log_in_out.php';
 ?>
 
 
@@ -44,7 +44,7 @@ if (isset($_SESSION["LoggedIn_EMP_ID"]))
 ?>
 
 <?php
-	include 'footer.php'
+	include 'footer.php';
 ?>
 
 </body>
