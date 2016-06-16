@@ -93,7 +93,7 @@ else if (isset($_SESSION['LoggedIn_EMP_ID']))
 	if ($resultRows == 0) {
 		
 		echo '<script type="text/javascript">';
-		echo 'window.confirm("All students were attendance-out recored!");';
+		echo 'window.confirm("No student to check out attendance!");';
 		echo '</script>';
 
 		//reload the page
