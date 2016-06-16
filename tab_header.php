@@ -1,7 +1,7 @@
 <div style="
     		position: fixed; 
     		height: 20px;
- 		   	width: 30%; 
+ 		   	width: 50%; 
     		top: 7px;
     		left: 6px;
     		right: 0;    
@@ -41,7 +41,7 @@
 		//the current row in [result]
 		$currentTab = mysqli_fetch_row($tabs);
 
-		echo '<a href="' . $currentTab[0] . '" style="background-color: rgb(153, 0, 0); color: white; text-decoration: none; padding: 5px; margin-left: 5px; border-radius: 5px">' . $currentTab[1] . '</a>';
+		echo '<a href="' . $currentTab[0] . '" style="background-color: rgb(255, 51, 0); color: white; text-decoration: none; padding: 5px; margin-left: 5px; border-radius: 5px">' . $currentTab[1] . '</a>';
 		
 	}//for	
 

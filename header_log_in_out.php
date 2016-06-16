@@ -57,9 +57,9 @@
 			echo '</script>';
 
 			//reload the page
-			echo '<script type="text/javascript">';
-	    	echo 'window.location.replace("index.php");';
-	    	echo '</script>';
+			echo '<script type="text/javascript">';			
+	    	echo 'window.location.replace("index.php");';	    			
+	    	echo '</script>';	    	
 
 		}
 
@@ -70,7 +70,7 @@
 	{		
 		echo '<font color="red">';
 		echo 'Please &#9658; ';
-		echo ' <a href="login.php" style="background-color: blue; color: white; text-decoration: none; padding: 	5px; border-radius: 5px"> &#10048; Log In &#10048; </a>';
+		echo ' <a href="login.php" style="background-color: blue; color: white; text-decoration: none; padding: 5px; border-radius: 5px"> &#10048; Log In &#10048; </a>';
 		echo '</font>';			
 
 		//if this is not login page, then load it
@@ -87,8 +87,6 @@
 	}//else
 
 	?>
-
-	
 
 	</div>
 
