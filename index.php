@@ -20,6 +20,10 @@ session_start();
 	include 'header_log_in_out.php'
 ?>
 
+<?php
+	include 'tab_header.php'
+?>
+
 <div id="main">
 
 
