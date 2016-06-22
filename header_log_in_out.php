@@ -41,7 +41,7 @@
 			echo '<font color="blue">';
 			echo 'Logged-in User: ' . $emp_name . 
 					' (ID = ' . $emp_id . ')' . ' &#9658; ';
-			echo ' <a href="logout.php" style="background-color: rgb(255, 153, 0); color: white; text-decoration: none; padding: 5px; border-radius: 5px"> &#10047; Log Out &#10047; </a>';
+			echo ' <a href="logout.php" style="background-color: rgb(255, 153, 0); color: white; text-decoration: none; padding: 5px; border-radius: 5px">Log Out</a>';
 			echo '</font>';
 
 			//then add designed tabs for this page
@@ -70,7 +70,7 @@
 	{		
 		echo '<font color="red">';
 		echo 'Please &#9658; ';
-		echo ' <a href="login.php" style="background-color: blue; color: white; text-decoration: none; padding: 5px; border-radius: 5px"> &#10048; Log In &#10048; </a>';
+		echo ' <a href="login.php" style="background-color: blue; color: white; text-decoration: none; padding: 5px; border-radius: 5px">Log In</a>';
 		echo '</font>';			
 
 		//if this is not login page, then load it

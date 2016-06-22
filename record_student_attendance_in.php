@@ -84,16 +84,16 @@ else if (isset($_SESSION['LoggedIn_EMP_ID']))
 	echo '</script>';
 	/**/
 
-	//search for students that were not checkec in today
+	//search for students that were not checked in today
 	require_once("db_operations.php");
 	$event_type = "In";
-	$result = getStudents_NotAttendanceCheckedToday($event_type, true);
-	$resultRows = mysqli_num_rows($result);
+	$studentsNotCheckedIn = getStudents_NotAttendanceCheckedToday($event_type, true);
+	$studentsNotCheckedInNum = mysqli_num_rows($studentsNotCheckedIn);
 
-	$result1 = getStudents_InSchoolNow(true);
-	$resultRows1 = mysqli_num_rows($result1);
+	$studentsInSchoolNow = getStudents_InSchoolNow(true);
+	$studentsInSchoolNowNum = mysqli_num_rows($studentsInSchoolNow);
 
-	if ($resultRows == 0) {
+	if ($studentsNotCheckedInNum == 0) {
 		
 		echo '<script type="text/javascript">';
 		echo 'window.confirm("All students were attendance-in recored!");';
@@ -120,7 +120,13 @@ else if (isset($_SESSION['LoggedIn_EMP_ID']))
 
 	echo '<tr>';
 	echo '<td>';
-	echo 'Total number of students presented (before this update): ' . $resultRows1;
+	echo 'Total number of students not checked-in (before this update): ' . $studentsNotCheckedInNum;
+	echo '</td>';
+	echo '</tr>';
+
+	echo '<tr>';
+	echo '<td>';
+	echo 'Please check one or multiple students in the following list:';
 	echo '</td>';
 	echo '</tr>';
 
@@ -132,7 +138,7 @@ else if (isset($_SESSION['LoggedIn_EMP_ID']))
 
 	echo '<tr>';
 	echo '<td>';
-	createStudentList_AttendanceCheck($result);
+	createStudentList_AttendanceCheck($studentsNotCheckedIn);
 	echo '</td>';
 	echo '</tr>';
 
@@ -161,6 +167,49 @@ else if (isset($_SESSION['LoggedIn_EMP_ID']))
     echo '});';
     echo '</script>'; 
     /**/
+
+
+	//////////////////////////////////////////////////////////
+
+	
+	echo '<div class="outer">';
+
+	echo '<table class="imagelinkbox">';
+
+	echo '<tr>';
+	echo '<td>';
+	echo 'Total number of students already checked-in (before this update): ' . $studentsInSchoolNowNum;
+	echo '</td>';
+	echo '</tr>';
+
+	if ($studentsInSchoolNowNum >= 1)
+	{
+
+		echo '<tr>';
+		echo '<td>';
+		echo 'Details are as follows:';
+		echo '</td>';
+		echo '</tr>';
+
+		echo '<tr>';
+		echo '<td>';
+		createStudentPhotoList($studentsInSchoolNow);
+		echo '</td>';
+		echo '</tr>';
+
+		if ($studentsInSchoolNowNum > 10)
+		{
+			echo '<tr>';
+			echo '<td>';
+			echo 'Total number of students already checked-in (before this update): ' . $studentsInSchoolNowNum;
+			echo '</td>';
+			echo '</tr>';
+		}
+
+		echo '</table>';
+		
+		echo '</div>';
+	}
 
 }//else if
 

@@ -38,7 +38,7 @@
 			echo 'text-decoration: none;';
 			echo 'padding: 5px;';
 			echo 'border-radius: 5px"';
-			echo '> &#10084; Home &#10084; </a>';
+			echo '>Home</a>';
 		}
 
 		?>
