@@ -164,49 +164,60 @@ function insert_DB_QUERY_LOGS($user_name, $queryStrToDisplay)
 
 
 function createScheduleOfDay($sch_date_time, $debug_on)
-{
-
-	$sch_date = date('Y-m-d', $sch_date_time);
-	$sch_date_displayed = date('l, d-M-Y', $sch_date_time);
-
-	echo '<br/><br/>';
-	echo '<b>Date: ' . $sch_date_displayed . '</b>';
+{	
+	
 	echo '<br/>';
 
-
 	echo '<table>';
-	
+
+	//print table caption dislaying the schedule date
+	$sch_date = date('Y-m-d', $sch_date_time);
+	$sch_date_displayed = date('l, d-M-Y', $sch_date_time);
 	echo '<tr>';
-	echo '<td><b>Names</b></td>';
-	echo '<th>06<br/>00</th>';
-	echo '<th>06<br/>30</th>';
-	echo '<th>07<br/>00</th>';
-	echo '<th>07<br/>30</th>';
-	echo '<th>08<br/>00</th>';
-	echo '<th>08<br/>30</th>';
-	echo '<th>09<br/>00</th>';
-	echo '<th>09<br/>30</th>';
-	echo '<th>10<br/>00</th>';
-	echo '<th>10<br/>30</th>';
-	echo '<th>11<br/>00</th>';
-	echo '<th>11<br/>30</th>';
-	echo '<th>12<br/>00</th>';
-	echo '<th>12<br/>30</th>';
-	echo '<th>13<br/>00</th>';
-	echo '<th>13<br/>30</th>';
-	echo '<th>14<br/>00</th>';
-	echo '<th>14<br/>30</th>';
-	echo '<th>15<br/>00</th>';
-	echo '<th>15<br/>30</th>';
-	echo '<th>16<br/>00</th>';
-	echo '<th>16<br/>30</th>';
-	echo '<th>17<br/>00</th>';
-	echo '<th>17<br/>30</th>';
-	echo '<th>18<br/>00</th>';
-	echo '<th>18<br/>30</th>';	
+	echo '<td colspan="27" style="text-align: center;">' . '<b>Date: ' . $sch_date_displayed . '</b>' . '</td>';
 	echo '</tr>';
 
-	$queryStr = 'SELECT EMP_ID, CONCAT(EMPLOYEES.EMP_FIRST_NAME, " ", EMPLOYEES.EMP_LAST_NAME) AS EMP_NAME FROM EMPLOYEES WHERE EMP_ID IN (SELECT DISTINCT EMP_ID FROM EMPLOYEE_SCHEDULE WHERE (SCH_DATE = "' . $sch_date . '") ORDER BY EMP_ID)';
+	//print emloyee name column header
+	echo '<tr>';
+	echo '<td><b>Names</b></td>';
+
+
+	//print time slot header
+
+	$queryStr = 'SELECT LPAD(START_TIME_HOUR,2,"0"), LPAD(START_TIME_MIN,2,"0") ' .
+				'FROM TIME_SLOTS ORDER BY START_TIME_HOUR, START_TIME_MIN;';
+	//if debug on, display [queryStr]
+	displayQueryStr($queryStr, $debug_on);
+	//execute quyery and get the results
+	$timeSlots = getResult($queryStr);
+	//the number of rows in [employees]
+	$timeSlotsNum = mysqli_num_rows($timeSlots);
+
+	for ($j = 0; $j < $timeSlotsNum; $j++)
+	{
+		$currentTimeSlot = mysqli_fetch_row($timeSlots);
+
+		$currentTimeSlot_START_TIME_MIN = $currentTimeSlot[1];
+		//if (($currentTimeSlot_START_TIME_MIN == '00') || ($currentTimeSlot_START_TIME_MIN == '30'))
+		if ($currentTimeSlot_START_TIME_MIN == '00')
+		{
+			$currentTimeSlot_START_TIME_HOUR = $currentTimeSlot[0];		
+			echo '<th>' . $currentTimeSlot_START_TIME_HOUR . '<br/>' . $currentTimeSlot_START_TIME_MIN . '</th>';
+		}
+		else
+		{
+			echo '<th>' . '' . '</th>';	
+		}
+
+	}
+	
+	echo '</tr>';
+
+	//print schedule for each employee
+
+	$queryStr = 'SELECT EMP_ID, CONCAT(EMPLOYEES.EMP_FIRST_NAME, " ", EMPLOYEES.EMP_LAST_NAME) AS EMP_NAME '. 
+				'FROM EMPLOYEES WHERE EMP_ID IN (SELECT DISTINCT EMP_ID FROM EMPLOYEE_SCHEDULE ' .
+				'WHERE (SCH_DATE = "' . $sch_date . '") ORDER BY EMP_ID)';
 	$queryStr = $queryStr . ';';
 
 	//if debug on, display [queryStr]
@@ -214,7 +225,6 @@ function createScheduleOfDay($sch_date_time, $debug_on)
 
 	//*** 2. execute quyery and get the results
 	$employees = getResult($queryStr);
-
 
 	//the number of rows in [employees]
 	$employeesNum = mysqli_num_rows($employees);
@@ -238,34 +248,33 @@ function createScheduleOfDay($sch_date_time, $debug_on)
 		echo '<td style="padding-right:5px;">' .  $currentEmployee_EMP_NAME . '</td>';
 
 
-		$queryStr = 'SELECT EMPLOYEE_SCHEDULE.TS_ID, EMPLOYEE_SCHEDULE.TS_STATUS_ID, TIME_SLOTS_STATUS.ICON_URL FROM EMPLOYEE_SCHEDULE, TIME_SLOTS_STATUS WHERE (EMPLOYEE_SCHEDULE.EMP_ID = ' . $currentEmployee_EMP_ID . ') AND (EMPLOYEE_SCHEDULE.SCH_DATE = "' . $sch_date . '") AND  (EMPLOYEE_SCHEDULE.TS_STATUS_ID = TIME_SLOTS_STATUS.TS_STATUS_ID) ORDER BY EMPLOYEE_SCHEDULE.TS_ID ASC'; 
+		$queryStr = 'SELECT EMPLOYEE_SCHEDULE.TS_ID, EMPLOYEE_SCHEDULE.TS_STATUS_ID, TIME_SLOTS_STATUS.ICON_URL ' .
+					'FROM EMPLOYEE_SCHEDULE, TIME_SLOTS_STATUS WHERE (EMPLOYEE_SCHEDULE.EMP_ID = ' . $currentEmployee_EMP_ID . ') AND '.
+					'(EMPLOYEE_SCHEDULE.SCH_DATE = "' . $sch_date . '") AND (EMPLOYEE_SCHEDULE.TS_STATUS_ID = TIME_SLOTS_STATUS.TS_STATUS_ID) ' . 
+					'ORDER BY EMPLOYEE_SCHEDULE.TS_ID ASC'; 
 		$queryStr = $queryStr . ';';
-
 		//if debug on, display [queryStr]
 		displayQueryStr($queryStr, $debug_on);
-
 		//*** 2. execute quyery and get the results
-		$timeSlots = getResult($queryStr);
-
-		//the number of rows in [timeSlots]
-		$timeSlotsNum = mysqli_num_rows($timeSlots);
+		$scheduledTimeSlots = getResult($queryStr);
 
 		
 		for ($j = 0; $j < $timeSlotsNum; $j++)
 		{
 		//the current row in [result]
-			$currentTimeSlot = mysqli_fetch_row($timeSlots);
+			$currentScheduledTimeSlots = mysqli_fetch_row($scheduledTimeSlots);
 
-			$currentTimeSlot_TS_STATUS_ID = $currentTimeSlot[1];
+			$currentScheduledTimeSlots_TS_STATUS_ID = $currentScheduledTimeSlots[1];
 
-			$currentTimeSlot_ICON_URL = $currentTimeSlot[2];
+			$currentScheduledTimeSlots_ICON_URL = $currentScheduledTimeSlots[2];
 
-			if ($currentTimeSlot_TS_STATUS_ID == 2)
+			//if this employee works in this time slots
+			if ($currentScheduledTimeSlots_TS_STATUS_ID == 2)
 			{
 				$employeesNumInTimeSlot[$j]=$employeesNumInTimeSlot[$j]+1;				
 			}
 
-			echo '<td><a href=""><img src="' . $currentTimeSlot_ICON_URL . '" height=40" width="40"></a></td>';
+			echo '<td><a href=""><img src="' . $currentScheduledTimeSlots_ICON_URL . '" height=40" width="20"></a></td>';
 		
 		}//for(j)
 
@@ -273,11 +282,46 @@ function createScheduleOfDay($sch_date_time, $debug_on)
 
 	}//for(i)
 
+
+	//re-print time slot header
+	echo '<tr>';
+	echo '<td></td>';
+	//*** set the pointer back to the beginning ***
+	mysqli_data_seek($timeSlots, 0);
+	for ($j = 0; $j < $timeSlotsNum; $j++)
+	{
+		$currentTimeSlot = mysqli_fetch_row($timeSlots);
+
+		$currentTimeSlot_START_TIME_MIN = $currentTimeSlot[1];
+		//if (($currentTimeSlot_START_TIME_MIN == '00') || ($currentTimeSlot_START_TIME_MIN == '30'))
+		if ($currentTimeSlot_START_TIME_MIN == '00')
+		{
+			$currentTimeSlot_START_TIME_HOUR = $currentTimeSlot[0];		
+			echo '<th>' . $currentTimeSlot_START_TIME_HOUR . '<br/>' . $currentTimeSlot_START_TIME_MIN . '</th>';
+		}
+		else
+		{
+			echo '<th>' . '' . '</th>';	
+		}
+
+	}	
+	echo '</tr>';
+
+	//print total number of employess working in time slots
 	echo '<tr>';
 	echo '<td style="text-align: center;"> Total: </td>';
-	for ($j = 0; $j < 26; $j++)
-	{		
-		echo '<td style="text-align: center;">' . $employeesNumInTimeSlot[$j] . '</td>';
+	$j = 0;
+	while ($j < $timeSlotsNum)
+	{	
+		$k = 1;
+		while (($j + $k < $timeSlotsNum) && 
+			   ($employeesNumInTimeSlot[$j] == $employeesNumInTimeSlot[$j + $k]))
+		{
+			$k = $k + 1;
+		}
+		echo '<td colspan="' . $k . '" style="background-color: gray; text-align: center;">' . $employeesNumInTimeSlot[$j] . '</td>';
+
+		$j = $j + $k;	
 	}
 	echo '</tr>';
 

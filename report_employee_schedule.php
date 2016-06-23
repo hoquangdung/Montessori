@@ -35,16 +35,19 @@ if (isset($_SESSION['LoggedIn_EMP_ID']))
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+	//today
+	$sch_date_time_today = time();
+
 	//yesterday
-	$sch_date_time = time()  - 24 * 60 * 60;
+	$sch_date_time_yesterday = $sch_date_time_today  - 24 * 60 * 60;
 	
-	createScheduleOfDay($sch_date_time, true);
+	createScheduleOfDay($sch_date_time_yesterday, true);
 
-	createScheduleOfDay($sch_date_time, true);
+	createScheduleOfDay($sch_date_time_today, true);
 
-	createScheduleOfDay($sch_date_time, true);
+	createScheduleOfDay($sch_date_time_today, true);
 
-	createScheduleOfDay($sch_date_time, true);
+	createScheduleOfDay($sch_date_time_today, true);
 	
 }//if
 
