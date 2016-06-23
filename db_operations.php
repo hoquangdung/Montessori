@@ -174,7 +174,7 @@ function createScheduleOfDay($sch_date_time, $debug_on)
 	$sch_date = date('Y-m-d', $sch_date_time);
 	$sch_date_displayed = date('l, d-M-Y', $sch_date_time);
 	echo '<tr>';
-	echo '<td colspan="27" style="text-align: center;">' . '<b>Date: ' . $sch_date_displayed . '</b>' . '</td>';
+	echo '<td colspan="53" style="text-align: center;">' . '<b>Date: ' . $sch_date_displayed . '</b>' . '</td>';
 	echo '</tr>';
 
 	//print emloyee name column header
@@ -193,13 +193,13 @@ function createScheduleOfDay($sch_date_time, $debug_on)
 	//the number of rows in [employees]
 	$timeSlotsNum = mysqli_num_rows($timeSlots);
 
-	for ($j = 0; $j < $timeSlotsNum; $j++)
+	for ($j = 1; $j <= $timeSlotsNum; $j = $j + 1)
 	{
 		$currentTimeSlot = mysqli_fetch_row($timeSlots);
 
 		$currentTimeSlot_START_TIME_MIN = $currentTimeSlot[1];
-		//if (($currentTimeSlot_START_TIME_MIN == '00') || ($currentTimeSlot_START_TIME_MIN == '30'))
-		if ($currentTimeSlot_START_TIME_MIN == '00')
+		if (($currentTimeSlot_START_TIME_MIN == '00') || ($currentTimeSlot_START_TIME_MIN == '30'))
+		//if ($currentTimeSlot_START_TIME_MIN == '00')
 		{
 			$currentTimeSlot_START_TIME_HOUR = $currentTimeSlot[0];		
 			echo '<th>' . $currentTimeSlot_START_TIME_HOUR . '<br/>' . $currentTimeSlot_START_TIME_MIN . '</th>';
@@ -230,14 +230,14 @@ function createScheduleOfDay($sch_date_time, $debug_on)
 	$employeesNum = mysqli_num_rows($employees);
 
 
-	for ($j = 0; $j < 26; $j++)
+	for ($j = 1; $j <= $timeSlotsNum; $j = $j + 1)
 	{
 			$employeesNumInTimeSlot[$j]=0;
 	}
 
 	for ($i = 0; $i < $employeesNum; $i++)
 	{
-		//the current row in [result]
+		//the current row in [employees]
 		$currentEmployee = mysqli_fetch_row($employees);
 
 		$currentEmployee_EMP_ID = $currentEmployee[0];
@@ -247,35 +247,70 @@ function createScheduleOfDay($sch_date_time, $debug_on)
 
 		echo '<td style="padding-right:5px;">' .  $currentEmployee_EMP_NAME . '</td>';
 
-
+		/*
 		$queryStr = 'SELECT EMPLOYEE_SCHEDULE.TS_ID, EMPLOYEE_SCHEDULE.TS_STATUS_ID, TIME_SLOTS_STATUS.ICON_URL ' .
 					'FROM EMPLOYEE_SCHEDULE, TIME_SLOTS_STATUS WHERE (EMPLOYEE_SCHEDULE.EMP_ID = ' . $currentEmployee_EMP_ID . ') AND '.
 					'(EMPLOYEE_SCHEDULE.SCH_DATE = "' . $sch_date . '") AND (EMPLOYEE_SCHEDULE.TS_STATUS_ID = TIME_SLOTS_STATUS.TS_STATUS_ID) ' . 
-					'ORDER BY EMPLOYEE_SCHEDULE.TS_ID ASC'; 
+					'ORDER BY EMPLOYEE_SCHEDULE.TS_ID ASC';
+		*/
+		$queryStr = 'SELECT TS_ID_BEGIN, TS_ID_END FROM EMPLOYEE_SCHEDULE WHERE ' .
+					'(EMP_ID = ' . $currentEmployee_EMP_ID . ') AND (SCH_DATE = "' . $sch_date . '")  ORDER BY TS_ID_BEGIN ASC'; 
 		$queryStr = $queryStr . ';';
+
 		//if debug on, display [queryStr]
 		displayQueryStr($queryStr, $debug_on);
-		//*** 2. execute quyery and get the results
-		$scheduledTimeSlots = getResult($queryStr);
+
+		//execute quyery and get the results
+		$scheduledTimeSlotSegments = getResult($queryStr);
+
+		//the number of segments in [scheduledTimeSlotSegments]
+		$scheduledTimeSlotSegmentsNum = mysqli_num_rows($scheduledTimeSlotSegments);
 
 		
-		for ($j = 0; $j < $timeSlotsNum; $j++)
+		if ($scheduledTimeSlotSegmentsNum >= 1)
 		{
-		//the current row in [result]
-			$currentScheduledTimeSlots = mysqli_fetch_row($scheduledTimeSlots);
-
-			$currentScheduledTimeSlots_TS_STATUS_ID = $currentScheduledTimeSlots[1];
-
-			$currentScheduledTimeSlots_ICON_URL = $currentScheduledTimeSlots[2];
-
-			//if this employee works in this time slots
-			if ($currentScheduledTimeSlots_TS_STATUS_ID == 2)
+			//the current segment in [scheduledTimeSlotSegments]
+			$currentscheduledTimeSlotSegment = mysqli_fetch_row($scheduledTimeSlotSegments);
+			$currentscheduledTimeSlotSegment_TS_ID_BEGIN = $currentscheduledTimeSlotSegment[0];
+			$currentscheduledTimeSlotSegment_TS_ID_END = $currentscheduledTimeSlotSegment[1];
+		}
+		else
+		{
+			$currentscheduledTimeSlotSegment_TS_ID_BEGIN = $timeSlotsNum + 1;
+			$currentscheduledTimeSlotSegment_TS_ID_END = $timeSlotsNum + 1;	
+		}
+		//index of the next segment 
+		$k = 1;
+		for ($j = 1; $j <= $timeSlotsNum; $j = $j + 1)
+		{
+			//if this employee does not work in this time slot
+			if ($j < $currentscheduledTimeSlotSegment_TS_ID_BEGIN)
 			{
-				$employeesNumInTimeSlot[$j]=$employeesNumInTimeSlot[$j]+1;				
+				echo '<td><a href=""><img src="images/icons/time_slot_out.png" height=40" width="20"></a></td>';				
+			}
+			//else if this employee works in this time slot
+			else if ($j <= $currentscheduledTimeSlotSegment_TS_ID_END)
+			{
+				echo '<td><a href=""><img src="images/icons/time_slot_in.png" height=40" width="20"></a></td>';	
+				$employeesNumInTimeSlot[$j] = $employeesNumInTimeSlot[$j] + 1;
+			}
+			//else: move to the next scheduled time slot segment to check
+			else if ($k < $scheduledTimeSlotSegmentsNum)
+			{
+				//the current segment in [scheduledTimeSlotSegments]
+				$currentscheduledTimeSlotSegment = mysqli_fetch_row($scheduledTimeSlotSegments);
+				$currentscheduledTimeSlotSegment_TS_ID_BEGIN = $currentscheduledTimeSlotSegment[0];
+				$currentscheduledTimeSlotSegment_TS_ID_END = $currentscheduledTimeSlotSegment[1];
+				$k = $k + 1;
+				$j = $j - 1;
+			}
+			else
+			{
+				$currentscheduledTimeSlotSegment_TS_ID_BEGIN = $timeSlotsNum + 1;
+				$currentscheduledTimeSlotSegment_TS_ID_END = $timeSlotsNum + 1;		
+				$j = $j - 1;
 			}
 
-			echo '<td><a href=""><img src="' . $currentScheduledTimeSlots_ICON_URL . '" height=40" width="20"></a></td>';
-		
 		}//for(j)
 
 		echo '</tr>';
@@ -288,13 +323,13 @@ function createScheduleOfDay($sch_date_time, $debug_on)
 	echo '<td></td>';
 	//*** set the pointer back to the beginning ***
 	mysqli_data_seek($timeSlots, 0);
-	for ($j = 0; $j < $timeSlotsNum; $j++)
+	for ($j = 1; $j <= $timeSlotsNum; $j = $j + 1)
 	{
 		$currentTimeSlot = mysqli_fetch_row($timeSlots);
 
 		$currentTimeSlot_START_TIME_MIN = $currentTimeSlot[1];
-		//if (($currentTimeSlot_START_TIME_MIN == '00') || ($currentTimeSlot_START_TIME_MIN == '30'))
-		if ($currentTimeSlot_START_TIME_MIN == '00')
+		if (($currentTimeSlot_START_TIME_MIN == '00') || ($currentTimeSlot_START_TIME_MIN == '30'))
+		//if ($currentTimeSlot_START_TIME_MIN == '00')
 		{
 			$currentTimeSlot_START_TIME_HOUR = $currentTimeSlot[0];		
 			echo '<th>' . $currentTimeSlot_START_TIME_HOUR . '<br/>' . $currentTimeSlot_START_TIME_MIN . '</th>';
@@ -310,11 +345,11 @@ function createScheduleOfDay($sch_date_time, $debug_on)
 	//print total number of employess working in time slots
 	echo '<tr>';
 	echo '<td style="text-align: center;"> Total: </td>';
-	$j = 0;
-	while ($j < $timeSlotsNum)
+	$j = 1;
+	while ($j <= $timeSlotsNum)
 	{	
 		$k = 1;
-		while (($j + $k < $timeSlotsNum) && 
+		while (($j + $k <= $timeSlotsNum) && 
 			   ($employeesNumInTimeSlot[$j] == $employeesNumInTimeSlot[$j + $k]))
 		{
 			$k = $k + 1;
