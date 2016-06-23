@@ -163,6 +163,130 @@ function insert_DB_QUERY_LOGS($user_name, $queryStrToDisplay)
 }//insert_DB_QUERY_LOGS()
 
 
+function createScheduleOfDay($sch_date_time, $debug_on)
+{
+
+	$sch_date = date('Y-m-d', $sch_date_time);
+	$sch_date_displayed = date('l, d-M-Y', $sch_date_time);
+
+	echo '<br/><br/>';
+	echo '<b>Date: ' . $sch_date_displayed . '</b>';
+	echo '<br/>';
+
+
+	echo '<table>';
+	
+	echo '<tr>';
+	echo '<td><b>Names</b></td>';
+	echo '<th>06<br/>00</th>';
+	echo '<th>06<br/>30</th>';
+	echo '<th>07<br/>00</th>';
+	echo '<th>07<br/>30</th>';
+	echo '<th>08<br/>00</th>';
+	echo '<th>08<br/>30</th>';
+	echo '<th>09<br/>00</th>';
+	echo '<th>09<br/>30</th>';
+	echo '<th>10<br/>00</th>';
+	echo '<th>10<br/>30</th>';
+	echo '<th>11<br/>00</th>';
+	echo '<th>11<br/>30</th>';
+	echo '<th>12<br/>00</th>';
+	echo '<th>12<br/>30</th>';
+	echo '<th>13<br/>00</th>';
+	echo '<th>13<br/>30</th>';
+	echo '<th>14<br/>00</th>';
+	echo '<th>14<br/>30</th>';
+	echo '<th>15<br/>00</th>';
+	echo '<th>15<br/>30</th>';
+	echo '<th>16<br/>00</th>';
+	echo '<th>16<br/>30</th>';
+	echo '<th>17<br/>00</th>';
+	echo '<th>17<br/>30</th>';
+	echo '<th>18<br/>00</th>';
+	echo '<th>18<br/>30</th>';	
+	echo '</tr>';
+
+	$queryStr = 'SELECT EMP_ID, CONCAT(EMPLOYEES.EMP_FIRST_NAME, " ", EMPLOYEES.EMP_LAST_NAME) AS EMP_NAME FROM EMPLOYEES WHERE EMP_ID IN (SELECT DISTINCT EMP_ID FROM EMPLOYEE_SCHEDULE WHERE (SCH_DATE = "' . $sch_date . '") ORDER BY EMP_ID)';
+	$queryStr = $queryStr . ';';
+
+	//if debug on, display [queryStr]
+	displayQueryStr($queryStr, $debug_on);
+
+	//*** 2. execute quyery and get the results
+	$employees = getResult($queryStr);
+
+
+	//the number of rows in [employees]
+	$employeesNum = mysqli_num_rows($employees);
+
+
+	for ($j = 0; $j < 26; $j++)
+	{
+			$employeesNumInTimeSlot[$j]=0;
+	}
+
+	for ($i = 0; $i < $employeesNum; $i++)
+	{
+		//the current row in [result]
+		$currentEmployee = mysqli_fetch_row($employees);
+
+		$currentEmployee_EMP_ID = $currentEmployee[0];
+		$currentEmployee_EMP_NAME = $currentEmployee[1];
+
+		echo '<tr>';
+
+		echo '<td style="padding-right:5px;">' .  $currentEmployee_EMP_NAME . '</td>';
+
+
+		$queryStr = 'SELECT EMPLOYEE_SCHEDULE.TS_ID, EMPLOYEE_SCHEDULE.TS_STATUS_ID, TIME_SLOTS_STATUS.ICON_URL FROM EMPLOYEE_SCHEDULE, TIME_SLOTS_STATUS WHERE (EMPLOYEE_SCHEDULE.EMP_ID = ' . $currentEmployee_EMP_ID . ') AND (EMPLOYEE_SCHEDULE.SCH_DATE = "' . $sch_date . '") AND  (EMPLOYEE_SCHEDULE.TS_STATUS_ID = TIME_SLOTS_STATUS.TS_STATUS_ID) ORDER BY EMPLOYEE_SCHEDULE.TS_ID ASC'; 
+		$queryStr = $queryStr . ';';
+
+		//if debug on, display [queryStr]
+		displayQueryStr($queryStr, $debug_on);
+
+		//*** 2. execute quyery and get the results
+		$timeSlots = getResult($queryStr);
+
+		//the number of rows in [timeSlots]
+		$timeSlotsNum = mysqli_num_rows($timeSlots);
+
+		
+		for ($j = 0; $j < $timeSlotsNum; $j++)
+		{
+		//the current row in [result]
+			$currentTimeSlot = mysqli_fetch_row($timeSlots);
+
+			$currentTimeSlot_TS_STATUS_ID = $currentTimeSlot[1];
+
+			$currentTimeSlot_ICON_URL = $currentTimeSlot[2];
+
+			if ($currentTimeSlot_TS_STATUS_ID == 2)
+			{
+				$employeesNumInTimeSlot[$j]=$employeesNumInTimeSlot[$j]+1;				
+			}
+
+			echo '<td><a href=""><img src="' . $currentTimeSlot_ICON_URL . '" height=40" width="40"></a></td>';
+		
+		}//for(j)
+
+		echo '</tr>';
+
+	}//for(i)
+
+	echo '<tr>';
+	echo '<td style="text-align: center;"> Total: </td>';
+	for ($j = 0; $j < 26; $j++)
+	{		
+		echo '<td style="text-align: center;">' . $employeesNumInTimeSlot[$j] . '</td>';
+	}
+	echo '</tr>';
+
+
+	echo '</table>';
+
+}
+
+
 //******************************************************
 //SELECT
 
@@ -936,7 +1060,7 @@ function report_DB_QUERY_LOGS($debug_on)
 		$queryStr = $queryStr . '*';
 	$queryStr = $queryStr . ' FROM ';
 		$queryStr = $queryStr . 'DB_QUERY_LOGS';
-		$queryStr = $queryStr . ' ORDER BY ' . 'DATE_TIME DESC';	
+		$queryStr = $queryStr . ' ORDER BY ' . 'DATE_TIME DESC, DB_QL_ID DESC';	
 	$queryStr = $queryStr . ';';	
 
 	//if debug on, display [queryStr]
