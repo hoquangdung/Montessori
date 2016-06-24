@@ -29,69 +29,67 @@ if (isset($_SESSION['LoggedIn_EMP_ID']))
 
 	echo '<h2>Schedules of Employees</h2>';
 
+	date_default_timezone_set('America/Toronto');
+
 	//display 
 	require_once("db_operations.php");
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	echo <<< END
-
-	<form action="report_employee_schedule.php" method="post">
-
-	<label for="from_date">From Date </label><input type="date" id="from_date" name="from_date"><br/><br/>
-
-	<label for="to_date">To Date </label><input type="date" id="to_date" name="to_date"><br/><br/>
-
-	<input type="submit" value="Submit Schedule">
-
-	</form>
-
-END;
-
+	
+	
 
 	if ((isset($_POST['from_date'])) && (isset($_POST['to_date'])))
 	{
 		$from_date = new DateTime($_POST['from_date']);
 		$to_date = new DateTime($_POST['to_date']);
 
-		echo '<br/>Submitted Variables:<br/>';
-		echo '  - From Date: ' . $from_date->format("Y-m-d") . '<br/>';
-		echo '  - To Date: ' . $to_date->format("Y-m-d") . '<br/>';
-
-		$timespan = 24 * 60 * 60;
-		$curr_date = $from_date;
-
-		while ($curr_date <= $to_date)
-		{
-			echo '  + Date: ' . $curr_date->format("l, Y-m-d") . '<br/>';
-			$curr_date->add(new DateInterval('PT'.$timespan.'S'));
-		}
-		
-
+		//echo the form to the page
+		echo '<form action="report_employee_schedule.php" method="post">';
+		echo '<label for="from_date">From Date </label><input type="date" id="from_date" name="from_date"' .
+				'value="' . $_POST['from_date'] . '"><br/><br/>';
+		echo '<label for="to_date">To Date </label><input type="date" id="to_date" name="to_date"' . 
+				'value="' . $_POST['to_date'] . '"><br/><br/>';
+		echo '<input type="submit" value="Submit Schedule">';
+		echo '</form>';
 	}
 	else
 	{
-		echo '<br/>No Variables Submitted!<br/>';
+		$from_date = new DateTime();
+		$to_date = new DateTime();
+
+		//echo the form to the page
+		//** Notes: web browser understands the date format then converts it to its own preference
+		//Y-m-d (only this format is understood by web browser) => mm/dd/yyyy when displayed on web
+		echo '<form action="report_employee_schedule.php" method="post">';
+		echo '<label for="from_date">From Date </label><input type="date" id="from_date" name="from_date"' .
+				'value="' . $from_date->format("Y-m-d") . '"><br/><br/>';
+		echo '<label for="to_date">To Date </label><input type="date" id="to_date" name="to_date"' . 
+				'value="' . $to_date->format("Y-m-d") . '"><br/><br/>';
+		echo '<input type="submit" value="Submit Schedule">';
+		echo '</form>';	
+		
 	}
 
-	
-
-	
+		
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	//today
-	$sch_date_time_today = time();
-	//yesterday
-	$sch_date_time_yesterday = $sch_date_time_today  - 24 * 60 * 60;
+	$timespan = 24 * 60 * 60;
+	$curr_date = new DateTime($from_date->format("Y-m-d"));
 
-	//tomorrow
-	$sch_date_time_tomorrow = $sch_date_time_today  + 24 * 60 * 60;
+	/**
+	echo '  # From Date: ' . $from_date->format("Y-m-d") . '<br/>';
+	echo '  # To Date: ' . $to_date->format("Y-m-d") . '<br/>';
+	/**/
+
+	while ($curr_date <= $to_date)
+	{
+		//echo ' **** Date: ' . $curr_date->format("l, Y-m-d") . '<br/>';
+
+		createScheduleOfDay($curr_date, true);
+		$curr_date->add(new DateInterval('PT'.$timespan.'S'));
+	}
 	
-	createScheduleOfDay($sch_date_time_yesterday, true);
-
-	createScheduleOfDay($sch_date_time_today, true);
-
-	createScheduleOfDay($sch_date_time_tomorrow, true);
 	
 }//if
 

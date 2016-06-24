@@ -166,16 +166,45 @@ function insert_DB_QUERY_LOGS($user_name, $queryStrToDisplay)
 function createScheduleOfDay($sch_date_time, $debug_on)
 {	
 	
-	echo '<br/>';
+	echo '<br/><br/>';
 
 	echo '<table>';
 
 	//print table caption dislaying the schedule date
-	$sch_date = date('Y-m-d', $sch_date_time);
-	$sch_date_displayed = date('l, d-M-Y', $sch_date_time);
+	$sch_date = $sch_date_time->format("Y-m-d");
+	$sch_date_displayed = $sch_date_time->format("l, d M y");
 	echo '<tr>';
-	echo '<td colspan="53" style="text-align: center;">' . '<b>Date: ' . $sch_date_displayed . '</b>' . '</td>';
+	echo '<td colspan="53" style="text-align: left;">' . '<b>Date: ' . $sch_date_displayed . '</b>' . '</td>';
 	echo '</tr>';
+
+	//get the list of employess having schedules on the given date
+	$queryStr = 'SELECT EMP_ID, CONCAT(EMPLOYEES.EMP_FIRST_NAME, " ", EMPLOYEES.EMP_LAST_NAME) AS EMP_NAME '. 
+				'FROM EMPLOYEES WHERE EMP_ID IN (SELECT DISTINCT EMP_ID FROM EMPLOYEE_SCHEDULE ' .
+				'WHERE (SCH_DATE = "' . $sch_date . '") ORDER BY EMP_ID)';
+	$queryStr = $queryStr . ';';
+	//if debug on, display [queryStr]
+	displayQueryStr($queryStr, $debug_on);
+	//execute query and get the results
+	$employees = getResult($queryStr);
+	//the number of rows in [employees]
+	$employeesNum = mysqli_num_rows($employees);
+
+	//if no employee having having schedules on the given date
+	if ($employeesNum == 0)
+	{
+		echo '<tr>';
+		echo '<td colspan="53" style="text-align: left;">' . 'No schedule exists!' . '</td>';
+		echo '</tr>';
+
+		//remember to terminate the table before existing
+		echo '</table>';
+
+		//terminate the function here!
+		return;
+	}
+
+	//else: exists employee(s) having having schedules on the given date
+
 
 	//print emloyee name column header
 	echo '<tr>';
@@ -184,13 +213,14 @@ function createScheduleOfDay($sch_date_time, $debug_on)
 
 	//print time slot header
 
+	//get the detailed list of time slots
 	$queryStr = 'SELECT LPAD(START_TIME_HOUR,2,"0"), LPAD(START_TIME_MIN,2,"0") ' .
 				'FROM TIME_SLOTS ORDER BY START_TIME_HOUR, START_TIME_MIN;';
 	//if debug on, display [queryStr]
 	displayQueryStr($queryStr, $debug_on);
-	//execute quyery and get the results
+	//execute query and get the results
 	$timeSlots = getResult($queryStr);
-	//the number of rows in [employees]
+	//the number of rows in [timeSlots]
 	$timeSlotsNum = mysqli_num_rows($timeSlots);
 
 	for ($j = 1; $j <= $timeSlotsNum; $j = $j + 1)
@@ -215,21 +245,6 @@ function createScheduleOfDay($sch_date_time, $debug_on)
 
 	//print schedule for each employee
 
-	$queryStr = 'SELECT EMP_ID, CONCAT(EMPLOYEES.EMP_FIRST_NAME, " ", EMPLOYEES.EMP_LAST_NAME) AS EMP_NAME '. 
-				'FROM EMPLOYEES WHERE EMP_ID IN (SELECT DISTINCT EMP_ID FROM EMPLOYEE_SCHEDULE ' .
-				'WHERE (SCH_DATE = "' . $sch_date . '") ORDER BY EMP_ID)';
-	$queryStr = $queryStr . ';';
-
-	//if debug on, display [queryStr]
-	displayQueryStr($queryStr, $debug_on);
-
-	//*** 2. execute quyery and get the results
-	$employees = getResult($queryStr);
-
-	//the number of rows in [employees]
-	$employeesNum = mysqli_num_rows($employees);
-
-
 	for ($j = 1; $j <= $timeSlotsNum; $j = $j + 1)
 	{
 			$employeesNumInTimeSlot[$j]=0;
@@ -246,26 +261,18 @@ function createScheduleOfDay($sch_date_time, $debug_on)
 		echo '<tr>';
 
 		echo '<td style="padding-right:5px;">' .  $currentEmployee_EMP_NAME . '</td>';
-
-		/*
-		$queryStr = 'SELECT EMPLOYEE_SCHEDULE.TS_ID, EMPLOYEE_SCHEDULE.TS_STATUS_ID, TIME_SLOTS_STATUS.ICON_URL ' .
-					'FROM EMPLOYEE_SCHEDULE, TIME_SLOTS_STATUS WHERE (EMPLOYEE_SCHEDULE.EMP_ID = ' . $currentEmployee_EMP_ID . ') AND '.
-					'(EMPLOYEE_SCHEDULE.SCH_DATE = "' . $sch_date . '") AND (EMPLOYEE_SCHEDULE.TS_STATUS_ID = TIME_SLOTS_STATUS.TS_STATUS_ID) ' . 
-					'ORDER BY EMPLOYEE_SCHEDULE.TS_ID ASC';
-		*/
+		
+		//get schedule time slot segments of current employee
 		$queryStr = 'SELECT TS_ID_BEGIN, TS_ID_END FROM EMPLOYEE_SCHEDULE WHERE ' .
 					'(EMP_ID = ' . $currentEmployee_EMP_ID . ') AND (SCH_DATE = "' . $sch_date . '")  ORDER BY TS_ID_BEGIN ASC'; 
 		$queryStr = $queryStr . ';';
-
 		//if debug on, display [queryStr]
 		displayQueryStr($queryStr, $debug_on);
-
-		//execute quyery and get the results
+		//execute query and get the results
 		$scheduledTimeSlotSegments = getResult($queryStr);
 
 		//the number of segments in [scheduledTimeSlotSegments]
 		$scheduledTimeSlotSegmentsNum = mysqli_num_rows($scheduledTimeSlotSegments);
-
 		
 		if ($scheduledTimeSlotSegmentsNum >= 1)
 		{
@@ -363,7 +370,7 @@ function createScheduleOfDay($sch_date_time, $debug_on)
 
 	echo '</table>';
 
-}
+}//createScheduleOfDay()
 
 
 //******************************************************
