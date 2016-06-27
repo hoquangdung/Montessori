@@ -13,7 +13,7 @@ function getMondayOfWeek($from_date_str)
 	//get the day of week String from [from_date]
 	$day_of_week_str = $from_date->format("l");
 
-	echo '------------ From date (day of week): ' . $day_of_week_str . '</br>';
+	//echo '------------ From date (day of week): ' . $day_of_week_str . '</br>';
 
 	switch ($day_of_week_str)
 	{
@@ -44,11 +44,11 @@ function getMondayOfWeek($from_date_str)
 	
 	$Monday_date = new DateTime($from_date->format("Y-m-d"));
 
-	echo '------------ From date: ' . $from_date->format("l, Y-m-d") . '</br>';
+	//echo '------------ From date: ' . $from_date->format("l, Y-m-d") . '</br>';
 
 	$Monday_date->sub(new DateInterval('PT' . $time_span . 'S'));
 
-	echo '------------ Monday date: ' . $Monday_date->format("l, Y-m-d") . '</br>';
+	//echo '------------ Monday date: ' . $Monday_date->format("l, Y-m-d") . '</br>';
 
 	return ($Monday_date);
 
@@ -198,7 +198,7 @@ function printDaysOfWeekHeader($Monday_date)
 
 	echo '<tr>';
 	//an empty row (employees name rows to follow)
-	echo '<th style="border: none; background-color: white"></th>';
+	echo '<th style="border-left: 1px solid white; border-top: 1px solid white; background-color: white;"></th>';
 	//for each day of week
 	for ($day_of_week = 0; $day_of_week < 5; $day_of_week++)
 	{
@@ -228,7 +228,7 @@ function printScheduleParamsHeader()
 {
 	echo '<tr>';
 	//an empty row (employees name rows to follow)
-	echo '<td style="border: none; background-color: white"></td>';
+	echo '<td style="border: 1px solid gray; background-color: white; ; font-weight: bold;">Employee</td>';
 	//for each day of week
 	for ($day_of_week = 0; $day_of_week < 5; $day_of_week++)
 	{
@@ -620,6 +620,104 @@ function createScheduleOfDay($sch_date_time, $debug_on)
 	echo '</table>';
 
 }//createScheduleOfDay()
+
+
+//update weekly schedule from the submitted to DB
+function updateWeeklySchedule($Monday_date,
+	 						  $all_employees_id,
+	 						  $start_time,
+	 						  $end_time,
+	 						  $pause_time,
+	 						  $updated_by_emp_id,
+	 						  $debug_on	 						  
+							 )
+{
+	/**/
+	//debug
+
+	echo '** updateWeeklySchedule() <br/><br/>';
+
+	echo 'Monday_date: ' . $Monday_date->format("l, d M Y") . '<br/><br/>';
+	echo 'all_employees_id: ';
+	print_r($all_employees_id);
+	echo '<br/><br/>';
+	
+	echo 'start_time: ';
+	print_r($start_time);
+	echo '<br/><br/>';
+	
+	echo 'end_time: ';
+	print_r($end_time);
+	echo '<br/><br/>';
+	
+	echo 'pause_time: ';
+	print_r($pause_time);
+	echo '<br/><br/>';
+	/**/
+
+	$now_date_time = new DateTime();
+
+	$day_of_week_num = 5;
+	$one_day_time_span = 24 * 60 * 60;
+
+	//for each employee in the list
+	$emp = 0;
+	foreach ($all_employees_id as $employees_id)
+	{
+		//for each of 5 days of the week
+		$curr_date = new DateTime($Monday_date->format("Y-m-d"));			
+		for ($day_of_week = 0; $day_of_week < $day_of_week_num; $day_of_week++)
+		{
+			/**/
+			//debug
+			echo $employees_id . ', ' . 
+			$start_time[$emp][$day_of_week] . ', ' . 
+			($end_time[$emp][$day_of_week] - 1) . ', ' .
+			$pause_time [$emp][$day_of_week] . ', ' .
+			$curr_date->format("Y-m-d") . ', ' . 
+			$updated_by_emp_id .  ', ' .
+			$now_date_time->format("Y-m-d H:i:s") .  ', ' .
+			get_client_ip() . '<br/>';
+			/**/
+
+			//1. delete existing schedule of the current employee on the current date (if there is any) 
+			$queryStr = 'DELETE FROM EMPLOYEE_SCHEDULE WHERE (EMP_ID = '. $employees_id . ') AND ' .
+							'( SCH_DATE = "' . $curr_date->format("Y-m-d") . '");';
+			//if debug on, display [queryStr]
+			displayQueryStr($queryStr, $debug_on);
+			//execute query and get the results
+			$results = getResult($queryStr);
+
+			//2. update/insert existing (if there is any)/new schedule of the current employee on the current date 
+			$queryStr = 'INSERT INTO EMPLOYEE_SCHEDULE (EMP_ID, TS_ID_BEGIN, TS_ID_END, TS_PAUSE_UNITS, SCH_DATE, ' . 
+							'UPDATED_BY_EMP_ID, UPDATED_ON_DATE_TIME, UPDATED_AT_IP_ADDR) VALUES ' .
+							'(' . $employees_id . ', ' . 
+							$start_time[$emp][$day_of_week] . ', ' .
+							($end_time[$emp][$day_of_week] - 1) . ', ' .
+							$pause_time [$emp][$day_of_week] . ', ' .
+							'"' . $curr_date->format("Y-m-d") . '"' . ', ' .
+							$updated_by_emp_id . ', ' .
+							'NOW()' . ', ' . 
+							'"' . get_client_ip() . '"' .
+							');';
+			//if debug on, display [queryStr]
+			displayQueryStr($queryStr, $debug_on);
+			//execute query and get the results
+			$results = getResult($queryStr);
+			
+			//move to the next day
+			$curr_date->add(new DateInterval('PT'.$one_day_time_span.'S'));
+		
+		}//for each of 5 days of the week
+
+		echo '<br/>';
+
+		//move the next employee
+		$emp++;
+
+	}//for each employee in the list
+
+}//updateWeeklySchedule()
 
 
 

@@ -23,6 +23,9 @@ INSERT INTO `employee_webpage` (`EMP_ID`, `PAGE_ID`, `GRANTED_DATE`, `NOTES`) VA
 (8, 4004, '2015-06-10 12:30:00', '');
 
 
+INSERT INTO `employee_schedule` (`EMP_ID`, `TS_ID_BEGIN`, `TS_ID_END`, `TS_PAUSE_UNITS`, `SCH_DATE`, `UPDATED_BY_EMP_ID`, `UPDATED_ON_DATE_TIME`, `UPDATED_AT_IP_ADDR`, `NOTES`) VALUES
+(2, 11, 44, 2, '2016-06-28', 1, '2016-06-25 17:49:26', '192.168.0.42', '');
+
 #########################
 #########################
 

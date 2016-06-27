@@ -40,14 +40,14 @@ if (isset($_SESSION['LoggedIn_EMP_ID']))
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//[date_selection] form
 	
-	//if [date_selection] form submitted	
+	//case 1: if [date_selection] form submitted	
 	if (isset($_POST['from_date']))
 	{
 		//get the submitted date
 		//and then get Monday of corresponding week
 		$from_date = getMondayOfWeek($_POST['from_date']);	
 	}
-	//else: [date_selection] form is not submitted
+	//case 2: [date_selection] form is not submitted
 	// but the [Update Weekly Schedule] form is submitted
 	else if ((isset($_POST['update'])) && 
 		($_POST['update'] == "Update Weekly Schedule"))
@@ -56,10 +56,8 @@ if (isset($_SESSION['LoggedIn_EMP_ID']))
 		if (isset($_POST['Monday_date_str']))
 		{
 			$Monday_date_str = $_POST['Monday_date_str'];
-
-			echo 'Monday_date_str: ' . $Monday_date_str;
-			echo '<br/><br/>';
-
+			//echo 'Monday_date_str: ' . $Monday_date_str;
+			//echo '<br/><br/>';
 			$from_date = new DateTime($Monday_date_str);
 		}
 		else
@@ -67,9 +65,11 @@ if (isset($_SESSION['LoggedIn_EMP_ID']))
 			echo 'Monday_date_str: ' . 'undefined' . '<br/>';
 		}
 	}
-	//neither [date_selection] nor [Update Weekly Schedule] is submitted
+	//case 3: neither [date_selection] nor [Update Weekly Schedule] is submitted
 	else
 	{
+		echo '[date_selection] form not submitted' . '<br/>';
+
 		//get the date of today
 		$today_date = new DateTime();			
 		//then get the Monday of this week
@@ -88,7 +88,7 @@ if (isset($_SESSION['LoggedIn_EMP_ID']))
 	//Y-m-d (only this format is understood by web browser) => mm/dd/yyyy when displayed on web
 	echo '<form action="employee_schedule_weekly.php" method="post">';
 	echo '<label for="from_date">Start Monday </label><input type="date" id="from_date" name="from_date"' .
-			'value="' . $from_date->format("Y-m-d") . '"><br/><br/>';		
+			'value="' . $from_date->format("Y-m-d") . '"> ';		
 	echo '<input type="submit" value="View/Update Schedule">';
 	echo '</form>';
 
@@ -112,11 +112,7 @@ if (isset($_SESSION['LoggedIn_EMP_ID']))
 		//parameter: [all_employees_id] from the submitted form
 		if (isset($_POST['all_employees_id']))
 		{
-			$all_employees_id = $_POST['all_employees_id'];
-
-			echo 'all_employees_id: ';
-			print_r($all_employees_id);
-			echo '<br/><br/>';
+			$all_employees_id = $_POST['all_employees_id'];			
 		}
 		else
 		{
@@ -126,11 +122,7 @@ if (isset($_SESSION['LoggedIn_EMP_ID']))
 		//parameter: [start_time] from the submitted form
 		if (isset($_POST['start_time']))
 		{
-			$start_time = $_POST['start_time'];
-
-			echo 'start_time: ';
-			print_r($start_time);
-			echo '<br/><br/>';
+			$start_time = $_POST['start_time'];			
 		}
 		else
 		{
@@ -140,11 +132,7 @@ if (isset($_SESSION['LoggedIn_EMP_ID']))
 		//parameter: [end_time] from the submitted form
 		if (isset($_POST['end_time']))
 		{
-			$end_time = $_POST['end_time'];
-
-			echo 'end_time: ';
-			print_r($end_time);
-			echo '<br/><br/>';
+			$end_time = $_POST['end_time'];			
 		}
 		else
 		{
@@ -154,11 +142,7 @@ if (isset($_SESSION['LoggedIn_EMP_ID']))
 		//parameter: [pause_time] from the submitted form
 		if (isset($_POST['pause_time']))
 		{
-			$pause_time = $_POST['pause_time'];
-
-			echo 'pause_time: ';
-			print_r($pause_time);
-			echo '<br/><br/>';
+			$pause_time = $_POST['pause_time'];			
 		}
 		else
 		{
@@ -166,6 +150,16 @@ if (isset($_SESSION['LoggedIn_EMP_ID']))
 		}		
 
 		echo '<br/>';
+
+		//update weekly schedule from the submitted to DB
+		updateWeeklySchedule($Monday_date,
+							 $all_employees_id,
+							 $start_time,
+							 $end_time,
+							 $pause_time,
+							 $_SESSION['LoggedIn_EMP_ID'],
+							 true
+							 );
 
 		//populate [Update Weekly Schedule] form
 		createWeeklyScheduleForm($Monday_date, true);
@@ -177,10 +171,11 @@ if (isset($_SESSION['LoggedIn_EMP_ID']))
 	{		
 		echo '[Update Weekly Schedule] form not submitted' . '<br/>'; 
 
-		echo '_POST: '; 
-		print_r($_POST);
+		//echo '_POST: '; 
+		//print_r($_POST);
+		//echo '<br/>';
 		
-		echo '<br/><br/>';
+		echo '<br/>';
 
 		//populate [Update Weekly Schedule] form
 		createWeeklyScheduleForm($Monday_date, true);
