@@ -1,0 +1,25 @@
+table.weeklySchedule {  
+	border-collapse: collapse;
+    border: 1px solid red;
+    padding: 2px;
+	margin: 0;
+}
+
+table.weeklySchedule th {
+	border: 1px solid gray;
+	text-align: center;	
+}
+
+table.weeklySchedule tr {
+	border: 1px solid gray;
+	padding: 2px;
+	margin: 0;
+	text-align: center;	
+}
+
+table.weeklySchedule td {
+	border: 1px solid gray;
+	padding: 2px;
+	margin: 0;
+	text-align: center;	
+}

@@ -168,7 +168,7 @@ function createScheduleOfDay($sch_date_time, $debug_on)
 	
 	echo '<br/><br/>';
 
-	echo '<table>';
+	echo '<table class="scheduleView">';
 
 	//print table caption dislaying the schedule date
 	$sch_date = $sch_date_time->format("Y-m-d");
@@ -361,7 +361,8 @@ function createScheduleOfDay($sch_date_time, $debug_on)
 		{
 			$k = $k + 1;
 		}
-		echo '<td colspan="' . $k . '" style="background-color: gray; text-align: center;">' . $employeesNumInTimeSlot[$j] . '</td>';
+		echo '<td colspan="' . $k . '" style="background-color: gray; text-align: center;">' . 
+													$employeesNumInTimeSlot[$j] . '</td>';
 
 		$j = $j + $k;	
 	}
@@ -1307,3 +1308,5 @@ function get_client_ip() {
     return $ipaddress;
     
 }//get_client_ip()
+
+?>

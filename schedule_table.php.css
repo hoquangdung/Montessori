@@ -1,4 +1,5 @@
-table {  
+table {
+    /*border: 1px solid gray;*/
     border-collapse: collapse;
     padding: 0;
 	margin: 0;
@@ -29,4 +30,3 @@ td:hover{
 	border-width: 2px;		
 	border-color: gray;
 }
-

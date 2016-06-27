@@ -14,4 +14,13 @@ if (strpos($_SERVER["PHP_SELF"], "/montessori/login.php") === false)
 PHP code is always executed by server
 http://www.randomsnippets.com/2008/02/21/how-to-dynamically-add-form-elements-via-javascript/
 
+remember to close all tags if function terminates before its end
+
+1. grouping (green, yellow to arrange lunch, ...)
+2. print out attendance summary of students for parent approvals
+3. student-teachear schedule to suggest schedules (schedule only made by boss)
+4. medical/allergy special notes for kids
+5. working hours and payments (per week, per two week, ...) based on check in/out
+
+
 
