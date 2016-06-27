@@ -33,11 +33,10 @@ if (isset($_SESSION['LoggedIn_EMP_ID']))
 
 	//display 
 	require_once("db_operations.php");
+	require_once("schedule_utils.php");
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	
-	
+		
 
 	if ((isset($_POST['from_date'])) && (isset($_POST['to_date'])))
 	{

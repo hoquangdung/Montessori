@@ -14,6 +14,12 @@ if (strpos($_SERVER["PHP_SELF"], "/montessori/login.php") === false)
 PHP code is always executed by server
 http://www.randomsnippets.com/2008/02/21/how-to-dynamically-add-form-elements-via-javascript/
 
+keypad:
+http://keith-wood.name/keypad.html
+http://jsfiddle.net/XGundam05/cdmej/
+
+
+
 remember to close all tags if function terminates before its end
 
 1. grouping (green, yellow to arrange lunch, ...)
