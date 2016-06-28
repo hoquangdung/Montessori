@@ -33,3 +33,7 @@ table.weeklySchedule td {
 	margin: 0;
 	text-align: center;	
 }
+
+select {
+	font-size: small;
+}

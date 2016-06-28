@@ -120,6 +120,8 @@ function createWeeklyScheduleTable($Monday_date, $debug_on)
 	//print schedule parameters header
 	printScheduleParamsHeader();
 	
+	$one_day_time_span = 24 * 60 * 60;
+
 	//for each emoployee
 	for ($emp = 0; $emp < $allEmployeesNum; $emp++)
 	{
@@ -133,18 +135,54 @@ function createWeeklyScheduleTable($Monday_date, $debug_on)
 
 		//print the name of the current employee
 		printNameThisEmployee($emp, $currentEmployee_EMP_ID, $currentEmployee_EMP_NAME);
-	
+
+		$curr_date = new DateTime($Monday_date->format("Y-m-d"));			
+		
 		//for each day of week: print 4 columns
 		for ($day_of_week = 0; $day_of_week < 5; $day_of_week++)
 		{
 			
+			//get the schedule of this employees on this day (if there is any)
+			$queryStr = 'SELECT TS_ID_BEGIN, TS_ID_END, TS_PAUSE_UNITS, UPDATED_ON_DATE_TIME ' .
+						'FROM EMPLOYEE_SCHEDULE ' .
+						'WHERE (EMP_ID = ' . $currentEmployee_EMP_ID . ') AND ' .
+						'(SCH_DATE = "' .  $curr_date->format("Y-m-d") . '");';
+			//if debug on, display [queryStr]
+			displayQueryStr($queryStr, $debug_on);
+			//execute query and get the results
+			$schedules = getResult($queryStr);
+			//the number of rows in [employees]
+			$schedulesNum = mysqli_num_rows($schedules);
+
+			//if schdule of this employee on this day does not exists
+			if ($schedulesNum == 0)
+			{
+				$pre_selected_start_TS_ID	= -1;
+				$pre_selected_end_TS_ID		= -1;
+				$pre_selected_pause_time	= -1;
+				$calculated_hours_15m_units	= -1;
+			}
+			else if ($schedulesNum == 1)
+			{
+				$currentSchedule = mysqli_fetch_row($schedules);
+				$pre_selected_start_TS_ID	= $currentSchedule[0];
+				$pre_selected_end_TS_ID		= $currentSchedule[1] + 1;
+				$pre_selected_pause_time	= $currentSchedule[2];
+				$calculated_hours_15m_units	= ($pre_selected_end_TS_ID - $pre_selected_start_TS_ID);
+
+			}
+			else 
+			{
+				echo 'Some errors with schedule! <br/>';
+			}
+
 			//column 1: start time
 			createScheduleTimeThisEmployee($timeSlots,
 										   $timeSlotsNum,
 										   $emp,
 										   $day_of_week,
 										   "start_time",
-										   9);
+										   $pre_selected_start_TS_ID);
 			mysqli_data_seek($timeSlots, 0);
 
 			//column 2: end time
@@ -153,14 +191,20 @@ function createWeeklyScheduleTable($Monday_date, $debug_on)
 										   $emp,
 										   $day_of_week,
 										   "end_time",
-										   41);
+										   $pre_selected_end_TS_ID);
 			mysqli_data_seek($timeSlots, 0);
 			
 			//column 3: pause time
-			createPauseTimeThisEmployee($emp, $day_of_week);
+			createPauseTimeThisEmployee($emp, $day_of_week,
+										$pre_selected_pause_time);
 			
 			//column 3: total hours
-			createHoursThisEmployee($emp, $day_of_week);
+			createHoursThisEmployee($emp, $day_of_week,
+									$pre_selected_pause_time,
+									$calculated_hours_15m_units);
+
+			//*** now, move to the next day
+			$curr_date->add(new DateInterval('PT'.$one_day_time_span.'S'));
 
 						
 		}//for($day_of_week)
@@ -310,13 +354,13 @@ function createScheduleTimeThisEmployee($timeSlots,
 	if ($currentTimeSlot_TS_ID == $pre_selected_TS_ID)
 	{						
 		echo '<option value='. $currentTimeSlot_TS_ID . ' selected>' . 
-				'X' .
+				'x' .
 			 '</option>';
 	}
 	else
 	{
 		echo '<option value='. $currentTimeSlot_TS_ID . '>' . 
-				'X' .
+				'x' .
 			 '</option>';
 	}
 	//end special item
@@ -353,7 +397,7 @@ function createScheduleTimeThisEmployee($timeSlots,
 }//createScheduleTimeThisEmployee()
 
 
-function createPauseTimeThisEmployee($emp, $day_of_week)
+function createPauseTimeThisEmployee($emp, $day_of_week, $pre_selected_pause_time)
 {	
 	if ($day_of_week % 2 == 0)
 	{
@@ -370,39 +414,68 @@ function createPauseTimeThisEmployee($emp, $day_of_week)
 					'style="background: white">'; 
 	}
 	
+	$pauses = array("00:00", "00:30", "01:00", "01:30",
+				 	"02:00", "02:30", "03:00", "03:30", "04:00");
+
 	//a special item to mark that this param is not yet intitialized
-	echo '<option value=-1>X</option>';
+	if ($pre_selected_pause_time == -1)
+	{
+		echo '<option value=-1 selected>x</option>';
+	}
+	else
+	{
+		echo '<option value=-1>X</option>';
+	}
 	//end special item
-	echo '<option value=0>00:00</option>';
-	echo '<option value=1 selected>00:30</option>';
-	echo '<option value=2>01:00</option>';
-	echo '<option value=3>01:30</option>';
-	echo '<option value=4>02:00</option>';
-	echo '<option value=5>02:30</option>';
-	echo '<option value=6>03:00</option>';
-	echo '<option value=7>03:30</option>';
-	echo '<option value=8>04:00</option>';
+	for ($i = 0; $i < 9; $i++)
+	{
+		if ($i == $pre_selected_pause_time)
+		{
+			echo '<option value=' . $i . ' selected>' . $pauses[$i] . '</option>';
+		}
+		else
+		{
+			echo '<option value=' . $i . '>' . $pauses[$i] . '</option>';
+		}
+
+	}//for
 	echo '</select>';
 	echo '</td>';
 
 }//createPauseTimeThisEmployee()
 
 
-function createHoursThisEmployee($emp, $day_of_week)
+function createHoursThisEmployee($emp, $day_of_week,
+								 $pre_selected_pause_time,
+								 $calculated_hours_15m_units)
 {	
+	if ($pre_selected_pause_time == -1)
+	{
+		$calculated_hours_mins_str = "-----";
+	}
+	else
+	{
+		$total_min = $calculated_hours_15m_units * 15 - 
+	 					$pre_selected_pause_time * 30;
+		$calculated_hours_mins_str = str_pad(floor($total_min/60), 2, "0", STR_PAD_LEFT) . ':' . 
+						str_pad(($total_min - 60 * floor($total_min/60)), 2, "0", STR_PAD_LEFT); 
+	}
+
 	if ($day_of_week % 2 == 0)
 	{
 		echo '<td style="border: 1px solid gray; ' .
 			        'background-color: rgb(230, 255, 230); text-align: center;">';		
 		echo '<label name="total_hours[' . $emp . '][]" ' .
-					'style="background: rgb(230, 255, 230); color: gray; width: 50px;">----</label>';          
+					'style="background: rgb(230, 255, 230); color: gray; width: 50px;">' . 
+					$calculated_hours_mins_str . '</label>';          
 	}
 	else
 	{
 		echo '<td style="border: 1px solid gray; ' .
 			        'background-color: white; text-align: center;">';
 		echo '<label name="total_hours[' . $emp . '][]" ' .
-					'style="background: white; color: gray; width: 50px;">----</label>'; 
+					'style="background: white; color: gray; width: 50px;">' . 
+					$calculated_hours_mins_str . '</label>'; 
 	}
 	
 	echo '</td>';
@@ -632,7 +705,7 @@ function updateWeeklySchedule($Monday_date,
 	 						  $debug_on	 						  
 							 )
 {
-	/**/
+	/**
 	//debug
 
 	echo '** updateWeeklySchedule() <br/><br/>';
@@ -660,6 +733,8 @@ function updateWeeklySchedule($Monday_date,
 	$day_of_week_num = 5;
 	$one_day_time_span = 24 * 60 * 60;
 
+	$total_updates = 0;
+
 	//for each employee in the list
 	$emp = 0;
 	foreach ($all_employees_id as $employees_id)
@@ -668,18 +743,19 @@ function updateWeeklySchedule($Monday_date,
 		$curr_date = new DateTime($Monday_date->format("Y-m-d"));			
 		for ($day_of_week = 0; $day_of_week < $day_of_week_num; $day_of_week++)
 		{
-			/**/
+			/**
 			//debug
 			echo $employees_id . ', ' . 
 			$start_time[$emp][$day_of_week] . ', ' . 
 			($end_time[$emp][$day_of_week] - 1) . ', ' .
-			$pause_time [$emp][$day_of_week] . ', ' .
+			$pause_time[$emp][$day_of_week] . ', ' .
 			$curr_date->format("Y-m-d") . ', ' . 
 			$updated_by_emp_id .  ', ' .
 			$now_date_time->format("Y-m-d H:i:s") .  ', ' .
 			get_client_ip() . '<br/>';
 			/**/
 
+			/*
 			//1. delete existing schedule of the current employee on the current date (if there is any) 
 			$queryStr = 'DELETE FROM EMPLOYEE_SCHEDULE WHERE (EMP_ID = '. $employees_id . ') AND ' .
 							'( SCH_DATE = "' . $curr_date->format("Y-m-d") . '");';
@@ -687,8 +763,10 @@ function updateWeeklySchedule($Monday_date,
 			displayQueryStr($queryStr, $debug_on);
 			//execute query and get the results
 			$results = getResult($queryStr);
+			*/
 
-			//2. update/insert existing (if there is any)/new schedule of the current employee on the current date 
+			//2. update/insert existing (if there is any)/new schedule of the current employee on the current date
+			/* 
 			$queryStr = 'INSERT INTO EMPLOYEE_SCHEDULE (EMP_ID, TS_ID_BEGIN, TS_ID_END, TS_PAUSE_UNITS, SCH_DATE, ' . 
 							'UPDATED_BY_EMP_ID, UPDATED_ON_DATE_TIME, UPDATED_AT_IP_ADDR) VALUES ' .
 							'(' . $employees_id . ', ' . 
@@ -700,22 +778,61 @@ function updateWeeklySchedule($Monday_date,
 							'NOW()' . ', ' . 
 							'"' . get_client_ip() . '"' .
 							');';
-			//if debug on, display [queryStr]
-			displayQueryStr($queryStr, $debug_on);
-			//execute query and get the results
-			$results = getResult($queryStr);
+			*/
+
+			//if valid data
+			if (($start_time[$emp][$day_of_week] >= 1) &&  
+				($end_time[$emp][$day_of_week] >= 1) &&
+				($pause_time[$emp][$day_of_week] >= 0) &&
+				($end_time[$emp][$day_of_week] > $start_time[$emp][$day_of_week]) &&
+				(($end_time[$emp][$day_of_week] - $start_time[$emp][$day_of_week]) * 15 - 
+					$pause_time[$emp][$day_of_week] * 30 > 0))
+			{
+
+				$queryStr = 'INSERT INTO EMPLOYEE_SCHEDULE ' .
+								'(EMP_ID, TS_ID_BEGIN, TS_ID_END, TS_PAUSE_UNITS, SCH_DATE, ' . 
+								'UPDATED_BY_EMP_ID, UPDATED_ON_DATE_TIME, UPDATED_AT_IP_ADDR) ' .
+							'VALUES ' .
+								'(' . $employees_id . ', ' . 
+								$start_time[$emp][$day_of_week] . ', ' .
+								($end_time[$emp][$day_of_week] - 1) . ', ' .
+								$pause_time[$emp][$day_of_week] . ', ' .
+								'"' . $curr_date->format("Y-m-d") . '"' . ', ' .
+								$updated_by_emp_id . ', ' .
+								'NOW()' . ', ' . 
+								'"' . get_client_ip() . '"' .
+								') ' . 
+							'ON DUPLICATE KEY UPDATE ' .
+								'TS_ID_BEGIN = VALUES(TS_ID_BEGIN), ' .
+								'TS_ID_END = VALUES(TS_ID_END), ' .
+								'TS_PAUSE_UNITS = VALUES(TS_PAUSE_UNITS), ' .
+								'UPDATED_BY_EMP_ID = VALUES(UPDATED_BY_EMP_ID), ' .
+								'UPDATED_ON_DATE_TIME = VALUES(UPDATED_ON_DATE_TIME), '.
+								'UPDATED_AT_IP_ADDR = VALUES(UPDATED_AT_IP_ADDR);';
+
+
+				//if debug on, display [queryStr]
+				displayQueryStr($queryStr, $debug_on);
+				//execute query and get the results
+				$results = getResult($queryStr);
+
+				$total_updates++;
 			
-			//move to the next day
+			}//if valid data
+			
+			//** move to the next day
 			$curr_date->add(new DateInterval('PT'.$one_day_time_span.'S'));
 		
 		}//for each of 5 days of the week
 
-		echo '<br/>';
+		//echo '<br/>';
 
 		//move the next employee
 		$emp++;
 
-	}//for each employee in the list
+	}//for each employee
+
+	echo '** TOTAL: ' . $total_updates . ' update(s) **<br/>';
 
 }//updateWeeklySchedule()
 
