@@ -55,13 +55,13 @@ function getMondayOfWeek($from_date_str)
 }//getMondayOfWeek()
 
 
-//populate [Update Weekly Schedule] form
+//populate [Update this Week Schedule] form
 function createWeeklyScheduleForm($Monday_date, $debug_on)
 {
 	
 	echo '<b>Schedule of the Week: ' . $Monday_date->format("l, d M Y") . '</b><br/><br/>';
 
-	echo '<form action="employee_schedule_weekly.php" method="post">';
+	echo '<form name="weekly_schedule_update" action="employee_schedule_weekly.php" method="post">';
 
 	//create [Monday_date] hidden form param for later DB queris
 	//when schedule form is submitted
@@ -73,7 +73,8 @@ function createWeeklyScheduleForm($Monday_date, $debug_on)
 
 	echo '<br/>';
 
-	echo '<input type="submit" name="update" value="Update Weekly Schedule">';
+	echo '<button type="submit" id="update" name="schedule_update_button" ' .
+			'value="Update this Week Schedule">Update this Week Schedule</button>';
 
 	echo '</form>';
 
@@ -242,7 +243,7 @@ function printDaysOfWeekHeader($Monday_date)
 
 	echo '<tr>';
 	//an empty row (employees name rows to follow)
-	echo '<th style="border-left: 1px solid white; border-top: 1px solid white; background-color: white;"></th>';
+	echo '<th style="border-left: 1px solid white; border-top: 1px solid white; background-color: rgb(255, 255, 204);"></th>';
 	//for each day of week
 	for ($day_of_week = 0; $day_of_week < 5; $day_of_week++)
 	{
@@ -314,7 +315,7 @@ function printNameThisEmployee($emp, $emp_id, $emp_name)
 	if ($emp % 2 == 0)
 	{
 		echo '<td style="border: 1px solid gray; ' .
-					'background-color: rgb(255, 204, 153); text-align: left; font-weight: normal;">' .
+					'background-color: #d3d3d3; text-align: left; font-weight: normal;">' .
 					$emp_name . '</td>';
 	}
 	else
@@ -487,7 +488,9 @@ function createHoursThisEmployee($emp, $day_of_week,
 function createScheduleOfDay($sch_date_time, $debug_on)
 {	
 	
-	echo '<br/><br/>';
+	//echo '<br/>';
+
+	echo '<div class="viewUpdate" style="padding-left: 0px;">';
 
 	echo '<table class="scheduleView">';
 
@@ -614,12 +617,12 @@ function createScheduleOfDay($sch_date_time, $debug_on)
 			//if this employee does not work in this time slot
 			if ($j < $currentscheduledTimeSlotSegment_TS_ID_BEGIN)
 			{
-				echo '<td><a href=""><img src="images/icons/time_slot_out.png" height=40" width="20"></a></td>';				
+				echo '<td><a href=""><img src="images/icons/time_slot_out.png" height=30" width="20"></a></td>';				
 			}
 			//else if this employee works in this time slot
 			else if ($j <= $currentscheduledTimeSlotSegment_TS_ID_END)
 			{
-				echo '<td><a href=""><img src="images/icons/time_slot_in.png" height=40" width="20"></a></td>';	
+				echo '<td><a href=""><img src="images/icons/time_slot_in.png" height=30" width="20"></a></td>';	
 				$employeesNumInTimeSlot[$j] = $employeesNumInTimeSlot[$j] + 1;
 			}
 			//else: move to the next scheduled time slot segment to check
@@ -689,8 +692,9 @@ function createScheduleOfDay($sch_date_time, $debug_on)
 	}
 	echo '</tr>';
 
-
 	echo '</table>';
+
+	echo '</div>';
 
 }//createScheduleOfDay()
 
@@ -755,31 +759,6 @@ function updateWeeklySchedule($Monday_date,
 			get_client_ip() . '<br/>';
 			/**/
 
-			/*
-			//1. delete existing schedule of the current employee on the current date (if there is any) 
-			$queryStr = 'DELETE FROM EMPLOYEE_SCHEDULE WHERE (EMP_ID = '. $employees_id . ') AND ' .
-							'( SCH_DATE = "' . $curr_date->format("Y-m-d") . '");';
-			//if debug on, display [queryStr]
-			displayQueryStr($queryStr, $debug_on);
-			//execute query and get the results
-			$results = getResult($queryStr);
-			*/
-
-			//2. update/insert existing (if there is any)/new schedule of the current employee on the current date
-			/* 
-			$queryStr = 'INSERT INTO EMPLOYEE_SCHEDULE (EMP_ID, TS_ID_BEGIN, TS_ID_END, TS_PAUSE_UNITS, SCH_DATE, ' . 
-							'UPDATED_BY_EMP_ID, UPDATED_ON_DATE_TIME, UPDATED_AT_IP_ADDR) VALUES ' .
-							'(' . $employees_id . ', ' . 
-							$start_time[$emp][$day_of_week] . ', ' .
-							($end_time[$emp][$day_of_week] - 1) . ', ' .
-							$pause_time [$emp][$day_of_week] . ', ' .
-							'"' . $curr_date->format("Y-m-d") . '"' . ', ' .
-							$updated_by_emp_id . ', ' .
-							'NOW()' . ', ' . 
-							'"' . get_client_ip() . '"' .
-							');';
-			*/
-
 			//if valid data
 			if (($start_time[$emp][$day_of_week] >= 1) &&  
 				($end_time[$emp][$day_of_week] >= 1) &&
@@ -791,7 +770,7 @@ function updateWeeklySchedule($Monday_date,
 
 				$queryStr = 'INSERT INTO EMPLOYEE_SCHEDULE ' .
 								'(EMP_ID, TS_ID_BEGIN, TS_ID_END, TS_PAUSE_UNITS, SCH_DATE, ' . 
-								'UPDATED_BY_EMP_ID, UPDATED_ON_DATE_TIME, UPDATED_AT_IP_ADDR) ' .
+								'UPDATED_BY_EMP_ID, UPDATED_ON_DATE_TIME, UPDATED_AT_IP_ADDR) ' . 
 							'VALUES ' .
 								'(' . $employees_id . ', ' . 
 								$start_time[$emp][$day_of_week] . ', ' .
@@ -832,7 +811,7 @@ function updateWeeklySchedule($Monday_date,
 
 	}//for each employee
 
-	echo '** TOTAL: ' . $total_updates . ' update(s) **<br/>';
+	echo 'Confirmation: ' . $total_updates . ' schedule(s) updated on '. (new DateTime())->format("l, d M Y  H:i:s") . '<br/>';
 
 }//updateWeeklySchedule()
 

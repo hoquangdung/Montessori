@@ -11,6 +11,7 @@ session_start();
 	<title>Weekly Schedules of Employees</title>		
 	<link rel="stylesheet" type="text/css" href="schedule_view_table.css">
 	<link rel="stylesheet" type="text/css" href="weekly_schedule_table.css">
+	<link rel="stylesheet" type="text/css" href="weekly_schedule_layout.css">
 	<link rel="stylesheet" type="text/css" href="common.css">
 </head>
 
@@ -20,7 +21,7 @@ session_start();
 	include 'header_log_in_out.php';
 ?>
 
-<div id="main">
+<div class="main">
 
 <?php
 
@@ -28,7 +29,8 @@ session_start();
 if (isset($_SESSION['LoggedIn_EMP_ID']))
 {
 
-	echo '<h2>Weekly Schedules of Employees</h2>';
+	echo '<b>WEEKLY SCHEDULES OF EMPLOYEES</b>';
+	echo '<br/>';
 
 	date_default_timezone_set('America/Toronto');
 
@@ -36,22 +38,68 @@ if (isset($_SESSION['LoggedIn_EMP_ID']))
 	require_once("db_operations.php");
 	require_once("schedule_utils.php");
 
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//check buttons and forms
+
+	if (isset($_POST["date_select_button"]))
+	{
+		switch ($_POST["date_select_button"])
+		{
+			case "View and Update Schedule":
+				echo '[View and Update Schedule] button clicked';
+				break;
+			case "Copy Schedule":
+				echo '[Copy Schedule] button clicked';
+				break;
+			default:
+				echo '[date_select_button] clicked but not known which specific button!';
+		}//switch				
+	}
+	else
+	{
+		echo '[date_select_button] not clicked ...';
+	}
+	echo '<br/>';
+
+	if (isset($_POST["schedule_update_button"]))
+	{
+		switch ($_POST["schedule_update_button"])
+		{
+			case "Update this Week Schedule":
+				echo '[Update this Week Schedule] button clicked';
+				break;
+			default:
+				echo '[schedule_update_button] clicked but not known which specific button!';
+		}//switch		
+	}
+	else
+	{
+		echo '[schedule_update_button] not clicked ...';
+	}
+	echo '<br/>';
+
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//[date_selection] form
+
+	echo '<div class="viewUpdate">';
 	
 	//case 1: if [date_selection] form submitted	
 	if (isset($_POST['from_date']))
 	{
+		//echo '[date_selection] form submitted' . '<br/>';
+
 		//get the submitted date
 		//and then get Monday of corresponding week
 		$from_date = getMondayOfWeek($_POST['from_date']);	
 	}
 	//case 2: [date_selection] form is not submitted
-	// but the [Update Weekly Schedule] form is submitted
-	else if ((isset($_POST['update'])) && 
-		($_POST['update'] == "Update Weekly Schedule"))
+	// but the [weekly_schedule_update] form is submitted
+	else if ((isset($_POST['schedule_update_button'])) && 
+		($_POST['schedule_update_button'] == "Update this Week Schedule"))
 	{
+		//echo '[date_selection] form not submitted' . '<br/>';
+
 		//parameter: [Monday_date] from the submitted form
 		if (isset($_POST['Monday_date_str']))
 		{
@@ -65,10 +113,10 @@ if (isset($_SESSION['LoggedIn_EMP_ID']))
 			echo 'Monday_date_str: ' . 'undefined' . '<br/>';
 		}
 	}
-	//case 3: neither [date_selection] nor [Update Weekly Schedule] is submitted
+	//case 3: neither [date_selection] nor [Update this Week Schedule] is submitted
 	else
 	{
-		echo '[date_selection] form not submitted' . '<br/>';
+		//echo '[date_selection] form not submitted' . '<br/>';
 
 		//get the date of today
 		$today_date = new DateTime();			
@@ -81,28 +129,64 @@ if (isset($_SESSION['LoggedIn_EMP_ID']))
 	//so in order to avoid side-effects, copy before transfer it o function
 	$Monday_date = new DateTime($from_date->format("Y-m-d"));
 
-	echo '<br/>';
+	$one_week_time_span = 7 * 24 * 60 * 60;
+	$from_date_copy_to = new DateTime($from_date->format("Y-m-d"));
+	$from_date_copy_to->add(new DateInterval('PT'. $one_week_time_span .'S'));
+
+	//echo '<br/>';
 		
 	//echo the form to the page with Monday of the current week
 	//** Notes: web browser understands the date format then converts it to its own preference
 	//Y-m-d (only this format is understood by web browser) => mm/dd/yyyy when displayed on web
-	echo '<form action="employee_schedule_weekly.php" method="post">';
-	echo '<label for="from_date">Start Monday </label><input type="date" id="from_date" name="from_date"' .
-			'value="' . $from_date->format("Y-m-d") . '"> ';		
-	echo '<input type="submit" value="View/Update Schedule">';
+
+	echo '<table style="border: none;">';
+
+	echo '<form name="date_selection" action="employee_schedule_weekly.php" method="post">';
+
+	echo '<tr style="border: none;">';
+
+	echo '<td style="border: none; padding-right: 15px;">';			
+	echo '<fieldset id="from_date_update">';
+  	echo '<legend> Select the Week to View/Update </legend>';
+	echo '<label for="from_date">Starting Monday </label>';
+	echo '<input type="date" id="from_date" name="from_date"' .
+			'value="' . $from_date->format("Y-m-d") . '"> ';			
+	echo '<button type="submit" id="view_update" name="date_select_button" ' .
+			'value="View and Update Schedule">View and Update Schedule</button>';
+	echo '</fieldset>';
+	echo '</td>';
+
+	echo '<td style="border: none; padding: 0px;">';
+	echo '<fieldset id="from_date_copy">';
+  	echo '<legend> Select the Week to Copy To </legend>';
+	echo '<label for="from_date_copy_to">Starting Monday </label>';
+	echo '<input type="date" id="from_date_copy_to" name="from_date_copy_to"' .
+			'value="' . $from_date_copy_to->format("Y-m-d") . '"> ';			
+	echo '<button type="submit" id="copy" name="date_select_button" ' .
+			'value="Copy Schedule">Copy Schedule</button>';
+	echo '</fieldset>';	
+	echo '</td>';
+
+	echo '</tr>';
+
 	echo '</form>';
 
-	echo '<br/>';
+	echo '</table>';
 
+	echo '</div>';
+
+
+	echo '<div class="viewUpdate" style="background-color: rgb(255, 255, 204)">';
+	
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	//[Update Weekly Schedule] form
+	//[Update this Week Schedule] form
 
-	//if the [Update Weekly Schedule] form is submitted
-	if ((isset($_POST['update'])) && 
-		($_POST['update'] == "Update Weekly Schedule"))
+	//if the [Update this Week Schedule] form is submitted
+	if ((isset($_POST['schedule_update_button'])) && 
+		($_POST['schedule_update_button'] == "Update this Week Schedule"))
 	{
-		echo '[Update Weekly Schedule] form submitted' . '<br/>';
-		echo '<br/>';
+		//echo '[weekly_schedule_update] form submitted' . '<br/>';
+		//echo '<br/>';
 
 		//check parameters from the form
 
@@ -149,7 +233,7 @@ if (isset($_SESSION['LoggedIn_EMP_ID']))
 			echo 'pause_time: ' . 'undefined' . '<br/>';
 		}		
 
-		echo '<br/>';
+		//echo '<br/>';
 
 		//update weekly schedule from the submitted to DB
 		updateWeeklySchedule($Monday_date,
@@ -161,34 +245,38 @@ if (isset($_SESSION['LoggedIn_EMP_ID']))
 							 true
 							 );
 
-		//populate [Update Weekly Schedule] form
+		//populate [Update this Week Schedule] form
 		createWeeklyScheduleForm($Monday_date, true);
 		 
 	}
 
-	//else: the [Update Weekly Schedule] form is not submitted
+	//else: the [Update this Week Schedule] form is not submitted
 	else
 	{		
-		echo '[Update Weekly Schedule] form not submitted' . '<br/>'; 
+		//echo '[weekly_schedule_update] form not submitted' . '<br/>'; 
 
 		//echo '_POST: '; 
 		//print_r($_POST);
 		//echo '<br/>';
 		
-		echo '<br/>';
+		//echo '<br/>';
 
-		//populate [Update Weekly Schedule] form
+		//populate [Update this Week Schedule] form
 		createWeeklyScheduleForm($Monday_date, true);
 	}
 
+	echo '</div>';
 		
+	
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//graphically display detailed schedule of the selected week: Monday to Friday
+
+	echo '<div class="viewUpdate">';
 	
 	$curr_date = new DateTime($from_date->format("Y-m-d"));
 
-	echo '<br/>';
-	echo '  # Start Monday: ' . $from_date->format("l, Y-m-d") . '<br/>';
+	//echo '<br/>';
+	//echo '  # Start Monday: ' . $from_date->format("l, Y-m-d");
 	
 	//5 days: Monday to Friday	
 	$date_num = 5;
@@ -199,6 +287,8 @@ if (isset($_SESSION['LoggedIn_EMP_ID']))
 		createScheduleOfDay($curr_date, true);
 		$curr_date->add(new DateInterval('PT'.$one_day_time_span.'S'));
 	}
+
+	echo '</div>';
 	
 	
 }//if some user is currently logging in
