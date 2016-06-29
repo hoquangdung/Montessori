@@ -1,3 +1,32 @@
+//update of insert
+$queryStr = 'INSERT INTO EMPLOYEE_SCHEDULE ' .
+								'(EMP_ID, TS_ID_BEGIN, TS_ID_END, TS_PAUSE_UNITS, SCH_DATE, ' . 
+								'UPDATED_BY_EMP_ID, UPDATED_ON_DATE_TIME, UPDATED_AT_IP_ADDR) ' . 
+							'VALUES ' .
+								'(' . $employee_id . ', ' . 
+								$start_time[$emp][$day_of_week] . ', ' .
+								($end_time[$emp][$day_of_week] - 1) . ', ' .
+								$pause_time[$emp][$day_of_week] . ', ' .
+								'"' . $sch_date . '"' . ', ' .
+								$updated_by_emp_id . ', ' .
+								'NOW()' . ', ' . 
+								'"' . get_client_ip() . '"' .
+								') ' . 
+							'ON DUPLICATE KEY UPDATE ' .
+								'TS_ID_BEGIN = VALUES(TS_ID_BEGIN), ' .
+								'TS_ID_END = VALUES(TS_ID_END), ' .
+								'TS_PAUSE_UNITS = VALUES(TS_PAUSE_UNITS), ' .
+								'UPDATED_BY_EMP_ID = VALUES(UPDATED_BY_EMP_ID), ' .
+								'UPDATED_ON_DATE_TIME = VALUES(UPDATED_ON_DATE_TIME), '.
+								'UPDATED_AT_IP_ADDR = VALUES(UPDATED_AT_IP_ADDR);';
+
+				//if debug on, display [queryStr]
+				displayQueryStr($queryStr, $debug_on);
+				//execute query and get the results
+				$results = getResult($queryStr);
+				
+
+
 SELECT TS_ID, TIME_FORMAT(START_TIME,'%H:%i') FROM TIME_SLOTS 
 
 SELECT START_TIME_HOUR, START_TIME_MIN FROM TIME_SLOTS

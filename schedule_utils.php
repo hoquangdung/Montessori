@@ -699,7 +699,7 @@ function createScheduleOfDay($sch_date_time, $debug_on)
 }//createScheduleOfDay()
 
 
-//update weekly schedule from the submitted to DB
+//update weekly schedule from the submitted form to DB
 function updateWeeklySchedule($Monday_date,
 	 						  $all_employees_id,
 	 						  $start_time,
@@ -737,14 +737,23 @@ function updateWeeklySchedule($Monday_date,
 	$day_of_week_num = 5;
 	$one_day_time_span = 24 * 60 * 60;
 
-	$total_updates = 0;
+	$total_submissions	= 0;
+	$total_deletes		= 0;
+	$total_empties		= 0;
+	$total_invalids		= 0;
+	$total_valids		= 0;			
+	$total_inserts		= 0;
+	$total_updates		= 0;
+	$total_unchanges	= 0;
+
 
 	//for each employee in the list
 	$emp = 0;
-	foreach ($all_employees_id as $employees_id)
+	foreach ($all_employees_id as $emp_id)
 	{
 		//for each of 5 days of the week
-		$curr_date = new DateTime($Monday_date->format("Y-m-d"));			
+		$curr_date = new DateTime($Monday_date->format("Y-m-d"));
+
 		for ($day_of_week = 0; $day_of_week < $day_of_week_num; $day_of_week++)
 		{
 			/**
@@ -759,62 +768,329 @@ function updateWeeklySchedule($Monday_date,
 			get_client_ip() . '<br/>';
 			/**/
 
-			//if valid data
-			if (($start_time[$emp][$day_of_week] >= 1) &&  
-				($end_time[$emp][$day_of_week] >= 1) &&
-				($pause_time[$emp][$day_of_week] >= 0) &&
-				($end_time[$emp][$day_of_week] > $start_time[$emp][$day_of_week]) &&
-				(($end_time[$emp][$day_of_week] - $start_time[$emp][$day_of_week]) * 15 - 
-					$pause_time[$emp][$day_of_week] * 30 > 0))
+			//[EMPLOYEE_SCHEDULE] table
+			//$emp_id			
+			$ts_id_begin 		= $start_time[$emp][$day_of_week];
+			//special attention to $end_time[$emp][$day_of_week]
+			if ($end_time[$emp][$day_of_week] >= 1)
 			{
+				$ts_id_end 		= ($end_time[$emp][$day_of_week] - 1);
+			}
+			else if ($end_time[$emp][$day_of_week] == -1)
+			{
+				$ts_id_end = -1;
+			} 
+			$pause_time_units	= $pause_time[$emp][$day_of_week];			
+			$sch_date 			= $curr_date->format("Y-m-d");
+			//$updated_by_emp_id
+			//UPDATED_ON_DATE_TIME = NOW()
+			//UPDATED_AT_IP_ADDR = IP address
 
-				$queryStr = 'INSERT INTO EMPLOYEE_SCHEDULE ' .
-								'(EMP_ID, TS_ID_BEGIN, TS_ID_END, TS_PAUSE_UNITS, SCH_DATE, ' . 
-								'UPDATED_BY_EMP_ID, UPDATED_ON_DATE_TIME, UPDATED_AT_IP_ADDR) ' . 
-							'VALUES ' .
-								'(' . $employees_id . ', ' . 
-								$start_time[$emp][$day_of_week] . ', ' .
-								($end_time[$emp][$day_of_week] - 1) . ', ' .
-								$pause_time[$emp][$day_of_week] . ', ' .
-								'"' . $curr_date->format("Y-m-d") . '"' . ', ' .
-								$updated_by_emp_id . ', ' .
-								'NOW()' . ', ' . 
-								'"' . get_client_ip() . '"' .
-								') ' . 
-							'ON DUPLICATE KEY UPDATE ' .
-								'TS_ID_BEGIN = VALUES(TS_ID_BEGIN), ' .
-								'TS_ID_END = VALUES(TS_ID_END), ' .
-								'TS_PAUSE_UNITS = VALUES(TS_PAUSE_UNITS), ' .
-								'UPDATED_BY_EMP_ID = VALUES(UPDATED_BY_EMP_ID), ' .
-								'UPDATED_ON_DATE_TIME = VALUES(UPDATED_ON_DATE_TIME), '.
-								'UPDATED_AT_IP_ADDR = VALUES(UPDATED_AT_IP_ADDR);';
+			//case 1: if the submitted schedule is valid
+			if (isValidSchedule($ts_id_begin,
+							    $ts_id_end,
+							   	$pause_time_units)) 				
+			{				
+				//update (if required) an existing schedule or
+				//insert a new schedule of given empployee on a given date
+				//the input schedule is valid
+				$operation_counts = updateInsertScheduleEmployeeDate(
+											$emp_id,
+										  	$ts_id_begin,
+										  	$ts_id_end,
+										  	$pause_time_units,
+										  	$sch_date,
+										  	$updated_by_emp_id,
+										  	$debug_on);
 
-
-				//if debug on, display [queryStr]
-				displayQueryStr($queryStr, $debug_on);
-				//execute query and get the results
-				$results = getResult($queryStr);
-
-				$total_updates++;
+				$total_inserts 		= $total_inserts 	+ $operation_counts[0];
+				$total_updates 		= $total_updates 	+ $operation_counts[1];
+				$total_unchanges	= $total_unchanges	+ $operation_counts[2];
+				$total_valids++;
 			
-			}//if valid data
+			}//if the submitted schedule is valid
+
+			//case 2: else, if the submitted schedule is requested to be deleted
+			else if (isToBeDeletedSchedule($ts_id_begin,
+							    	  	   $ts_id_end,
+							    	  	   $pause_time_units)) 
+			{
+				deleteScheduleEmployeeDate($emp_id,
+										   $sch_date,
+										   $debug_on);
+				$total_deletes++;
+			}
+
+			//case 3: else, if the submitted schedule is empty
+			else if (isEmptySchedule($ts_id_begin,
+				 	    	  	     $ts_id_end,
+				 	    	  	     $pause_time_units))
+			{
+				//do nothing
+
+				$total_empties++;	
+			}
+
+			//case 4: else, if the submitted schedule is invalid
+			else 
+			{
+				//do nothing
+
+				$total_invalids++;	
+			}
 			
+			
+			$total_submissions++;
+
 			//** move to the next day
 			$curr_date->add(new DateInterval('PT'.$one_day_time_span.'S'));
-		
+	
 		}//for each of 5 days of the week
 
 		//echo '<br/>';
 
-		//move the next employee
+		//** move the next employee
 		$emp++;
 
 	}//for each employee
 
-	echo 'Confirmation: ' . $total_updates . ' schedule(s) updated on '. (new DateTime())->format("l, d M Y  H:i:s") . '<br/>';
+	echo 'Confirmation: on '. (new DateTime())->format("l, d M Y  H:i:s") . '<br/>';
+	echo 'Total: ' 			. $total_submissions	. ' schedule(s) submitted' . '<br/>';
+	echo '-------- ' 		. $total_deletes 		. ' deleted' 	. '<br/>';
+	echo '-------- ' 		. $total_empties 		. ' empty' 	. '<br/>';
+	echo '-------- ' 		. $total_invalids		. ' invalid' 	. '<br/>';
+	echo '-------- ' 		. $total_valids			. ' valid' 		. '<br/>';
+	echo '-------------- ' 	. $total_inserts 		. ' inserted' 	. '<br/>';
+	echo '-------------- ' 	. $total_updates 		. ' updated'	. '<br/>';
+	echo '-------------- ' 	. $total_unchanges		. ' unchanged' 	. '<br/><br/>';
+
 
 }//updateWeeklySchedule()
 
+
+//check if the schedule is valid
+function isValidSchedule($ts_id_begin, $ts_id_end, $pause_time_units)
+{
+	if (($ts_id_begin >= 1)				&&  
+		($ts_id_end >= 1)				&&
+		($pause_time_units >= 0)		&&
+		($ts_id_end >= $ts_id_begin)	&&
+		(($ts_id_end - $ts_id_begin + 1) * 15 - $pause_time_units * 30 > 0))
+	{
+		return (true);
+	}
+	else
+	{
+		return (false);
+	}
+
+}//isValidSchedule()
+
+
+//check if the schedule is to be deleted
+function isToBeDeletedSchedule($ts_id_begin, $ts_id_end, $pause_time_units)
+{
+	if (($ts_id_begin == -1)	&&  
+		($ts_id_end >= 1)		&&
+		($pause_time_units >= 0))
+	{
+		return (true);
+	}
+	else
+	{
+		return (false);
+	}
+
+}//isToBeDeletedSchedule()
+
+
+//check if the schedule is to be empty
+function isEmptySchedule($ts_id_begin, $ts_id_end, $pause_time_units)
+{
+	if (($ts_id_begin == -1)	&&  
+		($ts_id_end == -1)		&&
+		($pause_time_units == -1))
+	{
+		return (true);
+	}
+	else
+	{
+		return (false);
+	}
+
+}//isEmptySchedule()
+
+
+//update (if required) an existing schedule or
+//insert a new schedule of given empployee on a given date
+//the input schedule is assumed to be valid
+function updateInsertScheduleEmployeeDate($emp_id,
+										  $ts_id_begin,
+										  $ts_id_end,
+										  $pause_time_units,
+										  $sch_date,
+										  $updated_by_emp_id,
+										  $debug_on)
+{
+	$insert_count		= 0;
+	$update_count 		= 0;
+	$unchange_count 	= 0;
+
+	//1. check if there exists a schedule of this employee on this date
+	$queryStr = 'SELECT TS_ID_BEGIN, TS_ID_END, TS_PAUSE_UNITS ' .
+		  		'FROM EMPLOYEE_SCHEDULE ' .
+		  		'WHERE ' .
+		  			'(EMP_ID = ' . $emp_id . ') AND ' .
+		  			'(SCH_DATE = "' . $sch_date . '");';
+	//if debug on, display [queryStr]
+	displayQueryStr($queryStr, $debug_on);
+	//execute query and get the results
+	$schedules = getResult($queryStr);
+	$schedulesNum = mysqli_num_rows($schedules);
+
+	//case 1: no schedule of this employee on this date exists 
+	if ($schedulesNum == 0)
+	{
+		//then insert this new schedule
+		insertScheduleEmployeeDate($emp_id,
+								   $ts_id_begin,
+								   $ts_id_end,
+								   $pause_time_units,
+								   $sch_date,
+								   $updated_by_emp_id,
+								   $debug_on);
+		$insert_count = 1;
+	}
+
+	//case 2: exactly one schedule of this employee on this date exists 
+	else if ($schedulesNum == 1)
+	{
+		//get the existing one to check if an update is required
+		$currentSchedule = mysqli_fetch_row($schedules);
+		//if this new schedule is not exactly same as the existing one
+		if (($currentSchedule[0] != $ts_id_begin) ||
+			($currentSchedule[1] != $ts_id_end) ||
+			($currentSchedule[2] != $pause_time_units))
+		{
+			
+			echo '[' . $emp_id . '] ' . '[' . $sch_date . ']: ' . 
+					'(start: '	. $currentSchedule[0] . ' ==> ' . $ts_id_begin 			. ') ' .
+					'(end: ' 	. $currentSchedule[1] . ' ==> ' . $ts_id_end			. ') ' .
+					'(pause: '	. $currentSchedule[2] . ' ==> ' . $pause_time_units		. ')<br/>';
+
+			//then update the existing one with the new one
+			updateScheduleEmployeeDate($emp_id,
+									   $ts_id_begin,
+									   $ts_id_end,
+									   $pause_time_units,
+									   $sch_date,
+									   $updated_by_emp_id,
+									   $debug_on);
+
+			$update_count = 1;
+		}
+		//else: this new schedule is exactly same as the existing one
+		else
+		{
+			//do nothing
+
+			$unchange_count = 1;
+		}
+		
+	}
+
+	//case 3: two or more than two schedules of this employee on this date exists
+	else if ($schedulesNum >= 2)
+	{
+		//something wrong with the schedule
+		//since there must be only one (if exitst) schedule of this employee on this date
+
+		//process this case later
+
+		$unchange_count = 1;
+	}
+
+	return array($insert_count, $update_count, $unchange_count);
+
+}//updateInsertScheduleEmployeeDate()
+
+
+//insert a new schedule of given empployee on a given date
+function insertScheduleEmployeeDate($emp_id,
+									$ts_id_begin,
+	 						  		$ts_id_end,
+	 						  		$pause_time_units,
+	 						  		$sch_date,
+	 						  		$updated_by_emp_id,
+	 						  		$debug_on)
+{
+	$queryStr = 'INSERT INTO EMPLOYEE_SCHEDULE ' .
+					'(EMP_ID, TS_ID_BEGIN, TS_ID_END, TS_PAUSE_UNITS, SCH_DATE, ' . 
+					'UPDATED_BY_EMP_ID, UPDATED_ON_DATE_TIME, UPDATED_AT_IP_ADDR) ' . 
+				'VALUES ' .
+					'(' . $emp_id . ', ' . 
+						  $ts_id_begin . ', ' .
+						  $ts_id_end . ', ' .
+						  $pause_time_units . ', ' .
+						  '"' . $sch_date . '"' . ', ' .
+						  $updated_by_emp_id . ', ' .
+						  'NOW()' . ', ' . 
+						  '"' . get_client_ip() . '"' .						  
+					');';
+				//if debug on, display [queryStr]
+	displayQueryStr($queryStr, $debug_on);
+	//execute query and get the results
+	$results = getResult($queryStr);
+
+}//insertScheduleEmployeeDate()
+
+
+//update an existing schedule of given empployee on a given date
+function updateScheduleEmployeeDate($emp_id,
+									$ts_id_begin,
+	 						  		$ts_id_end,
+	 						  		$pause_time_units,
+	 						  		$sch_date,
+	 						  		$updated_by_emp_id,
+	 						  		$debug_on)
+{
+	$queryStr = 'UPDATE EMPLOYEE_SCHEDULE ' .
+				'SET ' .
+					'EMP_ID = ' 				. $emp_id . ', ' . 
+					'TS_ID_BEGIN = '			. $ts_id_begin . ', ' .
+					'TS_ID_END = '				. $ts_id_end . ', ' .
+					'TS_PAUSE_UNITS = '			. $pause_time_units . ', ' .
+					'SCH_DATE = "'				. $sch_date . '"' . ', ' .
+					'UPDATED_BY_EMP_ID = '		. $updated_by_emp_id . ', ' .
+					'UPDATED_ON_DATE_TIME = '	. 'NOW()' . ', ' . 
+					'UPDATED_AT_IP_ADDR = "'	. get_client_ip() . '"' .
+				'WHERE ' .
+				  	'(EMP_ID = ' . $emp_id . ') AND ' .
+				  	'(SCH_DATE = "' . $sch_date . '");';
+	displayQueryStr($queryStr, $debug_on);
+	//execute query and get the results
+	$results = getResult($queryStr);
+
+}//updateScheduleEmployeeDate()
+
+
+//delete an existing schedule of given empployee on a given date
+function deleteScheduleEmployeeDate($emp_id,
+								  	$sch_date,
+									$debug_on)
+{
+
+	$queryStr = 'DELETE ' .
+		  		'FROM EMPLOYEE_SCHEDULE ' .
+		  		'WHERE ' .
+		  			'(EMP_ID = ' . $emp_id . ') AND ' .
+		  			'(SCH_DATE = "' . $sch_date . '");';
+	//if debug on, display [queryStr]
+	displayQueryStr($queryStr, $debug_on);
+	//execute query and get the results
+	$results = getResult($queryStr);
+
+}//deleteScheduleEmployeeDate()
 
 
 ?>
