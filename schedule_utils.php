@@ -55,7 +55,7 @@ function getMondayOfWeek($from_date_str)
 }//getMondayOfWeek()
 
 
-//populate [Update this Week Schedule] form
+//populate [weekly_schedule_update] form
 function createWeeklyScheduleForm($Monday_date, $debug_on)
 {
 	
@@ -74,7 +74,10 @@ function createWeeklyScheduleForm($Monday_date, $debug_on)
 	echo '<br/>';
 
 	echo '<button type="submit" id="update" name="schedule_update_button" ' .
-			'value="Update this Week Schedule">Update this Week Schedule</button>';
+			'value="UpdateThisWeekSchedule">Update this Week Schedule</button>';
+
+	echo '<button type="submit" id="clear" name="schedule_update_button" ' .
+			'value="ClearThisWeekSchedule">Clear this Week Schedule</button>';
 
 	echo '</form>';
 
@@ -205,7 +208,7 @@ function createWeeklyScheduleTable($Monday_date, $debug_on)
 									$calculated_hours_15m_units);
 
 			//*** now, move to the next day
-			$curr_date->add(new DateInterval('PT'.$one_day_time_span.'S'));
+			$curr_date->add(new DateInterval('PT' . $one_day_time_span . 'S'));
 
 						
 		}//for($day_of_week)
@@ -236,7 +239,7 @@ function printDaysOfWeekHeader($Monday_date)
 	for ($i = 0; $i < $date_num; $i++)
 	{		
 		$week_days[$i] = $week_days[$i] . '<br/>' . $curr_date->format("d M Y");
-		$curr_date->add(new DateInterval('PT'.$one_day_time_span.'S'));
+		$curr_date->add(new DateInterval('PT' . $one_day_time_span . 'S'));
 	}
 
 	//////////////////////
@@ -843,7 +846,7 @@ function updateWeeklySchedule($Monday_date,
 			$total_submissions++;
 
 			//** move to the next day
-			$curr_date->add(new DateInterval('PT'.$one_day_time_span.'S'));
+			$curr_date->add(new DateInterval('PT' . $one_day_time_span . 'S'));
 	
 		}//for each of 5 days of the week
 
@@ -1091,6 +1094,112 @@ function deleteScheduleEmployeeDate($emp_id,
 	$results = getResult($queryStr);
 
 }//deleteScheduleEmployeeDate()
+
+
+//delete all existing schedules of all empployees on a given date
+function deleteScheduleDate($sch_date,
+							$debug_on)
+{
+	$queryStr = 'DELETE ' .
+		  		'FROM EMPLOYEE_SCHEDULE ' .
+		  		'WHERE ' .		  			
+		  			'(SCH_DATE = "' . $sch_date . '");';
+	//if debug on, display [queryStr]
+	displayQueryStr($queryStr, $debug_on);
+	//execute query and get the results
+	$results = getResult($queryStr);
+}
+
+
+//delete all existing schedules of all empployees over a number of days
+function deleteScheduleDays($from_date_str,
+							$day_num,
+							$debug_on)
+{
+	$queryStr = 'DELETE ' .
+		  		'FROM EMPLOYEE_SCHEDULE ' .
+		  		'WHERE ' .
+					'SCH_DATE BETWEEN "' . $from_date_str. '" AND ' .
+					'DATE_ADD("' . $from_date_str . '", INTERVAL ' . $day_num . ' DAY)';
+	//if debug on, display [queryStr]
+	displayQueryStr($queryStr, $debug_on);
+	//execute query and get the results
+	$resutls = getResult($queryStr);
+
+}//deleteScheduleDays()
+
+
+//copy one weekly schedule to another week
+function copyWeeklySchedule($from_date,
+							$from_date_copy_to,
+							$updated_by_emp_id,
+							$debug_on)
+{
+	echo 'Copy Weekly Schedule: from week [' . $from_date->format("l, d M Y") . ']' .
+							  ' to week [' . $from_date_copy_to->format("l, d M Y") . ']' . '<br/>';
+
+
+	$from_date_str = $from_date->format("Y-m-d");
+	$from_date_copy_to_str = $from_date_copy_to->format("Y-m-d");
+	
+	$current_date_src_week = new DateTime($from_date_str);
+	$current_date_dest_week = new DateTime($from_date_copy_to_str);
+
+	//1. delete all schedules (if there is any) on all 5 days of the destination week
+	deleteScheduleDays($current_date_dest_week->format("Y-m-d"),
+					   5,
+					   $debug_on);
+
+	//2. copy all schedules (if there is any) of all 5 days of the source week
+	//to corresponding 5 days of the destination week
+	$one_day_time_span = 24 * 60 * 60;
+	$day_of_week_num = 5;
+	//for each day of the week from Monday to Friday
+	for ($day_of_week = 0; $day_of_week < $day_of_week_num; $day_of_week++)
+	{
+
+		//get all schedules on a given date of the source week
+		$queryStr = 'SELECT EMP_ID, TS_ID_BEGIN, TS_ID_END, TS_PAUSE_UNITS ' .
+					'FROM EMPLOYEE_SCHEDULE ' .
+					'WHERE (SCH_DATE = "' . $current_date_src_week->format("Y-m-d") . '")';
+		$queryStr = $queryStr . ';';
+		//if debug on, display [queryStr]
+		displayQueryStr($queryStr, $debug_on);
+		//execute query and get the results
+		$schedules = getResult($queryStr);
+		//the number of rows in [employees]
+		$schedulesNum = mysqli_num_rows($schedules);
+		
+		//copy all schedules (if there is any) on the current date of the source week
+		//to the corresponding date of the destination week
+
+		//for each existing schedule
+		for ($sch = 0; $sch < $schedulesNum; $sch++)
+		{
+			$currentSchedule = mysqli_fetch_row($schedules);
+			$emp_id 			= $currentSchedule[0];
+			$ts_id_begin 		= $currentSchedule[1];
+			$ts_id_end 			= $currentSchedule[2];
+			$pause_time_units	= $currentSchedule[3];
+
+			//insert this schedule into the corresponding date of the destination week
+			insertScheduleEmployeeDate($emp_id,
+									   $ts_id_begin,
+									   $ts_id_end,
+									   $pause_time_units,
+									   $current_date_dest_week->format("Y-m-d"),
+									   $updated_by_emp_id,
+									   $debug_on);
+		}////for each existing schedule
+
+		//*** now, move to the next day
+		$current_date_src_week->add(new DateInterval('PT' . $one_day_time_span . 'S'));
+		$current_date_dest_week->add(new DateInterval('PT' . $one_day_time_span . 'S'));
+
+	}//for ($day_of_week)
+
+
+}//copyWeeklySchedule()
 
 
 ?>

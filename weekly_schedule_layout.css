@@ -14,12 +14,21 @@ fieldset {
     padding: 10px;
 }
 
+fieldset {
+    border: 1px solid gray;
+}
+
+legend {
+    border: 1px solid gray;
+}
+
+
 fieldset#from_date_update {
 	background-color: rgb(255, 255, 204);
 }
 
 fieldset#from_date_update legend {
-	background-color: rgb(255, 255, 204);
+    background-color: rgb(255, 255, 204);
 }
 
 fieldset#from_date_copy {
@@ -48,12 +57,17 @@ div.viewUpdate {
 
 button[type=submit] {
     padding: 5px 5px; 
-    background-color: #8b8989; 
+    background-color: #CCCCCC; 
     color: white;
     border: 0 none;
     cursor: pointer;    
     border-radius: 3px; 
 }
+
+button[type=submit].previous_next_date {
+    background-color: #B0A4A0;
+}
+
 
 button[type=submit]#view_update {
     background-color: #008CBA;
@@ -64,12 +78,21 @@ button[type=submit]#copy {
 }
 
 button[type=submit]#update {     
+    background-color: #3355FF;  
+    margin-right: 20px;   
+}
+
+button[type=submit]#clear {     
     background-color: #f44336;     
 }
 
 
 button[type=submit]:hover {
 	color: blue;
+}
+
+button[type=submit]#update:hover {
+    color: red;
 }
 
 
